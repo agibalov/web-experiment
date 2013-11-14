@@ -1,0 +1,95 @@
+<!doctype html>
+<html ng-app="app">
+	<head>
+		<title>test</title>
+		<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.5/angular.min.js"></script>
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.string/2.3.3/underscore.string.min.js"></script>
+
+		<style type="text/css">
+			tag-editor {
+				border: 1px solid #ccc;
+				padding: 10px;				
+			}
+
+			tag-editor input,
+			tag-editor input:focus {
+				border: none;
+				outline: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container" ng-controller="MyController">
+			<div class="page-header">
+				<h1>hello</h1>
+			</div>	
+			<tag-editor tags="tags"></tag-editor>
+			<ul>
+				<li ng-repeat="t in tags">
+					{{t}}
+				</li>
+			</ul>
+		</div>
+
+		<script type="text/javascript">
+			angular.module("app", [], function() {				
+			});
+		</script>
+
+		<script type="text/javascript">
+			angular.module("app").controller("MyController", function($scope) {
+				$scope.tags = ["porn", "music"];
+			});			
+		</script>
+
+		<script type="text/javascript">
+			angular.module("app").directive("tagEditor", function() {
+				return {
+					restrict: "E",
+					scope: {
+						"tags": "="
+					},
+					templateUrl: "tag-editor.html",
+					link: function(scope, element, attrs) {
+						var input = element.children("input");
+						input.bind("change keyup paste click", function(e) {
+							var inputText = input.val();
+							var inputTextChars = _.str.chars(inputText);
+							var indexOfLastSpace = _.lastIndexOf(inputTextChars, " ");
+							if(indexOfLastSpace === -1) {
+								return;
+							}
+
+							var textToProcess = inputText.substring(0, indexOfLastSpace);
+
+							var readyTags = textToProcess.split(" ");
+							if(readyTags.length > 0) {
+								scope.$apply(function() {
+									scope.tags = _.union(scope.tags, readyTags);
+									input.val(inputText.substring(indexOfLastSpace + 1));
+								});								
+							}
+
+							console.log(scope.tags);
+						});
+					},
+					controller: function($scope) {
+						$scope.remove = function(t) {
+							console.log("REMOVE:", t);
+							$scope.tags = _.without($scope.tags, t);
+						};
+					}
+				};
+			});
+		</script>
+
+		<script type="text/ng-template" id="tag-editor.html">
+			<span ng-repeat="tag in tags">
+				<span class="label label-default">{{tag}} <span class="glyphicon glyphicon-remove-circle" ng-click="remove(tag)"></span></span>
+			</span>
+			<input type="text" />
+		</script>
+	</body>
+</html>
