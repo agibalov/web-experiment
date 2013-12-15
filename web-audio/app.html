@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+	<head>
+		<title>app</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var sequence = [
+			  // C D EF G A BC D EF G A BC D EF G A BC D EF G A BC D EF G A B
+				"         x              x           x                       ",
+				"         x              x           x                       ",
+				"         x              x           x                       ",
+				"         x              x           x                       ",
+				"            x               x           x                   ",
+				"            x               x           x                   ",
+				"            x               x           x                   ",
+				"            x               x           x                   ",
+				"       x               x           x                        ",
+				"       x               x           x                        ",
+				"       x               x           x                        ",
+				"       x                     x           x                  ",
+				"              x              x           x                  ",
+				"              x              x           x                  ",
+				"              x              x           x                  ",
+				"              x             x           x                   ",
+			];
+
+			// naiveApp();
+			optimizedApp();
+
+			function optimizedApp() {
+				var context = new webkitAudioContext();
+				var iteration = 0;
+				setInterval(function() {
+					for(var i = 0; i < sequence.length; ++i) {
+						var time = 0.2 * i;
+
+						var frame = sequence[i];
+						for(var j = 0; j < frame.length; ++j) {
+							var shouldSkip = frame[j] === " ";
+							if(shouldSkip) {
+								continue;
+							}
+
+							var oscillator = context.createOscillator();
+							oscillator.connect(context.destination);				
+							oscillator.frequency.value = 55 * Math.pow(2, j / 12);
+							oscillator.type = 2;
+							
+							oscillator.start(iteration * 16 * 0.2 + time);
+							oscillator.stop(iteration * 16 * 0.2 + time + 0.1);
+						}
+					}
+
+					++iteration;
+				}, 15 * 200);
+			};
+
+			function naiveApp() {
+				var context = new webkitAudioContext();
+
+				var len = sequence.length;
+				var pos = 0;
+				var delay = 200;
+				setInterval(function() {
+					var x = sequence[pos];
+					for(var i = 0; i < x.length; ++i) {
+						var t = x[i];
+						if(t === " ") {
+							continue;
+						}
+
+						var oscillator = context.createOscillator();
+						oscillator.connect(context.destination);				
+						oscillator.frequency.value = 55 * Math.pow(2, i / 12);
+
+						oscillator.type = 2;
+						oscillator.start(0);
+						setTimeout(function(oscillator) {
+							return function() {
+								oscillator.stop(0);
+								oscillator.disconnect();
+							}
+						}(oscillator), delay / 2);					
+					}
+
+					++pos;
+					if(pos === len) {
+						pos = 0;
+					}
+				}, delay);
+			};
+		</script>
+	</body>
+</html>

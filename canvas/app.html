@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+	<head><title>app</title></head>
+	<body>
+		<canvas id="myCanvas" width="500" height="300" style="border: 1px solid #ccc;"></canvas>
+
+		<script type="text/javascript">
+			var canvas = document.getElementById("myCanvas");		
+
+			var width = canvas.width;
+			var height = canvas.height;
+			var balls = makeRandomBalls(30, width, height);
+
+			var context = canvas.getContext("2d");
+			setInterval(function() {
+				for(var i = 0; i < balls.length; ++i) {
+					var ball = balls[i];
+					ball.step(width, height);
+				}
+
+				context.fillStyle = "#333333";
+				context.fillRect(0, 0, width, height);
+				
+				for(var i = 0; i < balls.length; ++i) {
+					var ball = balls[i];
+					ball.render(context);
+				}
+			}, 1);
+
+			function makeRandomBalls(numberOfBalls, width, height) {
+				var balls = [];
+				for(var i = 0; i < numberOfBalls; ++i) {
+					var type = Math.random() > 0.5 ? "rect" : "circle";
+					var color = ["#cc0088", "#88cc00", "#8800cc", "#cc8800"][i % 4];
+					var size = 10 + 50 * Math.random();
+					var x = (width - size) * Math.random();
+					var y = (height - size) * Math.random();
+					var vx = -1 + 2 * Math.random();
+					var vy = -1 + 2 * Math.random();
+					var ball = new Ball(type, color, size, x, y, vx, vy);
+					balls.push(ball);
+				}
+
+				return balls;
+			};
+
+			function Ball(type, color, size, x, y, vx, vy) {
+				this.type = type;
+				this.color = color;
+				this.size = size;
+				this.x = x;
+				this.y = y;
+				this.vx = vx;
+				this.vy = vy;
+			};
+
+			Ball.prototype.step = function(width, height) {
+				if(this.x < 0) {
+					this.x = 0;
+					this.vx = -this.vx;
+				} else if(this.x > width - this.size) {
+					this.x = width - this.size;
+					this.vx = -this.vx;
+				}
+
+				if(this.y < 0) {
+					this.y = 0;
+					this.vy = -this.vy;
+				} else if(this.y > height - this.size) {
+					this.y = height - this.size;
+					this.vy = -this.vy;
+				}			
+
+				this.x += this.vx;
+				this.y += this.vy;
+			};
+
+			Ball.prototype.render = function(context) {				
+				if(this.type === "rect") {
+					context.fillStyle = this.color;
+					context.fillRect(this.x, this.y, this.size, this.size);
+				} else {
+					var r = this.size / 2;
+					context.save();
+					context.beginPath();
+					context.arc(this.x + r, this.y + r, r, 0, 2 * Math.PI, false);
+					context.fillStyle = this.color;
+					context.fill();
+					context.restore();
+				}
+			};
+		</script>
+	</body>
+</html>

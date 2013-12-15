@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+	<head>
+		<title>app</title>
+		<style type="text/css">		
+			html, body, div, canvas {
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+
+		<script type="text/javascript" src="kinetic.min.js"></script>
+		<script type="text/javascript">
+			var stage = new Kinetic.Stage({
+				container: "container",
+				width: 1,
+				height: 1
+			});
+			updateStageDimensions();				
+
+			var layer = new Kinetic.Layer();
+
+			var box = new Kinetic.Rect({
+				x: 50,
+				y: 50,
+				width: 100,
+				height: 100,
+				fill: "#333333",
+				stroke: "#00ff00",
+				draggable: true
+			});
+
+			box.on("mouseover", function() {
+				document.body.style.cursor = "pointer";
+				box.setStroke("#ff0000");
+				stage.draw();				
+			});
+
+			box.on("mouseout", function() {
+				document.body.style.cursor = "default";
+				box.setStroke("#00ff00");
+				stage.draw();
+			});
+
+			box.on("dragstart", function(event) {
+				var shape = event.targetNode;
+				console.log("DRAG START: %d, %d", shape.getX(), shape.getY());
+			});
+
+			box.on("dragend", function(event) {
+				var shape = event.targetNode;
+				console.log("DRAG END: %d, %d", shape.getX(), shape.getY());
+			});
+
+			layer.add(box);
+			stage.add(layer);
+
+			window.onresize = function(event) {
+				updateStageDimensions();				
+			};
+
+			function updateStageDimensions() {
+				var container = document.getElementById("container");				
+				stage.setWidth(container.offsetWidth);
+				stage.setHeight(container.offsetHeight);
+			}
+		</script>
+	</body>
+</html>
