@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+	<head>
+		<title>app</title>		
+	</head>
+	<body>
+		<canvas id="myCanvas" width="500" height="300" style="border: 1px solid #ccc;"></canvas>
+
+		<script type="text/javascript" src="box2d.js"></script>
+		<script type="text/javascript">
+			var gravity = new Box2D.b2Vec2(0, 10);
+			var world = new Box2D.b2World(gravity);
+			
+			var shape = new Box2D.b2PolygonShape();
+			shape.SetAsBox(10, 10);
+			var bodyDef = new Box2D.b2BodyDef();
+			bodyDef.set_type(Box2D.b2_dynamicBody);
+			bodyDef.set_position(new Box2D.b2Vec2(0, 0));
+			var body = world.CreateBody(bodyDef);
+			body.CreateFixture(shape, 1);
+			body.SetTransform(new Box2D.b2Vec2(0, 0), Math.PI / 6);
+
+			var groundShape = new Box2D.b2EdgeShape();
+			groundShape.Set(new Box2D.b2Vec2(-100, 30), new Box2D.b2Vec2(100, 30));
+			var groundBodyDef = new Box2D.b2BodyDef();
+			var ground = world.CreateBody(groundBodyDef);
+			ground.CreateFixture(groundShape, 0);
+
+			var canvas = document.getElementById("myCanvas");
+			var width = canvas.width;
+			var height = canvas.height;
+			var context = canvas.getContext("2d");
+			function animate() {
+				context.fillStyle = "#333333";
+				context.fillRect(0, 0, width, height);
+				simulate();
+				render();
+
+				webkitRequestAnimationFrame(function() {
+					animate();
+				});
+			};
+
+			var t0 = new Date().getTime();
+
+			function simulate() {
+				var t1 = new Date().getTime();
+				var dt = t1 - t0;
+				world.Step(dt / 200, 2, 2);
+				t0 = t1;
+			};
+
+			function render() {
+				var bodyPos = body.GetPosition();
+				var bodyAngle = body.GetAngle();
+
+				context.save();				
+				context.translate(width / 2, height / 2);				
+				context.scale(5, 5);
+				context.translate(bodyPos.get_x(), bodyPos.get_y());
+				context.rotate(bodyAngle);
+				context.fillStyle = "#ff3333";
+				context.fillRect(-5, -5, 10, 10);
+				context.restore();
+			};
+
+			animate();
+		</script>
+	</body>
+</html>
