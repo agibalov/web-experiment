@@ -4,14 +4,19 @@
 		<title>hello d3</title>
 	</head>
 	<body>
-		<svg width="300" height="200" id="mySvg">
+		<svg width="300" height="200" id="mySvg1">
+			<rect width="100%" height="100%" fill="#bada55" />
+		</svg>
+
+		<svg width="300" height="200" id="mySvg2">
 			<rect width="100%" height="100%" fill="#bada55" />
 		</svg>
 
 		<script type="text/javascript" src="d3.v3.min.js"></script>
+		
 		<script type="text/javascript">
 			var data = [3, 1, 2, 2, 1];
-			var svg = d3.select("#mySvg");
+			var svg = d3.select("#mySvg1");
 			svg.selectAll("circle")
 				.data(data)
 				.enter()
@@ -23,6 +28,32 @@
 					"fill": "#ffffff",
 					"stroke": "#444444"
 				});
+		</script>
+
+		<script type="text/javascript">
+			var data = [3, 1, 2, 2, 1];
+			var svg = d3.select("#mySvg2");
+
+			var item = svg.selectAll("g")
+				.data(data)
+				.enter()
+				.append("g")
+				.attr("transform", function(d, i) { 
+					var x = 40 + i * 50;
+					return "translate(" + x + ",100)"; 
+				});
+
+			item.append("circle").attr({
+				"r": function(d, i) { return 10 * d; },
+				"fill": "#ffffff",
+				"stroke": "#444444"
+			});
+
+			item.append("text").attr({
+				"text-anchor": "middle"
+			}).text(function(d, i) {
+				return d;
+			});
 		</script>
 	</body>
 </html>
