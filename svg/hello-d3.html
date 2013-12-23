@@ -12,6 +12,10 @@
 			<rect width="100%" height="100%" fill="#bada55" />
 		</svg>
 
+		<svg width="300" height="200" id="mySvg3">
+			<rect width="100%" height="100%" fill="#bada55" />
+		</svg>
+
 		<script type="text/javascript" src="d3.v3.min.js"></script>
 		
 		<script type="text/javascript">
@@ -54,6 +58,34 @@
 			}).text(function(d, i) {
 				return d;
 			});
+		</script>
+
+		<script type="text/javascript">
+			var data = [3, 1, 2, 2, 1];
+			var svg = d3.select("#mySvg3");
+
+			var item = svg.selectAll("circle").data(data);
+			item.enter()
+				.append("circle")
+				.attr({
+					"cx": function(d, i) { return 40 + i * 50; },
+					"cy": 100,
+					"r": function(d, i) { return 10 * d; },
+					"fill": "#ffffff",
+					"stroke": "#444444"
+				});
+
+			// item.exit().remove();
+
+			setInterval(function() {
+				data.push(Math.random() * 3);
+				data.shift();
+
+				var item = svg.selectAll("circle").data(data);
+				item.transition().duration(300).ease(d3.ease("bounce")).attr({
+					"r": function(d, i) { return 10 * d; }
+				});				
+			}, 500);
 		</script>
 	</body>
 </html>
