@@ -16,6 +16,10 @@
 			<rect width="100%" height="100%" fill="#bada55" />
 		</svg>
 
+		<svg width="300" height="200" id="mySvg4">
+			<rect width="100%" height="100%" fill="#bada55" />
+		</svg>		
+
 		<script type="text/javascript" src="d3.v3.min.js"></script>
 		
 		<script type="text/javascript">
@@ -75,8 +79,6 @@
 					"stroke": "#444444"
 				});
 
-			// item.exit().remove();
-
 			setInterval(function() {
 				data.push(Math.random() * 3);
 				data.shift();
@@ -86,6 +88,35 @@
 					"r": function(d, i) { return 10 * d; }
 				});				
 			}, 500);
+		</script>
+
+		<script type="text/javascript">
+			var data = [3, 1, 2, 2, 1];
+			var svg = d3.select("#mySvg4");
+
+			var x = d3.scale.linear().domain([-1, 1]).range([20, 280]);
+			var axis = d3.svg.axis().scale(x).orient("bottom").ticks(5);
+			svg.append("g").call(axis);
+		</script>
+
+		<script type="text/javascript">
+			// expected inputs are 0 to 1
+			// outputs will be 0 to 1
+			var f = d3.scale.linear();
+			console.log("f(0)=", f(0)); // 0
+			console.log("f(1)=", f(1)); // 1
+
+			// expected inputs are -1 to 2
+			// outputs will be 0 to 1
+			f = d3.scale.linear().domain([-1, 2]);
+			console.log("f(-1)=", f(-1)); // 0
+			console.log("f(2)=", f(2)); // 1
+
+			// expected inputs are -1 to 2
+			// outputs will be 2 to 5
+			f = d3.scale.linear().domain([-1, 2]).range([2, 5]);
+			console.log("f(-1)=", f(-1)); // 2
+			console.log("f(2)=", f(2)); // 5
 		</script>
 	</body>
 </html>
