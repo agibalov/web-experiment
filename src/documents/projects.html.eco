@@ -1,0 +1,15 @@
+---
+title: Collection of projects
+layout: default
+---
+<ul>
+<% for project in @getCollection("html").findAll({isProject:true}).toJSON(): %>
+	<li>
+		<%= project.title %> 
+		<% for tech in project.technologies: %>
+			<span style="border: 3px solid #999;"><%= tech %></span>
+		<% end %>
+		<a href="<%= project.url %>">see it</a>
+	</li>
+<% end %>
+</ul>

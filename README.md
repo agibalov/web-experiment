@@ -5,4 +5,3 @@
 Playing with DocPad. http://protected-temple-1332.herokuapp.com/
 
 `docpad deploy-ghpages --env static` to deploy to gh-pages branch.
-

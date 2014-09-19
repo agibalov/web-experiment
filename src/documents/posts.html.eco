@@ -1,0 +1,9 @@
+---
+title: Collection of posts
+layout: default
+---
+<ul>
+<% for post in @getCollection("html").findAll({isPost:true}).toJSON(): %>
+	<li><%= post.title %> <a href="<%= post.url %>">see it</a></li>
+<% end %>
+</ul>
