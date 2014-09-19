@@ -2,9 +2,12 @@
 <html>
 	<head>
 		<title><%= @document.title %></title>
+		<link rel="stylesheet" href="/css/bootstrap.min.css">
 	</head>
 	<body>
-		<h1><%= @document.title %></h1>
-		<%- @content %>
+		<div class="container">
+			<h1><%= @document.title %></h1>
+			<%- @content %>
+		</div>
 	</body>
 </html>
