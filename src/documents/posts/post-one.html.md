@@ -1,6 +1,6 @@
 ---
 title: Post one
-layout: default
+layout: post
 isPost: true
 ---
 Hi there, I am post one.
