@@ -19,7 +19,8 @@
 					<% end %>
 					</ul>
 				</div>
-			</div>		
+			</div>
+			<%- @partial("footer") %>
 		</div>
 	</body>
 </html>

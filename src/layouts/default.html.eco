@@ -8,6 +8,7 @@
 		<div class="container">
 			<h1><%= @document.title %></h1>
 			<%- @content %>
+			<%- @partial("footer") %>
 		</div>
 	</body>
 </html>
