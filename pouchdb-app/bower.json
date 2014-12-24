@@ -1,0 +1,20 @@
+{
+  "name": "pouchdb-experiment",
+  "version": "0.0.0",
+  "authors": [
+    "loki2302 <loki2302@loki2302.me>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.8",
+    "pouchdb": "~3.2.0",
+    "bootstrap": "~3.3.1"
+  }
+}

@@ -1,0 +1,98 @@
+<!doctype html>
+<html ng-app="app">
+	<head>
+		<title>hello</title>
+		<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	</head>
+	<body ng-controller="AppController">
+		<div class="container">
+			<h1>The Ultimate Todo List</h1>
+			
+			<div class="alert alert-info" ng-if="notes.length === 0">
+				There are no notes so far.
+			</div>
+			<ul ng-if="notes.length > 0">
+				<li ng-repeat="note in notes|orderBy:'-createdAt'">{{note.text}}<br><small>{{note.createdAt|date:'medium'}}</small><br><button type="button" class="btn btn-danger btn-xs" ng-click="deleteNote(note)">Delete</button></li>
+			</ul>
+
+			<h4>New note</h4>
+			<form ng-submit="createNote()">
+				<div class="form-group">
+					<label for="text" class="control-label">Text</label>
+					<input type="text" class="form-control" id="text" ng-model="newNoteText">
+				</div>
+				<button type="submit" class="btn btn-default">New note</button>
+			</form>
+		</div>
+		
+		<script src="bower_components/angular/angular.min.js"></script>
+		<script src="bower_components/pouchdb/dist/pouchdb.min.js"></script>
+		
+		<script>
+			angular.module("app", [])
+			.controller("AppController", ["$scope", "api", function($scope, api) {
+				$scope.notes = [];
+				$scope.newNoteText = "";
+
+				$scope.createNote = function() {
+					var newNoteText = $scope.newNoteText;
+					if(!newNoteText) {
+						return;
+					}
+
+					$scope.newNoteText = "";
+
+					api.createNote(newNoteText).then(function(result) {
+						$scope.notes.push(result);
+						$scope.$apply();
+					}, function(error) {
+						console.log("Failed to create a new note");
+						console.log(error);
+					});
+				};
+
+				$scope.deleteNote = function(note) {
+					api.deleteNote(note._id, note._rev).then(function() {
+						var index = $scope.notes.indexOf(note);
+						$scope.notes.splice(index, 1);
+						$scope.$apply();
+					}, function(error) {
+						console.log("Failed to delete note");
+						console.log(error);
+					});
+				};
+
+				api.getAllNotes().then(function(result) {
+					$scope.notes = result;
+					$scope.$apply();
+				});
+			}])
+			.service("api", function() {
+				var db = new PouchDB("test");
+
+				this.createNote = function(text) {
+					return db.post({
+						text: text,
+						createdAt: new Date()
+					}).then(function(result) {
+						return db.get(result.id);
+					});
+				};
+
+				this.deleteNote = function(noteId, rev) {
+					return db.remove(noteId, rev);
+				};
+
+				this.getAllNotes = function() {
+					return db.allDocs({
+						include_docs: true
+					}).then(function(response) {
+						return response.rows.map(function(row) {
+							return row.doc;
+						});
+					});
+				};
+			});
+		</script>
+	</body>
+</html>
