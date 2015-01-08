@@ -8,7 +8,8 @@ module.exports = function(config) {
       'hello.spec.js',
       'controller.spec.js',
       'filter.spec.js',
-      'directive.spec.js'
+      'directive.spec.js',
+      'service.spec.js'
     ],
 
     autoWatch: true,
