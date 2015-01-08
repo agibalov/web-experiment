@@ -1,0 +1,18 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>Hello e2e</title>
+  </head>
+  <body ng-controller="DummyController">
+    <h1>Hello e2e</h1>
+    <p id="message">{{message}}</p>
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script>
+      angular.module('app', [])
+      .controller('DummyController', ['$scope', function($scope) {
+        $scope.message = "hi there!";
+      }]);
+    </script>
+  </body>
+</html>

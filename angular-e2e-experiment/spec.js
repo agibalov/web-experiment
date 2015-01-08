@@ -1,11 +1,11 @@
-describe('angularjs homepage', function() {
-  it('should have a title', function() {
-    browser.get('http://juliemr.github.io/protractor-demo/');
+describe('dummy nodejs app', function() {
+  it('should have page title set to Hello e2e', function() {
+    browser.get('http://localhost:1337/');
+    expect(browser.getTitle()).toEqual('Hello e2e');
+  });
 
-    expect(browser.getTitle()).toEqual('Super Calculator');
-
-    browser.getTitle().then(function(x) {
-      console.log(x);
-    });
+  it('should have a welcome message', function() {
+    browser.get('http://localhost:1337/');
+    expect(element(by.id('message')).getText()).toEqual('hi there!');
   });
 });

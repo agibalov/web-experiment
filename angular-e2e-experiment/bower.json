@@ -1,0 +1,19 @@
+{
+  "name": "angular-e2e-experiment",
+  "version": "0.0.0",
+  "homepage": "https://github.com/loki2302/angularjs-experiment",
+  "authors": [
+    "loki2302 <loki2302@loki2302.me>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.8"
+  }
+}
