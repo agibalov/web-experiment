@@ -1,4 +1,4 @@
-angular.module('app', [])
+angular.module('controllerApp', [])
 .controller('DummyController', ['$scope', function($scope) {
   $scope.message = 'hello';
   $scope.updateMessage = function() {
@@ -7,7 +7,7 @@ angular.module('app', [])
 }]);
 
 describe('DummyController', function() {
-  beforeEach(module('app'));
+  beforeEach(module('controllerApp'));
 
   var $controller;
   var $rootScope;
@@ -27,7 +27,7 @@ describe('DummyController', function() {
   it('sets message to hi there when I trigger updateMessage', function() {
     var $scope = $rootScope;
     var controller = $controller('DummyController', { $scope: $scope });
-    
+
     $scope.$digest();
     expect($scope.message).toEqual('hello');
 
