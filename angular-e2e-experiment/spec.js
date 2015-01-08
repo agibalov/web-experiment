@@ -8,4 +8,9 @@ describe('dummy nodejs app', function() {
     browser.get('http://localhost:1337/');
     expect(element(by.id('message')).getText()).toEqual('hi there!');
   });
+
+  it('should have a second welcome message', function() {
+    browser.get('http://localhost:1337/');
+    expect(element(by.id('asyncMessage')).getText()).toEqual('i am async message');
+  });
 });

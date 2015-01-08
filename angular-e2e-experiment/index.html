@@ -6,12 +6,18 @@
   <body ng-controller="DummyController">
     <h1>Hello e2e</h1>
     <p id="message">{{message}}</p>
+    <p id="asyncMessage">{{asyncMessage}}</p>
 
     <script src="bower_components/angular/angular.js"></script>
     <script>
       angular.module('app', [])
-      .controller('DummyController', ['$scope', function($scope) {
-        $scope.message = "hi there!";
+      .controller('DummyController', ['$scope', '$timeout', function($scope, $timeout) {
+        $scope.message = 'hi there!';
+        $scope.asyncMessage = '';
+
+        $timeout(function() {
+          $scope.asyncMessage = 'i am async message';
+        }, 1000);
       }]);
     </script>
   </body>
