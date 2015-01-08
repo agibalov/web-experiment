@@ -5,6 +5,17 @@ angular.module('serviceApp', [])
       return a + b;
     }
   };
+})
+.factory('asyncCalculatorService', function($q, $timeout) {
+  return {
+    add: function(a, b) {
+      var deferred = $q.defer();
+      $timeout(function() {
+        deferred.resolve(a + b);
+      }, 1);
+      return deferred.promise;
+    }
+  };
 });
 
 describe('calculatorService', function() {
@@ -17,4 +28,26 @@ describe('calculatorService', function() {
   it('should let me concatenate string', inject(function(calculatorService) {
     expect(calculatorService.add('hello', ' world')).toEqual('hello world');
   }));
+});
+
+describe('asyncCalculatorService', function() {
+  beforeEach(module('serviceApp'));
+
+  var asyncCalculatorService;
+  var $timeout;
+  beforeEach(inject(function(_asyncCalculatorService_, _$timeout_) {
+    asyncCalculatorService = _asyncCalculatorService_;
+    $timeout = _$timeout_;
+  }));
+
+  it('should let me add numbers', function(done) {
+    var promise = asyncCalculatorService.add(2, 3);
+
+    promise.then(function(result) {
+      expect(result).toEqual(5);
+      done();
+    });
+
+    $timeout.flush();
+  });
 });
