@@ -7,7 +7,8 @@ module.exports = function(config) {
       'bower_components/angular-mocks/angular-mocks.js',
       'hello.spec.js',
       'controller.spec.js',
-      'filter.spec.js'
+      'filter.spec.js',
+      'directive.spec.js'
     ],
 
     autoWatch: true,
