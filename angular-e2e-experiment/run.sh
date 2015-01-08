@@ -5,6 +5,5 @@ NODE_PID=$! && \
 echo $NODE_PID && \
 sleep 3 && \
 protractor conf.js && \
-kill $NODE_PID && \
-kill $WEBDRIVER_PID && \
+( kill $NODE_PID ; kill $WEBDRIVER_PID ; kill `pgrep --full protractor` ) && \
 echo "DONE"
