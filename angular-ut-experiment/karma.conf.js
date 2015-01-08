@@ -5,7 +5,8 @@ module.exports = function(config) {
     files: [
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
-      'hello.spec.js'
+      'hello.spec.js',
+      'controller.spec.js'
     ],
 
     autoWatch: true,
