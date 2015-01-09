@@ -7,6 +7,12 @@
     <h1>Hello e2e</h1>
     <p id="message">{{message}}</p>
     <p id="asyncMessage">{{asyncMessage}}</p>
+    <form ng-submit="addNumbers()">
+      <input type="text" ng-model="a">
+      <input type="text" ng-model="b">
+      <button id="addNumbers" type="submit">Add</button>
+    </form>
+    <p>{{result}}</p>
 
     <script src="bower_components/angular/angular.js"></script>
     <script>
@@ -14,10 +20,24 @@
       .controller('DummyController', ['$scope', '$timeout', function($scope, $timeout) {
         $scope.message = 'hi there!';
         $scope.asyncMessage = '';
+        
+        $scope.a = "";
+        $scope.b = "";
+        $scope.result = "";
+        $scope.addNumbers = function() {
+          var a = parseInt($scope.a, 10);
+          var b = parseInt($scope.b, 10);
+          $timeout(function() {
+            var result = a + b;
+            $scope.a = "";
+            $scope.b = "";
+            $scope.result = result;
+          }, 1000);
+        };
 
         $timeout(function() {
           $scope.asyncMessage = 'i am async message';
-        }, 1000);
+        }, 500);
       }]);
     </script>
   </body>
