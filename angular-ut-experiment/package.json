@@ -10,6 +10,8 @@
   "author": "loki2302",
   "license": "ISC",
   "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-karma": "^0.10.1",
     "jasmine-core": "^2.1.3",
     "karma": "^0.12.31",
     "karma-chrome-launcher": "^0.1.7",
