@@ -17,7 +17,7 @@
     <script src="bower_components/angular/angular.js"></script>
     <script>
       angular.module('app', [])
-      .controller('DummyController', ['$scope', '$timeout', function($scope, $timeout) {
+      .controller('DummyController', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
         $scope.message = 'hi there!';
         $scope.asyncMessage = '';
         
@@ -27,12 +27,11 @@
         $scope.addNumbers = function() {
           var a = parseInt($scope.a, 10);
           var b = parseInt($scope.b, 10);
-          $timeout(function() {
-            var result = a + b;
+          $http.post('/add/', { a: a, b: b }).then(function(response) {
             $scope.a = "";
             $scope.b = "";
-            $scope.result = result;
-          }, 1000);
+            $scope.result = response.data.result;
+          });
         };
 
         $timeout(function() {
