@@ -6,6 +6,7 @@ module.exports = function(config) {
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'di.spec.js',
+      'scope.spec.js',
       'hello.spec.js',
       'controller.spec.js',
       'filter.spec.js',
