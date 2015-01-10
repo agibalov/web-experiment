@@ -121,5 +121,40 @@ describe('dependency injection', function() {
       // TODO: define with constructor
       // TODO: what can I do with provider instance? (messageServiceProvider)
     });
+
+    // TODO: "decorator"
+
+    describe('composite test', function() {
+      it('dummy', function() {
+        // calculator->adder
+        // calculator->formatter->suffix
+        var $injector = angular.injector([function($provide) {
+          $provide.service('calculator', function(adder, formatter) {
+            this.add = function(a, b) {
+              var result = adder.add(a, b);
+              var resultString = formatter.format(a, b, result);
+              return resultString;
+            };
+          });
+
+          $provide.service('adder', function() {
+            this.add = function(a, b) {
+              return a + b;
+            };
+          });
+
+          $provide.service('formatter', function(suffix) {
+            this.format = function(a, b, result) {
+              return a + ' and ' + b + ' is ' + result + suffix;
+            };
+          });
+
+          $provide.constant('suffix', '!!!');
+        }]);
+
+        var calculator = $injector.get('calculator');
+        expect(calculator.add(2, 3)).toBe('2 and 3 is 5!!!');
+      });
+    });
   });  
 });
