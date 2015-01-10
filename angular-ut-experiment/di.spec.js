@@ -118,6 +118,25 @@ describe('dependency injection', function() {
         expect(messageService.getMessage()).toBe('hello world');
       });
 
+      it('can be defined with a constructor function', function() {
+        function MessageServiceProvider() {
+          this.$get = function(message) {
+            return new MessageService(message);
+          };
+        };
+
+        var $injector = angular.injector([function($provide) {
+          var messageServiceProvider = $provide.provider('messageService', MessageServiceProvider);
+          expect(messageServiceProvider.$get).toBeDefined();
+          expect(messageServiceProvider instanceof MessageServiceProvider).toBe(true);
+
+          $provide.constant('message', 'hello world');
+        }]);
+
+        var messageService = $injector.get('messageService');
+        expect(messageService.getMessage()).toBe('hello world');
+      });
+
       it('can be configured in module configuration function', function() {
         angular.module('test.provider', [], function(messageServiceProvider) {
           messageServiceProvider.setMessage('configured message');
@@ -134,8 +153,6 @@ describe('dependency injection', function() {
         var messageService = $injector.get('messageService');
         expect(messageService.getMessage()).toBe('configured message');
       });
-
-      // TODO: define with constructor
     });
 
     describe('decorator', function() {
