@@ -122,7 +122,42 @@ describe('dependency injection', function() {
       // TODO: what can I do with provider instance? (messageServiceProvider)
     });
 
-    // TODO: "decorator"
+    describe('decorator', function() {
+      it('can be used to override values', function() {
+        var $injector = angular.injector([function($provide) {
+          $provide.value('message', 'hello there');
+          $provide.decorator('message', function() {
+            return 'hi';
+          });
+        }]);
+
+        var message = $injector.get('message');
+        expect(message).toBe('hi');
+      });
+
+      it('can be used to decorate service', function() {
+        var $injector = angular.injector([function($provide) {
+          $provide.service('calculator', function() {
+            this.add = function(a, b) {
+              return a + b;
+            };
+          });
+
+          $provide.decorator('calculator', function($delegate, multiplier) {
+            return {
+              add: function(a, b) {
+                return $delegate.add(a, b) * multiplier;
+              }
+            };
+          });
+
+          $provide.constant('multiplier', 2);
+        }]);
+
+        var calculator = $injector.get('calculator');
+        expect(calculator.add(2, 3)).toBe(10);
+      });
+    });
 
     describe('composite test', function() {
       it('dummy', function() {
