@@ -38,5 +38,88 @@ describe('dependency injection', function() {
         $injector.invoke(retrieveMessage);
       });
     });
+
+    // TODO: illustrate how it differs from value
+    describe('constant', function() {
+      it('can be defined and retrieved', function() {
+        var $injector = angular.injector([function($provide) {
+          var x = $provide.constant('message', 'hello world');
+          expect(x).toBeUndefined(); // wtf? docs say it should be the instance itself
+        }]);
+
+        expect($injector.get('message')).toBe('hello world');
+      });
+    });
+
+    // TODO: illustrate how it differs from constant
+    describe('value', function() {
+      it('can be defined and retrieved', function() {
+        var $injector = angular.injector([function($provide) {
+          var valueProvider = $provide.value('message', 'hello world');
+          expect(valueProvider.$get).toBeDefined();
+        }]);
+
+        expect($injector.get('message')).toBe('hello world');
+      });
+    });
+
+    describe('factory', function() {
+      it('can be defined with factory function', function() {
+        function MessageService() {
+          this.getMessage = function() { return 'hello world'; }
+        };
+
+        var $injector = angular.injector([function($provide) {
+          var messageServiceProvider = $provide.factory('messageService', function() {
+            return new MessageService();
+          });
+          expect(messageServiceProvider.$get).toBeDefined();
+        }]);
+
+        expect($injector.get('messageService').getMessage()).toBe('hello world');
+      });
+    });
+
+    describe('service', function() {
+      it('can be defined with constructor function', function() {
+        function MessageService() {
+          this.getMessage = function() { return 'hello world'; }
+        };
+
+        var $injector = angular.injector([function($provide) {
+          var messageServiceProvider = $provide.service('messageService', MessageService);
+          expect(messageServiceProvider.$get).toBeDefined();
+        }]);
+
+        expect($injector.get('messageService').getMessage()).toBe('hello world');
+      });
+    });
+
+    describe('provider', function() {
+      function MessageService(message) {
+        this.getMessage = function() { return message; };
+      };
+
+      it('can be defined with an object with a $get function', function() {
+        var $injector = angular.injector([function($provide) {
+          var messageServiceProvider = $provide.provider('messageService', {
+            $get: function(message) {
+              return new MessageService(message);
+            }
+          });
+
+          // it's actually a { $get: ... } object I just gave it ^^^
+          expect(messageServiceProvider.$get).toBeDefined();
+
+          $provide.constant('message', 'hello world');
+        }]);
+
+        var messageService = $injector.get('messageService');
+        expect(messageService.getMessage()).toBe('hello world');
+      });
+
+      // TODO: define with constructor
+      // TODO: what can I do with provider instance? (messageServiceProvider)
+    });
   });  
 });
