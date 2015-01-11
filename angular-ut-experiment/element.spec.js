@@ -1,73 +1,63 @@
 describe('element', function() {
-  it('can be described as HTML markup, then manually compiled, linked and used', function() {
-    var $injector = angular.injector(['ng']);
-    var $compile = $injector.get('$compile');
-    var $rootScope = $injector.get('$rootScope');
+  it('should have a class when the class is added', function() {
+    var element = angular.element('<div></div>');
+    expect(element.hasClass('omg')).toBe(false);
 
-    var element = angular.element('<div><span>{{2 + 3}}</span></div>');
-    expect(element.hasClass('ng-scope')).toBe(false);
-    expect(element.html()).toBe('<span>{{2 + 3}}</span>');
-
-    var elementLinkFunction = $compile(element); // this affects the element!
-    expect(element.hasClass('ng-scope')).toBe(true);
-    expect(element.html()).toBe('<span class="ng-binding">{{2 + 3}}</span>');
-
-    var linkedElement = elementLinkFunction($rootScope);
-    expect(linkedElement).toBe(element); // element and linkedElements are the same object
-    expect(linkedElement.hasClass('ng-scope')).toBe(true);
-    expect(linkedElement.html()).toBe('<span class="ng-binding">{{2 + 3}}</span>');
-
-    $rootScope.$digest();
-    expect(linkedElement.hasClass('ng-scope')).toBe(true);
-    expect(linkedElement.html()).toBe('<span class="ng-binding">5</span>');
+    element.addClass('omg');
+    expect(element.hasClass('omg')).toBe(true);
   });
 
-  it('can be described as HTML markup, then manually compiled, linked and used (short)', function() {
-    var $injector = angular.injector(['ng']);
-    var $compile = $injector.get('$compile');
-    var $rootScope = $injector.get('$rootScope');
+  it('should not have a class when the class is removed', function() {
+    var element = angular.element('<div class="omg"></div>');
+    expect(element.hasClass('omg')).toBe(true);
 
-    var element = $compile('<div><span>{{2 + 3}}</span></div>')($rootScope);
-    expect(element.html()).toBe('<span class="ng-binding">{{2 + 3}}</span>');
-
-    $rootScope.$digest();
-    expect(element.html()).toBe('<span class="ng-binding">5</span>');
+    element.removeClass('omg');
+    expect(element.hasClass('omg')).toBe(false);
   });
 
-  it('should get updated when scope is updated', function() {
-    var $injector = angular.injector(['ng']);
-    var $compile = $injector.get('$compile');
-    var $rootScope = $injector.get('$rootScope');
-
-    var element = $compile('<div>Hello, {{name}}!!!</div>')($rootScope);
-
-    $rootScope.$digest();
-    expect(element.html()).toBe('Hello, !!!');
-
-    $rootScope.name = 'loki2302';
-    expect(element.html()).toBe('Hello, !!!');
-
-    $rootScope.$digest();
-    expect(element.html()).toBe('Hello, loki2302!!!');
-
-    $rootScope.name = 'Andrey';
-    expect(element.html()).toBe('Hello, loki2302!!!');
-
-    $rootScope.$digest();
-    expect(element.html()).toBe('Hello, Andrey!!!');
+  it('should call the handler added with a bind call', function() {
+    var element = angular.element('<div></div>');
+    var clicked = false;
+    element.bind('click', function() {
+      clicked = true;
+    });
+    
+    element.triggerHandler('click');
+    expect(clicked).toBe(true);
   });
 
-  it('should update the scope when something happens', function() {
-    var $injector = angular.injector(['ng']);
-    var $compile = $injector.get('$compile');
-    var $rootScope = $injector.get('$rootScope');
-
-    var element = $compile('<div ng-click="clicked = !clicked"></div>')($rootScope);
+  it('should stop calling the handler after an unbind call', function() {
+    var element = angular.element('<div></div>');
+    var clicked = false;
+    element.bind('click', function() {
+      clicked = true;
+    });
+    element.unbind('click');
 
     element.triggerHandler('click');
-    expect($rootScope.clicked).toBe(true);
+    expect(clicked).toBe(false);
+  });
 
-    element.triggerHandler('click');
-    expect($rootScope.clicked).toBe(false);
+  it('should let me manipulate its children', function() {
+    var element = angular.element('<ul></ul>');
+    expect(element.children().length).toBe(0);
+    expect(element.html()).toBe('');
+
+    element.append('<li>item 1</li>');
+    expect(element.children().length).toBe(1);
+    expect(element.html()).toBe('<li>item 1</li>');
+
+    var item2Element = angular.element('<li>item 2</li>');
+    element.append(item2Element);
+    expect(element.children().length).toBe(2);
+    expect(element.html()).toBe('<li>item 1</li><li>item 2</li>');
+
+    element.prepend('<li>item 0</li>');
+    expect(element.children().length).toBe(3);
+    expect(element.html()).toBe('<li>item 0</li><li>item 1</li><li>item 2</li>');
+    
+    item2Element.remove();
+    expect(element.children().length).toBe(2);
+    expect(element.html()).toBe('<li>item 0</li><li>item 1</li>');
   });
 });
