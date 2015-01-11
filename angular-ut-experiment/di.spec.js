@@ -39,6 +39,29 @@ describe('dependency injection', function() {
       });
     });
 
+    it('should throw on implicit annotations in strict mode', function() {
+      // note the [[]] thing
+      var $injector = angular.injector([['$provide', function($provide) {
+        $provide.constant('message', 'hello world');
+        $provide.provider('messageService', {
+          $get: function(message) { // note it's not annotated explicitly
+            return { 
+              getMessage: function() {
+                return message;
+              }
+            }
+          }
+        });
+      }]], true);
+
+      try {
+        $injector.get('messageService');
+        expect(true).toBe(false);
+      } catch(e) {
+        expect(e.message).toContain('[$injector:strictdi] messageService');
+      }
+    });
+
     it('should let me instantiate an arbitrary class', function() {
       var $injector = angular.injector([function($provide) {
         $provide.constant('message', 'hello world');
