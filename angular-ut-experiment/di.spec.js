@@ -39,6 +39,29 @@ describe('dependency injection', function() {
       });
     });
 
+    it('should let me instantiate an arbitrary class', function() {
+      var $injector = angular.injector([function($provide) {
+        $provide.constant('message', 'hello world');
+      }]);
+
+      var messageService1 = $injector.instantiate(MessageService, {
+        suffix: '!!!'
+      });
+      expect(messageService1.getMessage()).toBe('hello world!!!');
+
+      var messageService2 = $injector.instantiate(MessageService, {
+        suffix: '???'
+      });
+      expect(messageService2.getMessage()).toBe('hello world???');
+
+      // the 'message' comes from $injector, while 'suffix' is supplied explicitly
+      function MessageService(message, suffix) {
+        this.getMessage = function() {
+          return message + suffix;
+        };
+      };
+    });
+
     // TODO: illustrate how it differs from value
     describe('constant', function() {
       it('can be defined and retrieved', function() {
