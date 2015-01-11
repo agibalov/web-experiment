@@ -56,4 +56,18 @@ describe('element', function() {
     $rootScope.$digest();
     expect(element.html()).toBe('Hello, Andrey!!!');
   });
+
+  it('should update the scope when something happens', function() {
+    var $injector = angular.injector(['ng']);
+    var $compile = $injector.get('$compile');
+    var $rootScope = $injector.get('$rootScope');
+
+    var element = $compile('<div ng-click="clicked = !clicked"></div>')($rootScope);
+
+    element.triggerHandler('click');
+    expect($rootScope.clicked).toBe(true);
+
+    element.triggerHandler('click');
+    expect($rootScope.clicked).toBe(false);
+  });
 });
