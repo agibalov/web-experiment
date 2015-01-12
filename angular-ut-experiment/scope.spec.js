@@ -80,4 +80,68 @@ describe('scope', function() {
     expect($rootScope.name).toBe('loki2302'); // the root sope is not affected
     expect($childScope.name).toBe('Andrey'); // only the child scope is updated
   });
+
+  it('$emit notifies the scope hierarchy upwards', function() {
+    var $injector = angular.injector(['ng']);
+    var $rootScope = $injector.get('$rootScope');
+    var $subScope1 = $rootScope.$new(true);
+    var $subScope2 = $subScope1.$new(true);
+
+    var log = [];
+
+    $rootScope.$on('test', function(e, message, num) {
+      log.push({ 'scope': 'root', message: message, num: num });
+    });
+
+    $subScope1.$on('test', function(e, message, num) {
+      log.push({ 'scope': 'sub1', message: message, num: num });
+    });
+
+    $subScope2.$on('test', function(e, message, num) {
+      log.push({ 'scope': 'sub2', message: message, num: num });
+    });
+
+    $subScope1.$emit('test', 'hi there', 123);
+
+    // sub1 -> root (sub2 is not notified)
+    expect(log.length).toBe(2);
+    expect(log[0].scope).toBe('sub1');
+    expect(log[0].message).toBe('hi there');
+    expect(log[0].num).toBe(123);
+    expect(log[1].scope).toBe('root');
+    expect(log[1].message).toBe('hi there');
+    expect(log[1].num).toBe(123);
+  });
+
+  it('$broadcast notifies the scope hierarchy downwards', function() {
+    var $injector = angular.injector(['ng']);
+    var $rootScope = $injector.get('$rootScope');
+    var $subScope1 = $rootScope.$new(true);
+    var $subScope2 = $subScope1.$new(true);
+
+    var log = [];
+
+    $rootScope.$on('test', function(e, message, num) {
+      log.push({ 'scope': 'root', message: message, num: num });
+    });
+
+    $subScope1.$on('test', function(e, message, num) {
+      log.push({ 'scope': 'sub1', message: message, num: num });
+    });
+
+    $subScope2.$on('test', function(e, message, num) {
+      log.push({ 'scope': 'sub2', message: message, num: num });
+    });
+
+    $subScope1.$broadcast('test', 'hi there', 123);
+
+    // sub1 -> sub2 (root is not notified)
+    expect(log.length).toBe(2);
+    expect(log[0].scope).toBe('sub1');
+    expect(log[0].message).toBe('hi there');
+    expect(log[0].num).toBe(123);
+    expect(log[1].scope).toBe('sub2');
+    expect(log[1].message).toBe('hi there');
+    expect(log[1].num).toBe(123);    
+  });
 });
