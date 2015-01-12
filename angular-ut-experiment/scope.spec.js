@@ -14,7 +14,7 @@ describe('scope', function() {
     expect($scope.message).toBeUndefined();
   });
 
-  it('$watch updates everything when $digest is called', function() {
+  it('$watch watches a single expression and triggers the listener when $digest is called', function() {
     var $injector = angular.injector(['ng']);
     var $scope = $injector.get('$rootScope');
     $scope.name = 'loki2302';
@@ -23,6 +23,47 @@ describe('scope', function() {
     });
     $scope.$digest();
     expect($scope.message).toBe('hi loki2302!');
+  });
+
+  it('$watchGroup watches a collection of expressions and triggers the listener when $digest is called', function() {
+    var $injector = angular.injector(['ng']);
+    var $scope = $injector.get('$rootScope');
+    $scope.name = 'loki2302';
+    $scope.greeting = 'hello';
+    $scope.$watchGroup(['name', 'greeting'], function(newValues, oldValues) {
+      $scope.message = $scope.greeting + ' ' + $scope.name + '!';
+    });
+    
+    $scope.$digest();
+    expect($scope.message).toBe('hello loki2302!');
+
+    $scope.name = 'Andrey';
+    $scope.$digest();
+    expect($scope.message).toBe('hello Andrey!');
+
+    $scope.greeting = 'hi';
+    $scope.$digest();
+    expect($scope.message).toBe('hi Andrey!');
+  });
+
+  it('$watchCollection watches a collection of objects and triggers the listener when $digest is called', function() {
+    var $injector = angular.injector(['ng']);
+    var $scope = $injector.get('$rootScope');
+    $scope.tasks = ['task one', 'task two'];
+    $scope.$watchCollection('tasks', function(newTasks, oldTasks) {
+      $scope.taskCount = newTasks.length;
+    });
+    
+    $scope.$digest();
+    expect($scope.taskCount).toBe(2);
+
+    $scope.tasks.push('task three');
+    $scope.$digest();
+    expect($scope.taskCount).toBe(3);
+
+    $scope.tasks.pop();
+    $scope.$digest();
+    expect($scope.taskCount).toBe(2);
   });
 
   it('$apply calls $digest internally', function() {
