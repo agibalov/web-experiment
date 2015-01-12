@@ -25,6 +25,44 @@ describe('scope', function() {
     expect($scope.message).toBe('hi loki2302!');
   });
 
+  it('$watch can watch a collection and all its internals', function() {
+    var $injector = angular.injector(['ng']);
+    var $scope = $injector.get('$rootScope');
+    
+    var detectedAChange;
+    $scope.$watch('people', function(newPeople, oldPeople) {
+      detectedAChange = true;
+    }, true); // note a 'true' flag
+
+    $scope.people = null;
+    detectedAChange = false;
+    $scope.$digest();
+    expect(detectedAChange).toBe(true);
+
+    $scope.people = [
+      new Person('loki2302', 30), 
+      new Person('Andrey', 40)
+    ];
+    detectedAChange = false;
+    $scope.$digest();
+    expect(detectedAChange).toBe(true);
+
+    $scope.people.push(new Person('dummy', 50));
+    detectedAChange = false;
+    $scope.$digest();
+    expect(detectedAChange).toBe(true);
+
+    $scope.people[0].age = 1;
+    detectedAChange = false;
+    $scope.$digest();
+    expect(detectedAChange).toBe(true);
+
+    function Person(name, age) {
+      this.name = name;
+      this.age = age;
+    };
+  });
+
   it('$watchGroup watches a collection of expressions and triggers the listener when $digest is called', function() {
     var $injector = angular.injector(['ng']);
     var $scope = $injector.get('$rootScope');
