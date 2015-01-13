@@ -1,4 +1,4 @@
-angular.module('directiveApp', [])
+angular.module('test.directive', [])
 .directive('dummy', function() {
   return function(scope, element) {
     element.addClass('omg');
@@ -6,16 +6,11 @@ angular.module('directiveApp', [])
 });
 
 describe('dummy directive', function() {
-  var element;
-  var $scope;
-  beforeEach(module('directiveApp'));
-  beforeEach(inject(function($compile, $rootScope) {
-    $scope = $rootScope;
-    element = angular.element('<div dummy></div>');
-    element = $compile(element)($rootScope);
-  }));
-
-  it('should add a class of omg', function() {
+  it('should work', function() {
+    var $injector = angular.injector(['ng', 'test.directive']);
+    var $rootScope = $injector.get('$rootScope');
+    var $compile = $injector.get('$compile');
+    var element = $compile('<div dummy></div>')($rootScope);
     expect(element.hasClass('omg')).toBe(true);
   });
 });
