@@ -1,44 +1,50 @@
-angular.module('serviceApp', [])
-.factory('calculatorService', function() {
-  return {
-    add: function(a, b) {
-      return a + b;
-    }
-  };
-})
-.factory('asyncCalculatorService', function($q, $timeout) {
-  return {
-    add: function(a, b) {
-      var deferred = $q.defer();
-      $timeout(function() {
-        deferred.resolve(a + b);
-      }, 1);
-      return deferred.promise;
-    }
-  };
-});
-
 describe('calculatorService', function() {
-  beforeEach(module('serviceApp'));
+  var calculatorService;
+  beforeEach(function() {
+    var $injector = angular.injector([function($provide) {
+      $provide.factory('calculatorService', function() {
+        return {
+          add: function(a, b) {
+            return a + b;
+          }
+        };
+      });
+    }]);
+    calculatorService = $injector.get('calculatorService');
+  });
 
-  it('should let me add numbers', inject(function(calculatorService) {
+  it('should let me add numbers', function() {
     expect(calculatorService.add(2, 3)).toEqual(5);
-  }));
+  });
 
-  it('should let me concatenate string', inject(function(calculatorService) {
+  it('should let me concatenate string', function() {
     expect(calculatorService.add('hello', ' world')).toEqual('hello world');
-  }));
+  });
 });
 
 describe('asyncCalculatorService', function() {
-  beforeEach(module('serviceApp'));
-
+  var injector;
   var asyncCalculatorService;
-  var $timeout;
-  beforeEach(inject(function(_asyncCalculatorService_, _$timeout_) {
-    asyncCalculatorService = _asyncCalculatorService_;
-    $timeout = _$timeout_;
-  }));
+  beforeEach(function() {
+    var $injector = angular.injector(['ngMock', function($provide) {
+      $provide.factory('asyncCalculatorService', function($q, $timeout) {
+        return {
+          add: function(a, b) {
+            var deferred = $q.defer();
+
+            $timeout(function() {
+              deferred.resolve(a + b);
+            }, 1);
+
+            return deferred.promise;
+          }
+        };
+      });
+    }]);
+
+    injector = $injector;
+    asyncCalculatorService = $injector.get('asyncCalculatorService');
+  });
 
   it('should let me add numbers', function(done) {
     var promise = asyncCalculatorService.add(2, 3);
@@ -48,6 +54,7 @@ describe('asyncCalculatorService', function() {
       done();
     });
 
-    $timeout.flush();
+    var $timeout = injector.get('$timeout');
+    $timeout.flush(); // ngMock's $timeout has a 'flush()' method
   });
 });
