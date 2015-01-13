@@ -1,37 +1,52 @@
-angular.module('controllerApp', [])
-.controller('DummyController', ['$scope', function($scope) {
-  $scope.message = 'hello';
-  $scope.updateMessage = function() {
-    $scope.message = 'hi there';
+angular.module('test.controller', [])
+.controller('CalculatorController', function($scope) {
+  $scope.a = null;
+  $scope.b = null;
+  $scope.result = null;
+  $scope.add = function() {
+    $scope.result = parseInt($scope.a, 10) + parseInt($scope.b, 10);
   };
-}]);
+});
 
-describe('DummyController', function() {
-  beforeEach(module('controllerApp'));
+describe('$controller', function() {
+  it('should let me create a controller without module', function() {
+    var $injector = angular.injector(['ng']);
+    var $rootScope = $injector.get('$rootScope');
+    var $controller = $injector.get('$controller');
 
-  var $controller;
-  var $rootScope;
-  beforeEach(inject(function(_$controller_, _$rootScope_) {
-    $controller = _$controller_;
-    $rootScope = _$rootScope_;
-  }));
+    var dummyController = $controller(function($rootScope) {
+      $rootScope.message = 'hello there';
+    });
 
-  it('sets message to hello by default', function() {
-    var $scope = $rootScope;
-    var controller = $controller('DummyController', { $scope: $scope });
+    expect($rootScope.message).toBe('hello there');
+  });
+});
 
-    $scope.$digest();
-    expect($scope.message).toEqual('hello');
+describe('CalculatorController', function() {
+  var $scope;
+  beforeEach(function() {
+    var $injector = angular.injector(['ng', 'test.controller']);
+    var $rootScope = $injector.get('$rootScope');
+    var $controller = $injector.get('$controller');
+
+    $scope = $rootScope.$new();
+    var calculatorController = $controller('CalculatorController', { $scope: $scope });
   });
 
-  it('sets message to hi there when I trigger updateMessage', function() {
-    var $scope = $rootScope;
-    var controller = $controller('DummyController', { $scope: $scope });
+  it('should be empty by default', function() {    
+    expect($scope.a).toBe(null);
+    expect($scope.b).toBe(null);
+    expect($scope.result).toBe(null);
+    expect($scope.add).toBeDefined();
+  });
 
-    $scope.$digest();
-    expect($scope.message).toEqual('hello');
-
-    $scope.updateMessage();
-    expect($scope.message).toEqual('hi there');
+  it('should let me add the numbers', function() {
+    $scope.$apply(function() {
+      $scope.a = 2;
+      $scope.b = 3;
+    });
+    $scope.add();
+    
+    expect($scope.result).toBe(5);
   });
 });
