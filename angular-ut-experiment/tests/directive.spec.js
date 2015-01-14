@@ -58,7 +58,7 @@ describe('directives', function() {
         '<div>' + 
         '<person id="p1" info="loki2302"/>' + 
         '<person id="p2" info="andrey"/>' + 
-        '<div>'
+        '</div>'
       )($rootScope);
 
       $rootScope.loki2302 = { name: 'loki2302', age: 40 };
@@ -92,12 +92,59 @@ describe('directives', function() {
         '<div>' + 
         '<person id="p1" name="loki2302" age="40" />' + 
         '<person id="p2" name="Andrey" age="30" />' + 
-        '<div>'
+        '</div>'
       )($rootScope);
 
       $rootScope.$digest();
       expect(element.find('#p1').text()).toBe('name: loki2302, age: 40');
       expect(element.find('#p2').text()).toBe('name: Andrey, age: 30');
+    });
+  });
+
+  describe('a directive with callback binding', function() {
+    it('should work', function() {
+      var $injector = angular.injector(['ng', function($compileProvider) {
+        $compileProvider.directive('magicButton', function() {
+          return {
+            restrict: 'E',
+            scope: {
+              text: '@',
+              onClick: '&'
+            },
+            template: '<button type="button">{{text}}</button>',
+            link: function(scope, element) {
+              element.on('click', function() {
+                scope.onClick();
+              });
+            }
+          }
+        });
+      }]);
+
+      var $rootScope = $injector.get('$rootScope');
+      var $compile = $injector.get('$compile');
+      var element = $compile(
+        '<div>' + 
+        '<magic-button text="hello" on-click="helloClick()"></magic-button>' + 
+        '<magic-button text="there" on-click="thereClick()"></magic-button>' + 
+        '</div>'
+      )($rootScope);
+
+      $rootScope.helloClick = function() {};
+      $rootScope.thereClick = function() {};
+      spyOn($rootScope, 'helloClick');
+      spyOn($rootScope, 'thereClick');
+
+      $rootScope.$digest();
+      
+      element.find('[text="hello"]').click();
+      expect($rootScope.helloClick).toHaveBeenCalled();
+      expect($rootScope.thereClick).not.toHaveBeenCalled();
+
+      $rootScope.helloClick.calls.reset();
+      element.find('[text="there"]').click();
+      expect($rootScope.helloClick).not.toHaveBeenCalled();
+      expect($rootScope.thereClick).toHaveBeenCalled();
     });
   });
 });
