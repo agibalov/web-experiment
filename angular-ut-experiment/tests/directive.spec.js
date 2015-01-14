@@ -101,6 +101,34 @@ describe('directives', function() {
     });
   });
 
+  describe('a custom ngClick directive', function() {
+    it('should work', function() {
+      var $injector = angular.injector(['ng', function($compileProvider) {
+        $compileProvider.directive('testClick', function($parse) {
+          return {
+            restrict: 'A',
+            link: function(scope, element, attrs) {
+              var clickCallbackFunc = $parse(attrs.testClick);
+              element.on('click', function() {
+                clickCallbackFunc(scope);
+              });
+            }
+          }
+        });
+      }]);
+
+      var $rootScope = $injector.get('$rootScope');
+      var $compile = $injector.get('$compile');
+      var element = $compile(
+        '<button test-click="onClick()">hello<button>'
+      )($rootScope);
+
+      $rootScope.onClick = jasmine.createSpy('onClick');
+      element.click();
+      expect($rootScope.onClick).toHaveBeenCalled();
+    });
+  });
+
   describe('a directive with callback binding', function() {
     it('should work', function() {
       var $injector = angular.injector(['ng', function($compileProvider) {
@@ -130,11 +158,9 @@ describe('directives', function() {
         '</div>'
       )($rootScope);
 
-      $rootScope.helloClick = function() {};
-      $rootScope.thereClick = function() {};
-      spyOn($rootScope, 'helloClick');
-      spyOn($rootScope, 'thereClick');
-
+      $rootScope.helloClick = jasmine.createSpy('helloClick');
+      $rootScope.thereClick = jasmine.createSpy('thereClick');
+      
       $rootScope.$digest();
       
       element.find('[text="hello"]').click();
