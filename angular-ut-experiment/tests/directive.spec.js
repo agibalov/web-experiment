@@ -173,4 +173,54 @@ describe('directives', function() {
       expect($rootScope.thereClick).toHaveBeenCalled();
     });
   });
+
+  describe('a directive with controller', function() {
+    it('should work', function() {
+      var $injector = angular.injector(['ng', function($compileProvider) {
+        $compileProvider.directive('searchBox', function() {
+          return {
+            restrict: 'E',
+            scope: {
+              onSearch: '&'
+            },
+            template: 
+            '<div>' + 
+            '<input type="text" ng-model="searchText">' +
+            '<button type="button" ng-click="searchClick()">Search</button>' +
+            '</div>',
+            controller: function($scope) {
+              $scope.searchText = "";
+              $scope.searchClick = function() {
+                $scope.onSearch({
+                  // "text" is what the consumer should use in HTML, see below
+                  text: $scope.searchText
+                });
+              };
+            }
+          };
+        });
+      }]);
+
+      var $rootScope = $injector.get('$rootScope');
+      var $compile = $injector.get('$compile');
+      var element = $compile(
+        // The name "text" comes from the directive, see a call to $scope.onSearch() above
+        '<search-box on-search="handleSearch(text)" />'
+      )($rootScope);
+
+      $rootScope.$digest();
+
+      $rootScope.handleSearch = jasmine.createSpy('handleSearch');
+
+      var searchTextElement = element.find('input');
+      var searchButtonElement = element.find('button');
+
+      searchTextElement.val('hello');
+      searchTextElement.change();
+
+      searchButtonElement.click();
+
+      expect($rootScope.handleSearch).toHaveBeenCalledWith('hello');
+    });
+  });
 });
