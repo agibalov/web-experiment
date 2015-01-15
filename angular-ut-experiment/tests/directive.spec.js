@@ -175,7 +175,9 @@ describe('directives', function() {
   });
 
   describe('a directive with controller', function() {
-    it('should work', function() {
+    var $rootScope;
+    var $compile;
+    beforeEach(function() {
       var $injector = angular.injector(['ng', function($compileProvider) {
         $compileProvider.directive('searchBox', function() {
           return {
@@ -191,29 +193,36 @@ describe('directives', function() {
             controller: function($scope) {
               $scope.searchText = "";
               $scope.searchClick = function() {
-                $scope.onSearch({
+                var shouldResetSearchText = $scope.onSearch({
                   // "text" is what the consumer should use in HTML, see below
                   text: $scope.searchText
                 });
+
+                if(!!shouldResetSearchText) {
+                  $scope.searchText = "";
+                }
               };
             }
           };
         });
       }]);
 
-      var $rootScope = $injector.get('$rootScope');
-      var $compile = $injector.get('$compile');
+      $rootScope = $injector.get('$rootScope');
+      $compile = $injector.get('$compile');      
+    });
+
+    it('should work in basic use case', function() {
       var element = $compile(
         // The name "text" comes from the directive, see a call to $scope.onSearch() above
         '<search-box on-search="handleSearch(text)" />'
       )($rootScope);
 
-      $rootScope.$digest();
-
-      $rootScope.handleSearch = jasmine.createSpy('handleSearch');
-
       var searchTextElement = element.find('input');
       var searchButtonElement = element.find('button');
+
+      $rootScope.$digest();      
+
+      $rootScope.handleSearch = jasmine.createSpy('handleSearch').and.returnValue(true);
 
       searchTextElement.val('hello');
       searchTextElement.change();
@@ -221,6 +230,28 @@ describe('directives', function() {
       searchButtonElement.click();
 
       expect($rootScope.handleSearch).toHaveBeenCalledWith('hello');
+
+      expect(searchTextElement.val()).toBe('');
+    });
+
+    it('should not crash when I do not specify an on-search handler', function() {
+      var element = $compile(
+        // because there no search handler to return 'true', 
+        // the directive will never reset its search text
+        '<search-box />'
+      )($rootScope);
+
+      var searchTextElement = element.find('input');
+      var searchButtonElement = element.find('button');
+
+      $rootScope.$digest();
+
+      searchTextElement.val('hello');
+      searchTextElement.change();
+
+      searchButtonElement.click();
+
+      expect(searchTextElement.val()).toBe('hello');
     });
   });
 });
