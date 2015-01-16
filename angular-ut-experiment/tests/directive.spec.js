@@ -254,4 +254,30 @@ describe('directives', function() {
       expect(searchTextElement.val()).toBe('hello');
     });
   });
+
+  describe('a directive with transclusion', function() {
+    it('should work', function() {
+      var $injector = angular.injector(['ng', function($compileProvider) {
+        $compileProvider.directive('testTransclude', function() {
+          return {
+            restrict: 'E',
+            transclude: true,
+            template: 
+            '<div class="omg" ng-transclude>' +
+            '</div>'
+          };
+        });
+      }]);
+
+      var $rootScope = $injector.get('$rootScope');
+      var $compile = $injector.get('$compile');
+
+      var element = $compile(
+        '<div class="outer">' + 
+        '  <test-transclude>hello there</test-transclude>' +
+        '</div>')($rootScope);
+
+      expect(element.find('.omg').text()).toBe('hello there');
+    });
+  });
 });
