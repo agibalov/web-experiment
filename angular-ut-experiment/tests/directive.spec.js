@@ -280,4 +280,62 @@ describe('directives', function() {
       expect(element.find('.omg').text()).toBe('hello there');
     });
   });
+
+  describe('nested directives', function() {
+    it('should work', function() {
+      var $injector = angular.injector(['ng', function($compileProvider) {
+        $compileProvider
+        .directive('testList', function() {
+          return {
+            restrict: 'E',
+            transclude: true,
+            scope: {},
+            controller: function($scope) {              
+              $scope.items = [];
+
+              this.addItem = function(item) {
+                $scope.items.push(item);
+              };
+            },
+            template: 
+            '<div>' + 
+            '  <ul>' +
+            '    <li ng-repeat="item in items">{{item.title}}</li>' +
+            '  </ul>' + 
+            '  <ng-transclude />' +
+            '</div>'
+          };
+        })
+        .directive('testItem', function() {
+          return {
+            require: '^testList',
+            restrict: 'E',
+            scope: {
+              title: '@'
+            },
+            link: function(scope, element, attrs, itemsController) {              
+              itemsController.addItem(scope);
+            },
+            template: '<div>{{title}}</div>'
+          };
+        });
+      }]);
+
+      var $rootScope = $injector.get('$rootScope');
+      var $compile = $injector.get('$compile');
+
+      var element = $compile(
+        '<test-list>' + 
+        '  <test-item title="item1"></test-item>' +
+        '  <test-item title="item2"></test-item>' +
+        '</test-list>')($rootScope);
+
+      $rootScope.$digest();      
+      
+      expect(element.find('li:nth-child(1)').text()).toContain('item1');
+      expect(element.find('li:nth-child(2)').text()).toContain('item2');
+      expect(element.find('test-item:nth-child(1)').text()).toContain('item1');
+      expect(element.find('test-item:nth-child(2)').text()).toContain('item2');
+    });
+  });
 });
