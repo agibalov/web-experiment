@@ -295,12 +295,21 @@ describe('directives', function() {
 
               this.addItem = function(item) {
                 $scope.items.push(item);
+                item.selected = false;
+              };
+
+              $scope.select = function(item) {
+                angular.forEach($scope.items, function(it) {
+                  it.selected = false;
+                });
+
+                item.selected = true;
               };
             },
             template: 
             '<div>' + 
             '  <ul>' +
-            '    <li ng-repeat="item in items">{{item.title}}</li>' +
+            '    <li ng-repeat="item in items" ng-click="select(item)">{{item.title}}</li>' +
             '  </ul>' + 
             '  <ng-transclude />' +
             '</div>'
@@ -310,13 +319,14 @@ describe('directives', function() {
           return {
             require: '^testList',
             restrict: 'E',
+            transclude: true,
             scope: {
               title: '@'
             },
             link: function(scope, element, attrs, itemsController) {              
               itemsController.addItem(scope);
             },
-            template: '<div>{{title}}</div>'
+            template: '<div ng-show="selected">{{title}}: <ng-transclude></ng-transclude></div>'
           };
         });
       }]);
@@ -326,16 +336,30 @@ describe('directives', function() {
 
       var element = $compile(
         '<test-list>' + 
-        '  <test-item title="item1"></test-item>' +
-        '  <test-item title="item2"></test-item>' +
+        '  <test-item title="item1">Hi there</test-item>' +
+        '  <test-item title="item2">Bye there</test-item>' +
         '</test-list>')($rootScope);
 
-      $rootScope.$digest();      
+      $rootScope.$digest();
+
+      var item1Li = element.find('li:nth-child(1)');
+      var item2Li = element.find('li:nth-child(2)');
+      var item1View = element.find('test-item[title="item1"] div');
+      var item2View = element.find('test-item[title="item2"] div');
       
-      expect(element.find('li:nth-child(1)').text()).toContain('item1');
-      expect(element.find('li:nth-child(2)').text()).toContain('item2');
-      expect(element.find('test-item:nth-child(1)').text()).toContain('item1');
-      expect(element.find('test-item:nth-child(2)').text()).toContain('item2');
+      expect(item1Li.text()).toContain('item1');
+      expect(item2Li.text()).toContain('item2');
+
+      expect(item1View.text()).toBe('item1: Hi there');
+      expect(item2View.text()).toBe('item2: Bye there');
+
+      item1Li.click();
+      expect(item1View.attr('class')).not.toContain('ng-hide');
+      expect(item2View.attr('class')).toContain('ng-hide');
+
+      item2Li.click();
+      expect(item1View.attr('class')).toContain('ng-hide');
+      expect(item2View.attr('class')).not.toContain('ng-hide');
     });
   });
 });
