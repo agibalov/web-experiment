@@ -1,0 +1,36 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>hello</title>
+    <link rel="stylesheet" href="bower_components/foundation-apps/dist/css/foundation-apps.min.css">
+  </head>
+  <body ng-controller="AppController">
+    <button type="button" ng-click="showModal()">Modal</button>
+
+    <div zf-modal="" id="myModal">
+      <h1>Hello!</h1>
+      <h3>{{message}}</h3>
+    </div>
+
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/foundation-apps/dist/js/foundation-apps.min.js"></script>    
+    <script>
+      angular.module("app", ["foundation.modal"]).controller("AppController", function($scope, FoundationApi) {
+        $scope.message = "hi there!";
+
+        $scope.showModal = function() {
+          console.log("hello");
+          $scope.message += "1";
+          FoundationApi.publish("myModal", "open");
+        };
+      });
+    </script>
+
+    <!-- copied from Bower, looks like its not supposed to work without server -->
+    <script type="text/ng-template" id="components/modal/modal.html">      
+      <div class="modal-overlay" ng-click="hideOverlay()">
+        <aside class="modal" ng-click="$event.stopPropagation();" ng-transclude></aside>
+      </div>
+    </script>
+  </body>
+</html>
