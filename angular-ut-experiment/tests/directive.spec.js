@@ -1,4 +1,4 @@
-describe('directives', function() {
+describe('directives', function() {  
   it('can have a directive that statically adds a class to an element', function() {
     var $injector = angular.injector(['ng', function($compileProvider) {
       $compileProvider.directive('dummy', function() {
