@@ -10,12 +10,12 @@
         <div class="form-group" ng-class="{ 'has-error': f.username.$invalid }">
           <label for="username" class="control-label">Username</label>
           <input type="text" class="form-control" id="username" name="username" ng-model="username">          
-          <p class="help-block" ng-show="f.username.$invalid">{{f.username.message}}</p>
+          <p class="help-block" ng-show="f.username.$invalid">{{be.getFieldError('username')}}</p>
         </div>
         <div class="form-group" ng-class="{ 'has-error': f.password.$invalid }">
           <label for="password" class="control-label">Password</label>
           <input type="text" class="form-control" id="password" name="password" ng-model="password">
-          <p class="help-block" ng-show="f.password.$invalid">{{f.password.message}}</p>
+          <p class="help-block" ng-show="f.password.$invalid">{{be.getFieldError('password')}}</p>
         </div>
         <div class="form-group">
           <button type="submit" class="btn btn-default">Submit</button>
@@ -35,8 +35,8 @@
 
           $timeout(function() {
             var errorMap = {
-              'username': 'bad bad bad', 
-              'password': 'very bad'
+              'username': 'bad bad bad ' + new Date(), 
+              'password': 'very bad ' + new Date()
             };
 
             $scope.be.setFieldErrors(errorMap);
@@ -49,7 +49,8 @@
         // to the related scope
         return {
           require: 'form',
-          link: function(scope, element, attrs, ctrl) {            
+          link: function(scope, element, attrs, ctrl) {
+            var errors = {};
             scope[attrs.be] = {
               setAllFieldsValid: function() {
                 angular.forEach(ctrl, function(formElement, fieldName) {
@@ -57,15 +58,18 @@
                     return;
                   }
 
-                  ctrl[fieldName].$setValidity('omg', true);
-                  ctrl[fieldName].message = undefined;
+                  ctrl[fieldName].$setValidity('omg', true);              
                 });
+                errors = {};
               },
               setFieldErrors: function(errorMap) {
                 angular.forEach(errorMap, function(message, fieldName) {
                   ctrl[fieldName].$setValidity('omg', false);
-                  ctrl[fieldName].message = message;
                 });
+                errors = errorMap;
+              },
+              getFieldError: function(fieldName) {
+                return errors[fieldName];
               }
             };
           }
