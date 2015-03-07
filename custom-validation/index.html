@@ -6,7 +6,7 @@
   </head>
   <body ng-controller="AppController">
     <div class="container">
-      <form name="f" ng-submit="handleForm()" novalidate>
+      <form name="f" ng-submit="handleForm()" novalidate be="be">
         <div class="form-group" ng-class="{ 'has-error': f.username.$invalid }">
           <label for="username" class="control-label">Username</label>
           <input type="text" class="form-control" id="username" name="username" ng-model="username">          
@@ -31,28 +31,44 @@
         $scope.password = "qwerty";
 
         $scope.handleForm = function() {
-          // can I somehow extract this to directive?
-          angular.forEach($scope.f, function(formElement, fieldName) {
-            if(fieldName[0] === '$') {
-              return;
-            }
-
-            $scope.f[fieldName].$setValidity('omg', true);
-            $scope.f[fieldName].message = undefined;
-          });
+          $scope.be.setAllFieldsValid();
 
           $timeout(function() {
             var errorMap = {
               'username': 'bad bad bad', 
               'password': 'very bad'
             };
-            angular.forEach(errorMap, function(message, fieldName) {
-              $scope.f[fieldName].$setValidity('omg', false);
-              $scope.f[fieldName].message = message;
-            });
 
-            console.log($scope.f);
+            $scope.be.setFieldErrors(errorMap);
           }, 500);
+        };
+      })
+      .directive('be', function() {
+        // use like this: <form be="be">
+        // this will publish 'be' with setAllFieldsValid and setFieldErrors
+        // to the related scope
+        return {
+          require: 'form',
+          link: function(scope, element, attrs, ctrl) {            
+            scope[attrs.be] = {
+              setAllFieldsValid: function() {
+                angular.forEach(ctrl, function(formElement, fieldName) {
+                  if(fieldName[0] === '$') {
+                    return;
+                  }
+
+                  ctrl[fieldName].$setValidity('omg', true);
+                  ctrl[fieldName].message = undefined;
+                });
+              },
+              setFieldErrors: function(errorMap) {
+                angular.forEach(errorMap, function(message, fieldName) {
+                  ctrl[fieldName].$setValidity('omg', false);
+                  ctrl[fieldName].message = message;
+                });
+              }
+            };
+          }
         };
       });
     </script>    
