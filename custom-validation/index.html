@@ -1,0 +1,60 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>hello</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  </head>
+  <body ng-controller="AppController">
+    <div class="container">
+      <form name="f" ng-submit="handleForm()" novalidate>
+        <div class="form-group" ng-class="{ 'has-error': f.username.$invalid }">
+          <label for="username" class="control-label">Username</label>
+          <input type="text" class="form-control" id="username" name="username" ng-model="username">          
+          <p class="help-block" ng-show="f.username.$invalid">Help block here: {{f.username.$error|json}}, Error message: {{f.username.message}}</p>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error': f.password.$invalid }">
+          <label for="password" class="control-label">Password</label>
+          <input type="text" class="form-control" id="password" name="password" ng-model="password">
+          <p class="help-block" ng-show="f.password.$invalid">Help block here: {{f.password.$error|json}}, Error message: {{f.password.message}}</p>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+      </form>
+    </div>
+
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script>
+      angular.module('app', [])
+      .controller('AppController', function($scope, $timeout) {
+        $scope.username = "loki2302";
+        $scope.password = "qwerty";
+
+        $scope.handleForm = function() {
+          // can I somehow extract this to directive?
+          angular.forEach($scope.f, function(formElement, fieldName) {
+            if(fieldName[0] === '$') {
+              return;
+            }
+
+            $scope.f[fieldName].$setValidity('omg', true);
+            $scope.f[fieldName].message = undefined;
+          });
+
+          $timeout(function() {
+            var errorMap = {
+              'username': 'bad bad bad', 
+              'password': 'very bad'
+            };
+            angular.forEach(errorMap, function(message, fieldName) {
+              $scope.f[fieldName].$setValidity('omg', false);
+              $scope.f[fieldName].message = message;
+            });
+
+            console.log($scope.f);
+          }, 500);
+        };
+      });
+    </script>    
+  </body>
+</html>
