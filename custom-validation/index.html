@@ -10,12 +10,12 @@
         <div class="form-group" ng-class="{ 'has-error': f.username.$invalid }">
           <label for="username" class="control-label">Username</label>
           <input type="text" class="form-control" id="username" name="username" ng-model="username">          
-          <p class="help-block" ng-show="f.username.$invalid">Help block here: {{f.username.$error|json}}, Error message: {{f.username.message}}</p>
+          <p class="help-block" ng-show="f.username.$invalid">{{f.username.message}}</p>
         </div>
         <div class="form-group" ng-class="{ 'has-error': f.password.$invalid }">
           <label for="password" class="control-label">Password</label>
           <input type="text" class="form-control" id="password" name="password" ng-model="password">
-          <p class="help-block" ng-show="f.password.$invalid">Help block here: {{f.password.$error|json}}, Error message: {{f.password.message}}</p>
+          <p class="help-block" ng-show="f.password.$invalid">{{f.password.message}}</p>
         </div>
         <div class="form-group">
           <button type="submit" class="btn btn-default">Submit</button>
