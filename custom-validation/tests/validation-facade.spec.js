@@ -30,7 +30,9 @@ describe('validationFacade directive', function() {
     expect($scope.f.username.$valid).toBe(false);
     expect($scope.f.password.$valid).toBe(false);
 
+    expect($scope.vf.isError('username')).toBe(true);
     expect($scope.vf.getFieldError('username')).toBe('bad username');
+    expect($scope.vf.isError('password')).toBe(true);
     expect($scope.vf.getFieldError('password')).toBe('very bad password');
   });
 
@@ -52,7 +54,9 @@ describe('validationFacade directive', function() {
     expect($scope.f.username.$valid).toBe(true);
     expect($scope.f.password.$valid).toBe(true);
 
+    expect($scope.vf.isError('username')).toBe(false);
     expect($scope.vf.getFieldError('username')).not.toBeDefined();
+    expect($scope.vf.isError('password')).toBe(false);
     expect($scope.vf.getFieldError('password')).not.toBeDefined();
   });
 });
