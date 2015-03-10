@@ -33,4 +33,26 @@ describe('validationFacade directive', function() {
     expect($scope.vf.getFieldError('username')).toBe('bad username');
     expect($scope.vf.getFieldError('password')).toBe('very bad password');
   });
+
+  it('should reset form validity', function() {
+    var element = $compile(
+    '<form name="f" validation-facade="vf">' + 
+    '  <input type="text" name="username" ng-model="username">' +
+    '  <input type="password" name="password" ng-model="password">' +
+    '</form>')($scope);
+
+    $scope.vf.setFieldErrors({
+      username: 'bad username',
+      password: 'very bad password'
+    });
+
+    $scope.vf.setAllFieldsValid();
+
+    expect($scope.f.$valid).toBe(true);
+    expect($scope.f.username.$valid).toBe(true);
+    expect($scope.f.password.$valid).toBe(true);
+
+    expect($scope.vf.getFieldError('username')).not.toBeDefined();
+    expect($scope.vf.getFieldError('password')).not.toBeDefined();
+  });
 });
