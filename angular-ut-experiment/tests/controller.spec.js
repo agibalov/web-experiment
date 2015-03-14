@@ -26,6 +26,53 @@ describe('$controller', function() {
   });
 });
 
+describe('"Controller as" syntax', function() {
+  it('should work when controller is instantiated via $compile', function() {
+    var $injector = angular.injector(['ng', function($controllerProvider) {
+      $controllerProvider.register('DummyController', function() {
+        this.message = 'hello there';
+      });
+    }]);    
+    
+    var $compile = $injector.get('$compile');
+    var $rootScope = $injector.get('$rootScope');
+    var $scope = $rootScope.$new();
+
+    var view = $compile('<div ng-controller="DummyController as dummy">{{dummy.message}}</div>')($scope);
+
+    $rootScope.$apply();
+
+    console.log(view);
+    console.log($scope);
+
+    expect(view.text()).toBe('hello there');
+
+    expect($scope.$$childTail.dummy.message).toBe('hello there');
+    expect($scope.$$childHead.dummy.message).toBe('hello there');
+    
+    // http://stackoverflow.com/questions/29047247/when-instantiating-a-controller-with-controller-as-syntax-via-compile-where
+    // expect($scope.dummy.message).toBe('hello there');
+  });
+
+  it('should work when controller is instantiated explicitly', function() {
+    var $injector = angular.injector(['ng', function($controllerProvider) {
+      $controllerProvider.register('DummyController', function() {
+        this.message = 'hello there';
+      });
+    }]);    
+    
+    var $controller = $injector.get('$controller');
+    var $compile = $injector.get('$compile');
+    var $rootScope = $injector.get('$rootScope');
+    var $scope = $rootScope.$new();
+
+    $controller('DummyController as dummy', {$scope: $scope});
+    $rootScope.$apply();
+
+    expect($scope.dummy.message).toBe('hello there');
+  });
+});
+
 describe('CalculatorController', function() {
   function CalculatorController($scope) {
     $scope.a = null;
