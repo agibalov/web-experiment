@@ -42,16 +42,17 @@ describe('"Controller as" syntax', function() {
 
     $rootScope.$apply();
 
-    console.log(view);
-    console.log($scope);
-
     expect(view.text()).toBe('hello there');
 
+    // http://stackoverflow.com/questions/29047247/when-instantiating-a-controller-with-controller-as-syntax-via-compile-where
+    // When using ng-controller, the child scope is created
+    // and 'dummy' property only gets published on that child scope,
+    // so it's not available via $scope:
+    expect($scope.dummy).toBeUndefined();
+
+    // As a dirty hack, one can use non-public API to get there:
     expect($scope.$$childTail.dummy.message).toBe('hello there');
     expect($scope.$$childHead.dummy.message).toBe('hello there');
-    
-    // http://stackoverflow.com/questions/29047247/when-instantiating-a-controller-with-controller-as-syntax-via-compile-where
-    // expect($scope.dummy.message).toBe('hello there');
   });
 
   it('should work when controller is instantiated explicitly', function() {
