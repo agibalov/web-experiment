@@ -1,5 +1,5 @@
 describe('$http', function() {
-  it('should provide successful result when there was no error', inject(function($httpBackend, $http) {
+  it('should provide successful result when there was no error (<300)', inject(function($httpBackend, $http) {
     $httpBackend.expect('GET', '/something').respond(200, { here: 'it is' });
 
     var onSuccess = jasmine.createSpy('onSuccess');
@@ -26,7 +26,7 @@ describe('$http', function() {
     expect(onError).not.toHaveBeenCalled();
   }));
 
-  it('should provide error result when there was an error', inject(function($httpBackend, $http) {
+  it('should provide error result when there was an error (>=400)', inject(function($httpBackend, $http) {
     $httpBackend.expect('GET', '/something').respond(400, { here: 'it is' });
 
     var onSuccess = jasmine.createSpy('onSuccess');
@@ -67,8 +67,7 @@ describe('$http', function() {
       $httpBackend.expect('GET', '/something').respond(200, { here: 'it is' });
      
       var onSuccess = jasmine.createSpy('onSuccess');
-      $http.get('/something')
-        .then(responseHandler.handle, responseHandler.handle)
+      responseHandler.wrap($http.get('/something'))
         .then(onSuccess);
 
       $httpBackend.verifyNoOutstandingExpectation();
@@ -85,8 +84,7 @@ describe('$http', function() {
       $httpBackend.expect('GET', '/something').respond(400, { here: 'it is' });
      
       var onError = jasmine.createSpy('onError');
-      $http.get('/something')
-        .then(responseHandler.handle, responseHandler.handle)
+      responseHandler.wrap($http.get('/something'))
         .then(null, onError);
 
       $httpBackend.verifyNoOutstandingExpectation();
@@ -103,8 +101,7 @@ describe('$http', function() {
       $httpBackend.expect('GET', '/something').respond(500, { here: 'it is' });
      
       var onError = jasmine.createSpy('onError');
-      $http.get('/something')
-        .then(responseHandler.handle, responseHandler.handle)
+      responseHandler.wrap($http.get('/something'))
         .then(null, onError);
 
       $httpBackend.verifyNoOutstandingExpectation();
@@ -158,6 +155,10 @@ describe('$http', function() {
         }
 
         return handlerFunc(httpResponse);
+      };
+
+      self.wrap = function(promise) {
+        return promise.then(self.handle, self.handle);
       };
     };
   });
