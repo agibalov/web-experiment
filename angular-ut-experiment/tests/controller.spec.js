@@ -1,5 +1,5 @@
 describe('$controller', function() {
-  it('should let me create a controller without a module', function() {
+  it('should let me create a controller via controller constructor function', function() {
     var $injector = angular.injector(['ng']);
     var $rootScope = $injector.get('$rootScope');
     var $controller = $injector.get('$controller');
@@ -10,23 +10,38 @@ describe('$controller', function() {
 
     expect($rootScope.message).toBe('hello there');
   });
+
+  it('should let me create a controller previously registered with $controllerProvider', function() {
+    var $injector = angular.injector(['ng', function($controllerProvider) {
+      $controllerProvider.register('DummyController', ['$rootScope', function($rootScope) {
+        $rootScope.message = 'hello there';
+      }]);
+    }]);
+    var $rootScope = $injector.get('$rootScope');
+    var $controller = $injector.get('$controller');
+
+    var dummyController = $controller('DummyController');
+
+    expect($rootScope.message).toBe('hello there');
+  });
 });
 
 describe('CalculatorController', function() {
-  angular.module('test.controller', [])
-  .controller('CalculatorController', function($scope) {
+  function CalculatorController($scope) {
     $scope.a = null;
     $scope.b = null;
     $scope.result = null;
     $scope.add = function() {
       $scope.result = parseInt($scope.a, 10) + parseInt($scope.b, 10);
     };
-  });
+  };
 
   describe('can be tested via scope with no view at all', function() {
     var $scope;
     beforeEach(function() {
-      var $injector = angular.injector(['ng', 'test.controller']);
+      var $injector = angular.injector(['ng', function($controllerProvider) {
+        $controllerProvider.register('CalculatorController', CalculatorController);
+      }]);
       var $rootScope = $injector.get('$rootScope');
       var $controller = $injector.get('$controller');
 
@@ -52,7 +67,9 @@ describe('CalculatorController', function() {
   describe('can be tested even with plain object instead of scope', function() {
     var $scope;
     beforeEach(function() {
-      var $injector = angular.injector(['ng', 'test.controller']);
+      var $injector = angular.injector(['ng', function($controllerProvider) {
+        $controllerProvider.register('CalculatorController', CalculatorController);
+      }]);
       var $controller = $injector.get('$controller');
 
       $scope = {};
@@ -78,7 +95,9 @@ describe('CalculatorController', function() {
     var $scope;
     var view;
     beforeEach(function() {
-      var $injector = angular.injector(['ng', 'test.controller']);
+      var $injector = angular.injector(['ng', function($controllerProvider) {
+        $controllerProvider.register('CalculatorController', CalculatorController);
+      }]);
       var $compile = $injector.get('$compile');
       var $rootScope = $injector.get('$rootScope');
       var $controller = $injector.get('$controller');
