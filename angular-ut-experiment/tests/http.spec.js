@@ -54,20 +54,21 @@ describe('$http', function() {
   }));
 
   describe('Response handler', function() {
-    var responseHandler;
+    var interpretResponse;
 
     beforeEach(inject(function($q) {
-      responseHandler = new ResponseHandler()
+      interpretResponse = new ResponseHandler()
         .when(200, returnData())
         .when(400, throwValidationError($q))
-        .otherwise(throwError($q));
+        .otherwise(throwError($q))
+        .wrap;
     }));
 
     it('should successfully resolve to data when 200', inject(function($httpBackend, $http) {
       $httpBackend.expect('GET', '/something').respond(200, { here: 'it is' });
      
       var onSuccess = jasmine.createSpy('onSuccess');
-      responseHandler.wrap($http.get('/something'))
+      interpretResponse($http.get('/something'))
         .then(onSuccess);
 
       $httpBackend.verifyNoOutstandingExpectation();
@@ -84,7 +85,7 @@ describe('$http', function() {
       $httpBackend.expect('GET', '/something').respond(400, { here: 'it is' });
      
       var onError = jasmine.createSpy('onError');
-      responseHandler.wrap($http.get('/something'))
+      interpretResponse($http.get('/something'))
         .then(null, onError);
 
       $httpBackend.verifyNoOutstandingExpectation();
@@ -101,7 +102,7 @@ describe('$http', function() {
       $httpBackend.expect('GET', '/something').respond(500, { here: 'it is' });
      
       var onError = jasmine.createSpy('onError');
-      responseHandler.wrap($http.get('/something'))
+      interpretResponse($http.get('/something'))
         .then(null, onError);
 
       $httpBackend.verifyNoOutstandingExpectation();
