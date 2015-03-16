@@ -1,5 +1,4 @@
 // TODO: check if it loads templates via $http
-// TODO: check how resolve works (and triggers $routeChangeError if there's a rejection)
 // TODO: check if $routeChangeError gets propagated to $exceptionHandler
 // TODO: check <ng-view/>
 // TODO: check how .otherwise() works
@@ -122,13 +121,13 @@ describe('$routeProvider', function() {
             expect(onRouteChangeError.calls.mostRecent().args[3/*rejection*/]).toBe('no async data');
           });
 
-          // that's surprising          
+          // that's surprising, true
           xit('should keep $route.current undefined', function() {
             expect($route.current).toBeUndefined();
           });
 
-          // TODO: check if it's supposed to be like this
-          it('should still update $route.current respectively', function() {
+          // that's quite weird, but expected
+          it('should still update $route.current respectively, but set locals to undefined', function() {
             expect($route.current.controller).toBe('DummyController');
             expect($route.current.template).toBe('template for dummy controller');
             expect($route.current.locals).toBeUndefined();
