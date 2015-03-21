@@ -12,9 +12,11 @@ module.exports = function(grunt) {
       }
     },
     processhtml: {
-      index: {        
+      build: {        
         files: {
-          '<%= buildDir %>/index.html': ['index.html']
+          '<%= buildDir %>/angular-and-threejs.html': ['angular-and-threejs.html'],
+          '<%= buildDir %>/app.html': ['app.html'],
+          '<%= buildDir %>/geometry.html': ['geometry.html']
         }
       }
     },
