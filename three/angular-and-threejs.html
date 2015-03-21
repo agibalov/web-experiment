@@ -22,6 +22,7 @@
           <sphere x="app.posX" ng-if="app.shouldShow3"></sphere>
           <picker x="app.mouseX" y="app.mouseY"></picker>
           <sprite></sprite>
+          <sprite2 text="hello there"></sprite2>
         </canvas>
       </div>
     </div>
@@ -90,7 +91,7 @@
                 renderer.setClearColor(0xeeeeee);
 
                 camera = new THREE.PerspectiveCamera(90, element.width()/element.height(), 0.1, 10000);
-                camera.position.set(10, 0, -50);
+                camera.position.set(5, 0, -50);
                 camera.lookAt(new THREE.Vector3(0, 0, 0));
                 scene.add(camera);
 
@@ -151,6 +152,49 @@
           }
         };
       })
+      .directive('sprite2', function() {
+        return {
+          require: '^three',
+          link: function(scope, element, attrs, three) {            
+            var canvas = document.createElement('canvas');
+            canvas.style='background-color: pink;';
+            var context = canvas.getContext('2d');
+            
+            context.font = 'bold 130px Arial';
+            var textWidth = context.measureText(attrs.text).width;
+
+            canvas.width = textWidth;
+            canvas.height = 130;
+
+            context.font = 'bold 130px Arial';
+            context.fillStyle = '#ffffff';
+            context.fillText(attrs.text, 0, 130);
+
+            var texture = new THREE.Texture(canvas);
+            texture.needsUpdate = true;
+            var ratio = canvas.width / canvas.height;
+            var scale = 20;
+            var geometry = new THREE.PlaneGeometry(scale*ratio, scale);
+            var material = new THREE.MeshBasicMaterial({
+              map: texture,
+              color: 0xffffff, 
+              side: THREE.DoubleSide,
+              transparent: true,
+              depthTest: false
+            });
+            var plane = new THREE.Mesh(geometry, material);
+            plane.position.set(-100, 0, 0)
+
+            three.getScene().add(plane);
+            three.redraw();
+
+            scope.$on('$destroy', function() {
+              three.getScene().remove(plane);
+              three.redraw();
+            });
+          }
+        };
+      })
       .directive('sprite', function($compile) {
         // raycaster only seems to work fine with round sprites,
         // it interprets scale.x as a radius of the sprite
@@ -182,7 +226,7 @@
             var ratio = canvas.width / canvas.height;
             var scale = 20;
             sprite.scale.set(scale * ratio, scale);            
-            sprite.position.set(-30, 0, 0);
+            sprite.position.set(30, 0, 0);
             three.getScene().add(sprite);
             three.redraw();
 
