@@ -362,4 +362,26 @@ describe('directives', function() {
       expect(item2View.attr('class')).not.toContain('ng-hide');
     });
   });
+
+  describe('method call order', function() {
+    describe('a single directive with controller and link', function() {      
+      beforeEach(module(function($compileProvider) {
+        $compileProvider.directive('test', function($log) {
+          return {
+            controller: function() {
+              $log.info('controller');
+            },
+            link: function() {
+              $log.info('link');
+            }
+          };
+        });
+      }));
+
+      it('should have its controller called before link', inject(function($compile, $log) {
+        $compile('<test></test>')({});
+        expect($log.info.logs.length).toBe(2);
+      }));
+    });
+  });
 });
