@@ -1,0 +1,181 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>angular-threejs-experiment</title>
+    <!-- build:css bootstrap.min.css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <!-- /build -->
+  </head>
+  <body ng-controller="AppController as app">
+    <div class="container">
+      <div class="row">
+        <button ng-click="app.shouldShow1 = !app.shouldShow1" class="btn btn-default">Toggle 1</button>
+        <button ng-click="app.shouldShow2 = !app.shouldShow2" class="btn btn-default">Toggle 2</button>
+        <button ng-click="app.shouldShow3 = !app.shouldShow3" class="btn btn-default">Toggle 3</button>
+        <button ng-click="app.posX = app.posX - 5" class="btn btn-default">&lt;-</button>
+        <button ng-click="app.posX = app.posX + 5" class="btn btn-default">-&gt;</button>
+      </div>
+      <div class="row">
+        <canvas style="width: 100%; height: 300px;" ng-mousemove="app.handleMouseMove($event)" three>
+          <sphere x="app.posX2" ng-if="app.shouldShow1"></sphere>
+          <sphere x="0" ng-if="app.shouldShow2"></sphere>
+          <sphere x="app.posX" ng-if="app.shouldShow3"></sphere>
+          <picker x="app.mouseX" y="app.mouseY"></picker>
+        </canvas>
+      </div>
+    </div>
+
+    <!-- build:js everything.js -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/threejs/build/three.js"></script>
+    <!-- /build -->
+    <script>
+      angular.module('app', [])
+      .controller('AppController', function($interval) {
+        this.message = 'hello';
+        this.shouldShow1 = true;
+        this.shouldShow2 = true;
+        this.shouldShow3 = true;
+        this.posX = 50;
+        this.posX2 = -50;
+        this.mouseX = 0;
+        this.mouseY = 0;
+
+        var t = 0;
+        var self = this;
+        $interval(function() {
+          self.posX2 = -50 + Math.sin(t)*20;
+          t+=0.1;
+        }, 100);
+
+        var self = this;
+        this.handleMouseMove = function(e) {
+          e.preventDefault();
+          self.mouseX = e.clientX - e.toElement.offsetLeft;
+          self.mouseY = e.clientY - e.toElement.offsetTop;
+          //console.log(e);
+        };
+      })
+      .directive('three', function() {
+        var scene;        
+        var renderer;
+        var camera;
+        var width;
+        var height;
+        return {
+          controller: function() {
+            console.log('three controller');
+            this.getScene = function() { return scene; };
+            this.redraw = function() {
+              renderer.render(scene, camera);
+            };
+            this.getCamera = function(){return camera;};
+            this.getRendererWidth = function() {return width;};
+            this.getRendererHeight = function() {return height;};
+          },
+          // http://stackoverflow.com/questions/22081140/how-to-execute-parent-directive-before-child-directive
+          compile: function(element, attrs, transclude) {
+            return {
+              pre: function(scope, element, attrs, controller) {
+                scene = new THREE.Scene();
+                renderer = new THREE.WebGLRenderer({
+                  antialias: true,
+                  canvas: element[0]
+                });
+                renderer.setSize(element.width(), element.height());
+                width = element.width();
+                height = element.height();
+                renderer.setClearColor(0xeeeeee);
+
+                camera = new THREE.PerspectiveCamera(90, element.width()/element.height(), 0.1, 10000);
+                camera.position.set(-10, 0, 50);
+                camera.lookAt(new THREE.Vector3(0, 0, 0));
+                scene.add(camera);
+
+                var light = new THREE.DirectionalLight(0xffffff);
+                light.position.set(0, 0, 100);
+                scene.add(light);
+
+                renderer.render(scene, camera);
+              },
+              post: angular.noop
+            }
+          }
+        };
+      })
+      .directive('picker', function() {
+        return {
+          require: '^three',
+          scope: {
+            x: '&',
+            y: '&'
+          },
+          link: function(scope, element, attrs, three) {
+            var width = three.getRendererWidth();
+            var height = three.getRendererHeight();
+            var raycaster = new THREE.Raycaster();
+            var mouseVector = new THREE.Vector2();
+            
+            scope.$watch(scope.x, function(newX, oldX) {
+              mouseVector.x = 2 * (newX / width) - 1;
+              update();
+
+            });
+
+            scope.$watch(scope.y, function(newY, oldY) {
+              mouseVector.y = 1 - 2 * ( newY / height );
+              update();
+            });
+
+            function update() {
+              raycaster.setFromCamera(mouseVector, three.getCamera());
+
+              var scene = three.getScene();
+              for(var i = 0; i < scene.children.length; i++) {
+                var child = three.getScene().children[i];
+                if('material' in child) {
+                  child.material.color.set(0xff0000);
+                }
+              }
+
+              var intersections = raycaster.intersectObjects(scene.children);
+              for(var i = 0; i < intersections.length; i++) {
+                var intersection = intersections[i];
+                intersection.object.material.color.set(0x00ff00);            
+              }
+
+              three.redraw();
+            }
+          }
+        };
+      })
+      .directive('sphere', function() {        
+        return {
+          require: '^three',
+          scope: {
+            x: '&x'
+          },
+          link: function(scope, element, attrs, three) {
+            var sphereGeometry = new THREE.SphereGeometry(20);
+            var sphereMaterial = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+            var sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+            three.getScene().add(sphereMesh);
+            three.redraw();
+
+            scope.$watch(scope.x, function(newX, oldX) {
+              sphereMesh.position.set(newX, 0, 0);
+              three.redraw();
+            });
+
+            scope.$on('$destroy', function() {
+              three.getScene().remove(sphereMesh);
+              three.redraw();
+            });
+          }
+        };
+      });
+    </script>
+  </body>
+</html>
