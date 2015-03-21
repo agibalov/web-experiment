@@ -223,4 +223,39 @@ describe('scope', function() {
     expect(log[1].message).toBe('hi there');
     expect(log[1].num).toBe(123);    
   });
+
+  it('$destroy excludes the scope from $digest updates', function() {
+    var $injector = angular.injector(['ng']);
+    var $rootScope = $injector.get('$rootScope');
+
+    var scope = $rootScope.$new();
+    var onNameUpdated = jasmine.createSpy('onNameUpdated');
+
+    scope.$watch('name', onNameUpdated);
+    scope.$apply(function() {
+      scope.name = 'loki2302';
+    });
+    expect(onNameUpdated).toHaveBeenCalled();
+
+    onNameUpdated.calls.reset();
+
+    scope.$destroy();
+    scope.$apply(function() {
+      scope.name = 'andrey';
+    });
+    expect(onNameUpdated).not.toHaveBeenCalled();
+  });
+
+  it('$destroy broadcasts an event before actually destroying the scope', function() {
+    var $injector = angular.injector(['ng']);
+    var $rootScope = $injector.get('$rootScope');
+
+    var scope = $rootScope.$new();
+    var onScopeDestroyed = jasmine.createSpy('onScopeDestroyed');
+    scope.$on('$destroy', onScopeDestroyed);
+
+    expect(onScopeDestroyed).not.toHaveBeenCalled();
+    scope.$destroy();
+    expect(onScopeDestroyed).toHaveBeenCalled();
+  });
 });
