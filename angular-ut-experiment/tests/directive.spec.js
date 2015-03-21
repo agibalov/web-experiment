@@ -415,5 +415,56 @@ describe('directives', function() {
         expect($log.info.logs[2][0]).toBe('post-link');
       }));
     });
+
+    describe('parent/child directives', function() {
+      beforeEach(module(function($compileProvider) {
+        $compileProvider
+        .directive('parent', function($log) {
+          return {
+            controller: function() {
+              $log.info('parent-controller');
+            },
+            compile: function(element, attrs, transclude) {
+              return {
+                pre: function(scope, element, attrs, controller) {
+                  $log.info('parent-pre-link');
+                },
+                post: function(scope, element, attrs, controller) {
+                  $log.info('parent-post-link');
+                }
+              };
+            }
+          };
+        })
+        .directive('child', function($log) {
+          return {
+            controller: function() {
+              $log.info('child-controller');
+            },
+            compile: function(element, attrs, transclude) {
+              return {
+                pre: function(scope, element, attrs, controller) {
+                  $log.info('child-pre-link');
+                },
+                post: function(scope, element, attrs, controller) {
+                  $log.info('child-post-link');
+                }
+              };
+            }
+          };
+        });
+      }));
+
+      it('should have a very specific sequence of calls', inject(function($log, $compile) {
+        $compile('<parent><child></child></parent>')({});
+        expect($log.info.logs.length).toBe(6);
+        expect($log.info.logs[0][0]).toBe('parent-controller');
+        expect($log.info.logs[1][0]).toBe('parent-pre-link');
+        expect($log.info.logs[2][0]).toBe('child-controller');
+        expect($log.info.logs[3][0]).toBe('child-pre-link');
+        expect($log.info.logs[4][0]).toBe('child-post-link');
+        expect($log.info.logs[5][0]).toBe('parent-post-link');
+      }));
+    });
   });
 });
