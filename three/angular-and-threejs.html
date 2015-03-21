@@ -91,7 +91,7 @@
                 renderer.setClearColor(0xeeeeee);
 
                 camera = new THREE.PerspectiveCamera(90, element.width()/element.height(), 0.1, 10000);
-                camera.position.set(5, 0, -50);
+                camera.position.set(5, 20, -50);
                 camera.lookAt(new THREE.Vector3(0, 0, 0));
                 scene.add(camera);
 
@@ -183,7 +183,9 @@
               depthTest: false
             });
             var plane = new THREE.Mesh(geometry, material);
-            plane.position.set(-100, 0, 0)
+            plane.lookAt(three.getCamera().position);
+            plane.position.set(-100, 0, 0);
+
 
             three.getScene().add(plane);
             three.redraw();
