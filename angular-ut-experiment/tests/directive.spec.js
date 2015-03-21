@@ -418,41 +418,28 @@ describe('directives', function() {
 
     describe('parent/child directives', function() {
       beforeEach(module(function($compileProvider) {
-        $compileProvider
-        .directive('parent', function($log) {
-          return {
-            controller: function() {
-              $log.info('parent-controller');
-            },
-            compile: function(element, attrs, transclude) {
-              return {
-                pre: function(scope, element, attrs, controller) {
-                  $log.info('parent-pre-link');
-                },
-                post: function(scope, element, attrs, controller) {
-                  $log.info('parent-post-link');
-                }
-              };
-            }
-          };
-        })
-        .directive('child', function($log) {
-          return {
-            controller: function() {
-              $log.info('child-controller');
-            },
-            compile: function(element, attrs, transclude) {
-              return {
-                pre: function(scope, element, attrs, controller) {
-                  $log.info('child-pre-link');
-                },
-                post: function(scope, element, attrs, controller) {
-                  $log.info('child-post-link');
-                }
-              };
-            }
-          };
-        });
+        makeDummyDirective('parent', $compileProvider);
+        makeDummyDirective('child', $compileProvider);
+
+        function makeDummyDirective(name, $compileProvider) {
+          $compileProvider.directive(name,  function($log) {
+            return {
+              controller: function() {
+                $log.info(name + '-controller');
+              },
+              compile: function(element, attrs, transclude) {
+                return {
+                  pre: function(scope, element, attrs, controller) {
+                    $log.info(name + '-pre-link');
+                  },
+                  post: function(scope, element, attrs, controller) {
+                    $log.info(name + '-post-link');
+                  }
+                };
+              }
+            };
+          });
+        };
       }));
 
       it('should have a very specific sequence of calls', inject(function($log, $compile) {
