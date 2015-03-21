@@ -381,6 +381,38 @@ describe('directives', function() {
       it('should have its controller called before link', inject(function($compile, $log) {
         $compile('<test></test>')({});
         expect($log.info.logs.length).toBe(2);
+        expect($log.info.logs[0][0]).toBe('controller');
+        expect($log.info.logs[1][0]).toBe('link');
+      }));
+    });
+
+    describe('a single directive with controller and compile', function() {
+      beforeEach(module(function($compileProvider) {
+        $compileProvider.directive('test', function($log) {
+          return {
+            controller: function() {
+              $log.info('controller');
+            },
+            compile: function(element, attrs, transclude) {
+              return {
+                pre: function(scope, element, attrs, controller) {
+                  $log.info('pre-link');
+                },
+                post: function(scope, element, attrs, controller) {
+                  $log.info('post-link');
+                }
+              };
+            }
+          };
+        });
+      }));
+
+      it('should have calls in this order: controller, pre, post', inject(function($compile, $log) {
+        $compile('<test></test>')({});
+        expect($log.info.logs.length).toBe(3);
+        expect($log.info.logs[0][0]).toBe('controller');
+        expect($log.info.logs[1][0]).toBe('pre-link');
+        expect($log.info.logs[2][0]).toBe('post-link');
       }));
     });
   });
