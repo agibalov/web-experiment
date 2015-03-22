@@ -7,7 +7,7 @@ title: Hexo Experiment
 subtitle: The Ultimate Hexo Experiment
 description: Looking at Hexo
 author: loki2302
-language: default
+language: en
 timezone:
 
 # URL
@@ -62,7 +62,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
-theme: next
+theme: icarus
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
@@ -71,18 +71,19 @@ deploy:
   repo: https://github.com/loki2302/hexo-experiment.git
   branch: gh-pages
 
-# hueman theme configuration
-social_links:
-  twitter: https://twitter.com/loki2302
-  github: https://github.com/loki2302
+
+sidebar: right
 widgets:
 - recent_posts
 - category
-- archive
 - tag
 - tagcloud
-- links
+- archive
 
-# Links
-links:
-  Hexo: http://hexo.io
+contacts:
+  github: http://github.com/loki2302
+  twitter: loki2302
+  rss: /atom.xml
+
+favicon: /favicon.png
+twitter: loki2302
