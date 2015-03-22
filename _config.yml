@@ -7,7 +7,7 @@ title: Hexo Experiment
 subtitle: The Ultimate Hexo Experiment
 description: Looking at Hexo
 author: loki2302
-language: en
+language: default
 timezone:
 
 # URL
@@ -62,7 +62,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
-theme: hueman
+theme: next
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
