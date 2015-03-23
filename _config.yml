@@ -5,10 +5,14 @@
 # Site
 title: Hexo Experiment
 subtitle: The Ultimate Hexo Experiment
-description: Looking at Hexo
+description: where no man has gone before
 author: loki2302
+author_title: Software Engineer
 language: en
 timezone:
+avatar: 'https://www.gravatar.com/avatar/0b60790aafcdfa51aca282140aa9573e?s=128&d=identicon&r=PG'
+location: Worldwide
+
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -62,19 +66,16 @@ pagination_dir: page
 # Extensions
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
-theme: hueman
+theme: icarus
 
-thumbnail: false
-widgets:
-- recent_posts
-- category
-- archive
-- tag
-- tagcloud
+menu:
+  Home: /
+  Archives: /archives
 
-social_links:
-  twitter: https://twitter.com/loki2302
+# Contacts
+contacts:
   github: https://github.com/loki2302
+  twitter: https://twitter.com/loki2302
 
 # Deployment
 deploy:
