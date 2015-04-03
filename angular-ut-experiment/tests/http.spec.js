@@ -4,7 +4,7 @@ describe('$http', function() {
 
     var onSuccess = jasmine.createSpy('onSuccess');
     var onError = jasmine.createSpy('onError');
-    
+
     $http.get('/something').then(onSuccess, onError);
 
     $httpBackend.verifyNoOutstandingExpectation();
@@ -21,7 +21,7 @@ describe('$http', function() {
       data: {
         here: 'it is'
       }
-    }));    
+    }));
 
     expect(onError).not.toHaveBeenCalled();
   }));
@@ -31,7 +31,7 @@ describe('$http', function() {
 
     var onSuccess = jasmine.createSpy('onSuccess');
     var onError = jasmine.createSpy('onError');
-    
+
     $http.get('/something').then(onSuccess, onError);
 
     $httpBackend.verifyNoOutstandingExpectation();
@@ -48,7 +48,7 @@ describe('$http', function() {
       data: {
         here: 'it is'
       }
-    }));    
+    }));
 
     expect(onSuccess).not.toHaveBeenCalled();
   }));
@@ -66,7 +66,7 @@ describe('$http', function() {
 
     it('should successfully resolve to data when 200', inject(function($httpBackend, $http) {
       $httpBackend.expect('GET', '/something').respond(200, { here: 'it is' });
-     
+
       var onSuccess = jasmine.createSpy('onSuccess');
       interpretResponse($http.get('/something'))
         .then(onSuccess);
@@ -83,7 +83,7 @@ describe('$http', function() {
 
     it('should reject with validation error when 400', inject(function($httpBackend, $http) {
       $httpBackend.expect('GET', '/something').respond(400, { here: 'it is' });
-     
+
       var onError = jasmine.createSpy('onError');
       interpretResponse($http.get('/something'))
         .then(null, onError);
@@ -100,7 +100,7 @@ describe('$http', function() {
 
     it('should reject with error when not 200 and not 400', inject(function($httpBackend, $http) {
       $httpBackend.expect('GET', '/something').respond(500, { here: 'it is' });
-     
+
       var onError = jasmine.createSpy('onError');
       interpretResponse($http.get('/something'))
         .then(null, onError);
@@ -124,7 +124,7 @@ describe('$http', function() {
     function throwValidationError($q) {
       return function(httpResponse) {
         return $q.reject(new Error('validation'));
-      }; 
+      };
     };
 
     function throwError($q) {
@@ -149,7 +149,7 @@ describe('$http', function() {
       };
 
       self.handle = function(httpResponse) {
-        var statusCode = httpResponse.status;        
+        var statusCode = httpResponse.status;
         var handlerFunc = self.handlers[statusCode];
         if(!handlerFunc) {
           handlerFunc = self.otherwiseHandlerFunc;
@@ -162,5 +162,53 @@ describe('$http', function() {
         return promise.then(self.handle, self.handle);
       };
     };
+  });
+
+  describe('Interceptor', function() {
+    var interceptor;
+    beforeEach(module(function($httpProvider) {
+      $httpProvider.interceptors.push(function() {
+        interceptor = {
+          request: function(config) {
+            console.log('config', config);
+            return config;
+          },
+          requestError: function(rejection) { return rejection; },
+          response: function(response) { return response; },
+          responseError: function(rejection) { return rejection; }
+        };
+
+        spyOn(interceptor, 'request').and.callThrough();
+        spyOn(interceptor, 'requestError').and.callThrough();
+        spyOn(interceptor, 'response').and.callThrough();
+        spyOn(interceptor, 'responseError').and.callThrough();
+
+        return interceptor;
+      });
+    }));
+
+    it('should let me intercept the request and response', inject(function($httpBackend, $http) {
+      $httpBackend.when('GET', '/something').respond(200, { message: 'hello' });
+
+      $http.get('/something').then(function(response) {
+        console.log(response);
+      });
+
+      $httpBackend.flush();
+
+      expect(interceptor.request).toHaveBeenCalledWith(jasmine.objectContaining({
+        url: '/something',
+        method: 'GET'
+      }));
+
+      expect(interceptor.response).toHaveBeenCalledWith(jasmine.objectContaining({
+        data: { message: 'hello' },
+        status: 200,
+        config: jasmine.objectContaining({
+          url: '/something',
+          method: 'GET'
+        })
+      }));
+    }));
   });
 });
