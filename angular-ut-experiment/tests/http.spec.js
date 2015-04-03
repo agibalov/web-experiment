@@ -219,5 +219,29 @@ describe('$http', function() {
         })
       }));
     }));
+
+    it('should let me intercept the request and responseError', inject(function($httpBackend, $http) {
+      $httpBackend.when('GET', '/something').respond(400, { message: 'hello' });
+
+      $http.get('/something').then(function(response) {
+        console.log(response);
+      });
+
+      $httpBackend.flush();
+
+      expect(interceptor.request).toHaveBeenCalledWith(jasmine.objectContaining({
+        url: '/something',
+        method: 'GET'
+      }));
+
+      expect(interceptor.responseError).toHaveBeenCalledWith(jasmine.objectContaining({
+        data: { message: 'hello' },
+        status: 400,
+        config: jasmine.objectContaining({
+          url: '/something',
+          method: 'GET'
+        })
+      }));
+    }));
   });
 });
