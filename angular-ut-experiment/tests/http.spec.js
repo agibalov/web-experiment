@@ -170,12 +170,21 @@ describe('$http', function() {
       $httpProvider.interceptors.push(function() {
         interceptor = {
           request: function(config) {
-            console.log('config', config);
+            console.log('request', config);
             return config;
           },
-          requestError: function(rejection) { return rejection; },
-          response: function(response) { return response; },
-          responseError: function(rejection) { return rejection; }
+          requestError: function(rejection) {
+            console.log('requestError', rejection);
+            return rejection;
+          },
+          response: function(response) {
+            console.log('response', response);
+            return response;
+          },
+          responseError: function(rejection) {
+            console.log('responseError', rejection);
+            return rejection;
+          }
         };
 
         spyOn(interceptor, 'request').and.callThrough();
