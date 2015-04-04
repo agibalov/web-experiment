@@ -164,25 +164,57 @@ describe('$http', function() {
     };
   });
 
+  describe('transformations', function() {
+    it('should let me override the request/response transformations', inject(function($http, $httpBackend) {
+      $httpBackend.when('POST', '/something').respond(200, { message: 'hello' });
+
+      var config = {
+        // TODO: what is the real signature?
+        transformRequest: function(request, headersGetter, status) {
+          console.log('request', request, headersGetter, status);
+          return request;
+        },
+        // TODO: what is the real signature?
+        transformResponse: function(data, headersGetter, status) {
+          console.log('response', data, headersGetter, status);
+          return data;
+        }
+      };
+
+      spyOn(config, 'transformRequest').and.callThrough();
+      spyOn(config, 'transformResponse').and.callThrough();
+
+      $http.post('/something', 'hey there', config);
+      $httpBackend.flush();
+
+      expect(config.transformRequest)
+        .toHaveBeenCalledWith('hey there', jasmine.any(Function), undefined);
+      expect(config.transformResponse)
+        .toHaveBeenCalledWith(jasmine.objectContaining({
+          message: 'hello'
+        }), jasmine.any(Function), 200);
+    }));
+  });
+
   describe('Interceptor', function() {
     var interceptor;
     beforeEach(module(function($httpProvider) {
       $httpProvider.interceptors.push(function() {
         interceptor = {
           request: function(config) {
-            console.log('request', config);
+            // console.log('request', config);
             return config;
           },
           requestError: function(rejection) {
-            console.log('requestError', rejection);
+            // console.log('requestError', rejection);
             return rejection;
           },
           response: function(response) {
-            console.log('response', response);
+            // console.log('response', response);
             return response;
           },
           responseError: function(rejection) {
-            console.log('responseError', rejection);
+            // console.log('responseError', rejection);
             return rejection;
           }
         };
@@ -200,7 +232,7 @@ describe('$http', function() {
       $httpBackend.when('GET', '/something').respond(200, { message: 'hello' });
 
       $http.get('/something').then(function(response) {
-        console.log(response);
+        // console.log(response);
       });
 
       $httpBackend.flush();
@@ -224,7 +256,7 @@ describe('$http', function() {
       $httpBackend.when('GET', '/something').respond(400, { message: 'hello' });
 
       $http.get('/something').then(function(response) {
-        console.log(response);
+        // console.log(response);
       });
 
       $httpBackend.flush();
