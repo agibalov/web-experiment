@@ -1,4 +1,4 @@
-describe('directives', function() {  
+describe('directives', function() {
   it('can have a directive that statically adds a class to an element', function() {
     var $injector = angular.injector(['ng', function($compileProvider) {
       $compileProvider.directive('dummy', function() {
@@ -12,6 +12,51 @@ describe('directives', function() {
     var $compile = $injector.get('$compile');
     var element = $compile('<div dummy></div>')($rootScope);
     expect(element.hasClass('omg')).toBe(true);
+  });
+
+  describe('a directive that decides what template to use based on attrs', function() {
+    beforeEach(module(function($compileProvider) {
+      $compileProvider.directive('dummy', function() {
+        return {
+          scope: {
+            message: '='
+          },
+          template: function(element, attrs) {
+            if(attrs.template === 'a') {
+              return '<div>{{message}}</div>';
+            } else if(attrs.template === 'b') {
+              return '<p>{{message}}</p>';
+            } else {
+              throw new Error();
+            }
+          }
+        };
+      });
+    }));
+
+    var $scope;
+    var $compile;
+    beforeEach(inject(function($rootScope, _$compile_) {
+      $scope = $rootScope.$new();
+      $compile = _$compile_;
+      $scope.message = 'hello there';
+    }));
+
+    it('should use the "div" template, when template is set to A', function() {
+      var element = $compile('<dummy template="a" message="message"></div>')($scope);
+      $scope.$digest();
+      expect(element.find('div').length).toBe(1);
+      expect(element.find('p').length).toBe(0);
+      expect(element.find('div').text()).toBe('hello there');
+    });
+
+    it('should use the "p" template, when template is set to B', function() {
+      var element = $compile('<dummy template="b" message="message"></div>')($scope);
+      $scope.$digest();
+      expect(element.find('div').length).toBe(0);
+      expect(element.find('p').length).toBe(1);
+      expect(element.find('p').text()).toBe('hello there');
+    });
   });
 
   describe('a directive that just renders a template', function() {
@@ -55,9 +100,9 @@ describe('directives', function() {
       var $rootScope = $injector.get('$rootScope');
       var $compile = $injector.get('$compile');
       var element = $compile(
-        '<div>' + 
-        '<person id="p1" info="loki2302"/>' + 
-        '<person id="p2" info="andrey"/>' + 
+        '<div>' +
+        '<person id="p1" info="loki2302"/>' +
+        '<person id="p2" info="andrey"/>' +
         '</div>'
       )($rootScope);
 
@@ -89,9 +134,9 @@ describe('directives', function() {
       var $rootScope = $injector.get('$rootScope');
       var $compile = $injector.get('$compile');
       var element = $compile(
-        '<div>' + 
-        '<person id="p1" name="loki2302" age="40" />' + 
-        '<person id="p2" name="Andrey" age="30" />' + 
+        '<div>' +
+        '<person id="p1" name="loki2302" age="40" />' +
+        '<person id="p2" name="Andrey" age="30" />' +
         '</div>'
       )($rootScope);
 
@@ -152,17 +197,17 @@ describe('directives', function() {
       var $rootScope = $injector.get('$rootScope');
       var $compile = $injector.get('$compile');
       var element = $compile(
-        '<div>' + 
-        '<magic-button text="hello" on-click="helloClick()"></magic-button>' + 
-        '<magic-button text="there" on-click="thereClick()"></magic-button>' + 
+        '<div>' +
+        '<magic-button text="hello" on-click="helloClick()"></magic-button>' +
+        '<magic-button text="there" on-click="thereClick()"></magic-button>' +
         '</div>'
       )($rootScope);
 
       $rootScope.helloClick = jasmine.createSpy('helloClick');
       $rootScope.thereClick = jasmine.createSpy('thereClick');
-      
+
       $rootScope.$digest();
-      
+
       element.find('[text="hello"]').click();
       expect($rootScope.helloClick).toHaveBeenCalled();
       expect($rootScope.thereClick).not.toHaveBeenCalled();
@@ -185,8 +230,8 @@ describe('directives', function() {
             scope: {
               onSearch: '&'
             },
-            template: 
-            '<div>' + 
+            template:
+            '<div>' +
             '<input type="text" ng-model="searchText">' +
             '<button type="button" ng-click="searchClick()">Search</button>' +
             '</div>',
@@ -208,7 +253,7 @@ describe('directives', function() {
       }]);
 
       $rootScope = $injector.get('$rootScope');
-      $compile = $injector.get('$compile');      
+      $compile = $injector.get('$compile');
     });
 
     it('should work in basic use case', function() {
@@ -220,7 +265,7 @@ describe('directives', function() {
       var searchTextElement = element.find('input');
       var searchButtonElement = element.find('button');
 
-      $rootScope.$digest();      
+      $rootScope.$digest();
 
       $rootScope.handleSearch = jasmine.createSpy('handleSearch').and.returnValue(true);
 
@@ -236,7 +281,7 @@ describe('directives', function() {
 
     it('should not crash when I do not specify an on-search handler', function() {
       var element = $compile(
-        // because there no search handler to return 'true', 
+        // because there no search handler to return 'true',
         // the directive will never reset its search text
         '<search-box />'
       )($rootScope);
@@ -262,7 +307,7 @@ describe('directives', function() {
           return {
             restrict: 'E',
             transclude: true,
-            template: 
+            template:
             '<div class="omg" ng-transclude>' +
             '</div>'
           };
@@ -273,7 +318,7 @@ describe('directives', function() {
       var $compile = $injector.get('$compile');
 
       var element = $compile(
-        '<div class="outer">' + 
+        '<div class="outer">' +
         '  <test-transclude>hello there</test-transclude>' +
         '</div>')($rootScope);
 
@@ -290,7 +335,7 @@ describe('directives', function() {
             restrict: 'E',
             transclude: true,
             scope: {},
-            controller: function($scope) {              
+            controller: function($scope) {
               $scope.items = [];
 
               this.addItem = function(item) {
@@ -306,11 +351,11 @@ describe('directives', function() {
                 item.selected = true;
               };
             },
-            template: 
-            '<div>' + 
+            template:
+            '<div>' +
             '  <ul>' +
             '    <li ng-repeat="item in items" ng-click="select(item)">{{item.title}}</li>' +
-            '  </ul>' + 
+            '  </ul>' +
             '  <ng-transclude />' +
             '</div>'
           };
@@ -323,7 +368,7 @@ describe('directives', function() {
             scope: {
               title: '@'
             },
-            link: function(scope, element, attrs, itemsController) {              
+            link: function(scope, element, attrs, itemsController) {
               itemsController.addItem(scope);
             },
             template: '<div ng-show="selected">{{title}}: <ng-transclude></ng-transclude></div>'
@@ -335,7 +380,7 @@ describe('directives', function() {
       var $compile = $injector.get('$compile');
 
       var element = $compile(
-        '<test-list>' + 
+        '<test-list>' +
         '  <test-item title="item1">Hi there</test-item>' +
         '  <test-item title="item2">Bye there</test-item>' +
         '</test-list>')($rootScope);
@@ -346,7 +391,7 @@ describe('directives', function() {
       var item2Li = element.find('li:nth-child(2)');
       var item1View = element.find('test-item[title="item1"] div');
       var item2View = element.find('test-item[title="item2"] div');
-      
+
       expect(item1Li.text()).toContain('item1');
       expect(item2Li.text()).toContain('item2');
 
@@ -364,7 +409,7 @@ describe('directives', function() {
   });
 
   describe('method call order', function() {
-    describe('a single directive with controller and link', function() {      
+    describe('a single directive with controller and link', function() {
       beforeEach(module(function($compileProvider) {
         $compileProvider.directive('test', function($log) {
           return {
