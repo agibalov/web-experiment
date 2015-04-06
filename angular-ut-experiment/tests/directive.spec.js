@@ -1,17 +1,17 @@
 describe('directives', function() {
-  it('can have a directive that statically adds a class to an element', function() {
-    var $injector = angular.injector(['ng', function($compileProvider) {
+  describe('a directive that statically adds a class to an element', function() {
+    beforeEach(module(function($compileProvider) {
       $compileProvider.directive('dummy', function() {
         return function(scope, element) {
           element.addClass('omg');
         };
       });
-    }]);
+    }));
 
-    var $rootScope = $injector.get('$rootScope');
-    var $compile = $injector.get('$compile');
-    var element = $compile('<div dummy></div>')($rootScope);
-    expect(element.hasClass('omg')).toBe(true);
+    it('should work', inject(function($rootScope, $compile) {
+      var element = $compile('<div dummy></div>')($rootScope);
+      expect(element.hasClass('omg')).toBe(true);
+    }));
   });
 
   describe('a directive that decides what template to use based on attrs', function() {
@@ -60,17 +60,15 @@ describe('directives', function() {
   });
 
   describe('a directive that just renders a template', function() {
-    it('should work', function() {
-      var $injector = angular.injector(['ng', function($compileProvider) {
-        $compileProvider.directive('person', function() {
-          return {
-            template: 'name: {{name}}, age: {{age}}'
-          };
-        });
-      }]);
+    beforeEach(module(function($compileProvider) {
+      $compileProvider.directive('person', function() {
+        return {
+          template: 'name: {{name}}, age: {{age}}'
+        };
+      });
+    }));
 
-      var $rootScope = $injector.get('$rootScope');
-      var $compile = $injector.get('$compile');
+    it('should work', inject(function($rootScope, $compile) {
       var element = $compile('<person/>')($rootScope);
 
       $rootScope.$digest();
@@ -80,7 +78,7 @@ describe('directives', function() {
       $rootScope.age = 40;
       $rootScope.$digest();
       expect(element.html()).toBe('name: loki2302, age: 40');
-    });
+    }));
   });
 
   describe('a directive with an isolate scope', function() {
