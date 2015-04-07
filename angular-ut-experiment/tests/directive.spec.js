@@ -82,21 +82,19 @@ describe('directives', function() {
   });
 
   describe('a directive with an isolate scope', function() {
-    it('should work', function() {
-      var $injector = angular.injector(['ng', function($compileProvider) {
-        $compileProvider.directive('person', function() {
-          return {
-            restrict: 'E',
-            scope: {
-              personInfo: '=info'
-            },
-            template: 'name: {{personInfo.name}}, age: {{personInfo.age}}'
-          };
-        });
-      }]);
+    beforeEach(module(function($compileProvider) {
+      $compileProvider.directive('person', function() {
+        return {
+          restrict: 'E',
+          scope: {
+            personInfo: '=info'
+          },
+          template: 'name: {{personInfo.name}}, age: {{personInfo.age}}'
+        };
+      });
+    }));
 
-      var $rootScope = $injector.get('$rootScope');
-      var $compile = $injector.get('$compile');
+    it('should work', inject(function($rootScope, $compile) {
       var element = $compile(
         '<div>' +
         '<person id="p1" info="loki2302"/>' +
@@ -109,28 +107,26 @@ describe('directives', function() {
       $rootScope.$digest();
       expect(element.find('#p1').text()).toBe('name: loki2302, age: 40');
       expect(element.find('#p2').text()).toBe('name: Andrey, age: 30');
-    });
+    }));
   });
 
   describe('a directive with attributes', function() {
-    it('should work', function() {
-      var $injector = angular.injector(['ng', function($compileProvider) {
-        $compileProvider.directive('person', function() {
-          return {
-            restrict: 'E',
-            scope: {
-              name: '@'
-            },
-            template: 'name: {{name}}, age: {{age}}',
-            link: function(scope, element, attrs) {
-              scope.age = attrs.age;
-            }
-          };
-        });
-      }]);
+    beforeEach(module(function($compileProvider) {
+      $compileProvider.directive('person', function() {
+        return {
+          restrict: 'E',
+          scope: {
+            name: '@'
+          },
+          template: 'name: {{name}}, age: {{age}}',
+          link: function(scope, element, attrs) {
+            scope.age = attrs.age;
+          }
+        };
+      });
+    }))
 
-      var $rootScope = $injector.get('$rootScope');
-      var $compile = $injector.get('$compile');
+    it('should work', inject(function($rootScope, $compile) {
       var element = $compile(
         '<div>' +
         '<person id="p1" name="loki2302" age="40" />' +
@@ -141,27 +137,25 @@ describe('directives', function() {
       $rootScope.$digest();
       expect(element.find('#p1').text()).toBe('name: loki2302, age: 40');
       expect(element.find('#p2').text()).toBe('name: Andrey, age: 30');
-    });
+    }));
   });
 
   describe('a custom ngClick directive', function() {
-    it('should work', function() {
-      var $injector = angular.injector(['ng', function($compileProvider) {
-        $compileProvider.directive('testClick', function($parse) {
-          return {
-            restrict: 'A',
-            link: function(scope, element, attrs) {
-              var clickCallbackFunc = $parse(attrs.testClick);
-              element.on('click', function() {
-                clickCallbackFunc(scope);
-              });
-            }
+    beforeEach(module(function($compileProvider) {
+      $compileProvider.directive('testClick', function($parse) {
+        return {
+          restrict: 'A',
+          link: function(scope, element, attrs) {
+            var clickCallbackFunc = $parse(attrs.testClick);
+            element.on('click', function() {
+              clickCallbackFunc(scope);
+            });
           }
-        });
-      }]);
+        }
+      });
+    }));
 
-      var $rootScope = $injector.get('$rootScope');
-      var $compile = $injector.get('$compile');
+    it('should work', inject(function($rootScope, $compile) {
       var element = $compile(
         '<button test-click="onClick()">hello<button>'
       )($rootScope);
@@ -169,31 +163,29 @@ describe('directives', function() {
       $rootScope.onClick = jasmine.createSpy('onClick');
       element.click();
       expect($rootScope.onClick).toHaveBeenCalled();
-    });
+    }));
   });
 
   describe('a directive with callback binding', function() {
-    it('should work', function() {
-      var $injector = angular.injector(['ng', function($compileProvider) {
-        $compileProvider.directive('magicButton', function() {
-          return {
-            restrict: 'E',
-            scope: {
-              text: '@',
-              onClick: '&'
-            },
-            template: '<button type="button">{{text}}</button>',
-            link: function(scope, element) {
-              element.on('click', function() {
-                scope.onClick();
-              });
-            }
+    beforeEach(module(function($compileProvider) {
+      $compileProvider.directive('magicButton', function() {
+        return {
+          restrict: 'E',
+          scope: {
+            text: '@',
+            onClick: '&'
+          },
+          template: '<button type="button">{{text}}</button>',
+          link: function(scope, element) {
+            element.on('click', function() {
+              scope.onClick();
+            });
           }
-        });
-      }]);
+        }
+      });
+    }));
 
-      var $rootScope = $injector.get('$rootScope');
-      var $compile = $injector.get('$compile');
+    it('should work', inject(function($rootScope, $compile) {
       var element = $compile(
         '<div>' +
         '<magic-button text="hello" on-click="helloClick()"></magic-button>' +
@@ -214,45 +206,45 @@ describe('directives', function() {
       element.find('[text="there"]').click();
       expect($rootScope.helloClick).not.toHaveBeenCalled();
       expect($rootScope.thereClick).toHaveBeenCalled();
-    });
+    }));
   });
 
   describe('a directive with controller', function() {
+    beforeEach(module(function($compileProvider) {
+      $compileProvider.directive('searchBox', function() {
+        return {
+          restrict: 'E',
+          scope: {
+            onSearch: '&'
+          },
+          template:
+          '<div>' +
+          '<input type="text" ng-model="searchText">' +
+          '<button type="button" ng-click="searchClick()">Search</button>' +
+          '</div>',
+          controller: function($scope) {
+            $scope.searchText = "";
+            $scope.searchClick = function() {
+              var shouldResetSearchText = $scope.onSearch({
+                // "text" is what the consumer should use in HTML, see below
+                text: $scope.searchText
+              });
+
+              if(!!shouldResetSearchText) {
+                $scope.searchText = "";
+              }
+            };
+          }
+        };
+      });
+    }));
+
     var $rootScope;
     var $compile;
-    beforeEach(function() {
-      var $injector = angular.injector(['ng', function($compileProvider) {
-        $compileProvider.directive('searchBox', function() {
-          return {
-            restrict: 'E',
-            scope: {
-              onSearch: '&'
-            },
-            template:
-            '<div>' +
-            '<input type="text" ng-model="searchText">' +
-            '<button type="button" ng-click="searchClick()">Search</button>' +
-            '</div>',
-            controller: function($scope) {
-              $scope.searchText = "";
-              $scope.searchClick = function() {
-                var shouldResetSearchText = $scope.onSearch({
-                  // "text" is what the consumer should use in HTML, see below
-                  text: $scope.searchText
-                });
-
-                if(!!shouldResetSearchText) {
-                  $scope.searchText = "";
-                }
-              };
-            }
-          };
-        });
-      }]);
-
-      $rootScope = $injector.get('$rootScope');
-      $compile = $injector.get('$compile');
-    });
+    beforeEach(inject(function(_$rootScope_, _$compile_) {
+      $rootScope = _$rootScope_;
+      $compile = _$compile_;
+    }));
 
     it('should work in basic use case', function() {
       var element = $compile(
@@ -299,84 +291,78 @@ describe('directives', function() {
   });
 
   describe('a directive with transclusion', function() {
-    it('should work', function() {
-      var $injector = angular.injector(['ng', function($compileProvider) {
-        $compileProvider.directive('testTransclude', function() {
-          return {
-            restrict: 'E',
-            transclude: true,
-            template:
-            '<div class="omg" ng-transclude>' +
-            '</div>'
-          };
-        });
-      }]);
+    beforeEach(module(function($compileProvider) {
+      $compileProvider.directive('testTransclude', function() {
+        return {
+          restrict: 'E',
+          transclude: true,
+          template:
+          '<div class="omg" ng-transclude>' +
+          '</div>'
+        };
+      });
+    }));
 
-      var $rootScope = $injector.get('$rootScope');
-      var $compile = $injector.get('$compile');
-
+    it('should work', inject(function($rootScope, $compile) {
       var element = $compile(
         '<div class="outer">' +
         '  <test-transclude>hello there</test-transclude>' +
         '</div>')($rootScope);
 
       expect(element.find('.omg').text()).toBe('hello there');
-    });
+    }));
   });
 
   describe('nested directives', function() {
-    it('should work', function() {
-      var $injector = angular.injector(['ng', function($compileProvider) {
-        $compileProvider
-        .directive('testList', function() {
-          return {
-            restrict: 'E',
-            transclude: true,
-            scope: {},
-            controller: function($scope) {
-              $scope.items = [];
+    beforeEach(module(function($compileProvider) {
+      $compileProvider
+      .directive('testList', function() {
+        return {
+          restrict: 'E',
+          transclude: true,
+          scope: {},
+          controller: function($scope) {
+            $scope.items = [];
 
-              this.addItem = function(item) {
-                $scope.items.push(item);
-                item.selected = false;
-              };
+            this.addItem = function(item) {
+              $scope.items.push(item);
+              item.selected = false;
+            };
 
-              $scope.select = function(item) {
-                angular.forEach($scope.items, function(it) {
-                  it.selected = false;
-                });
+            $scope.select = function(item) {
+              angular.forEach($scope.items, function(it) {
+                it.selected = false;
+              });
 
-                item.selected = true;
-              };
-            },
-            template:
-            '<div>' +
-            '  <ul>' +
-            '    <li ng-repeat="item in items" ng-click="select(item)">{{item.title}}</li>' +
-            '  </ul>' +
-            '  <ng-transclude />' +
-            '</div>'
-          };
-        })
-        .directive('testItem', function() {
-          return {
-            require: '^testList',
-            restrict: 'E',
-            transclude: true,
-            scope: {
-              title: '@'
-            },
-            link: function(scope, element, attrs, itemsController) {
-              itemsController.addItem(scope);
-            },
-            template: '<div ng-show="selected">{{title}}: <ng-transclude></ng-transclude></div>'
-          };
-        });
-      }]);
+              item.selected = true;
+            };
+          },
+          template:
+          '<div>' +
+          '  <ul>' +
+          '    <li ng-repeat="item in items" ng-click="select(item)">{{item.title}}</li>' +
+          '  </ul>' +
+          '  <ng-transclude />' +
+          '</div>'
+        };
+      })
+      .directive('testItem', function() {
+        return {
+          require: '^testList',
+          restrict: 'E',
+          transclude: true,
+          scope: {
+            title: '@'
+          },
+          link: function(scope, element, attrs, itemsController) {
+            itemsController.addItem(scope);
+          },
+          template: '<div ng-show="selected">{{title}}: <ng-transclude></ng-transclude></div>'
+        };
+      });
+    }));
 
-      var $rootScope = $injector.get('$rootScope');
-      var $compile = $injector.get('$compile');
-
+    it('should work', inject(function($rootScope, $compile) {
       var element = $compile(
         '<test-list>' +
         '  <test-item title="item1">Hi there</test-item>' +
@@ -403,7 +389,7 @@ describe('directives', function() {
       item2Li.click();
       expect(item1View.attr('class')).toContain('ng-hide');
       expect(item2View.attr('class')).not.toContain('ng-hide');
-    });
+    }));
   });
 
   describe('method call order', function() {
