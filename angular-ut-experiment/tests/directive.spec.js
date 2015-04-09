@@ -451,7 +451,7 @@ describe('directives', function() {
         makeDummyDirective('child', $compileProvider);
 
         function makeDummyDirective(name, $compileProvider) {
-          $compileProvider.directive(name,  function($log) {
+          $compileProvider.directive(name, function($log) {
             return {
               controller: function() {
                 $log.info(name + '-controller');
@@ -481,6 +481,70 @@ describe('directives', function() {
         expect($log.info.logs[4][0]).toBe('child-post-link');
         expect($log.info.logs[5][0]).toBe('parent-post-link');
       }));
+    });
+  });
+
+  describe("testing a directive's link() function", function() {
+    beforeEach(module(function($compileProvider) {
+      $compileProvider.directive('dummy', function() {
+        return {
+          scope: {
+            a: '=',
+            b: '='
+          },
+          link: function(scope) {
+            scope.addNumbers = function() {
+              return scope.a + scope.b;
+            };
+          }
+        };
+      });
+    }));
+
+    var $scope;
+    var scope;
+    var isolateScope;
+    beforeEach(inject(function($rootScope, $compile) {
+      $scope = $rootScope.$new();
+      var element = $compile('<dummy a="myA" b="myB"></dummy>')($scope);
+      //$rootScope.$digest();
+
+      scope = element.scope();
+      isolateScope = element.isolateScope();
+    }));
+
+    describe('scope', function() {
+      it('should be the same as $scope', function() {
+        expect(scope).toBe($scope);
+        expect(scope).not.toBe(isolateScope);
+      });
+    });
+
+    describe('isolateScope', function() {
+      it('should not be the same as scope or $scope', function() {
+        expect(isolateScope).not.toBe($scope);
+        expect(isolateScope).not.toBe(scope);
+      });
+
+      it('should have addNumbers defined', function() {
+        expect(isolateScope.addNumbers).toBeDefined();
+      });
+    });
+
+    it('should add numbers when they are defined', function() {
+      expect(isolateScope.a).not.toBeDefined();
+      expect(isolateScope.b).not.toBeDefined();
+
+      $scope.$apply(function() {
+        $scope.myA = 2;
+        $scope.myB = 3;
+      });
+
+      expect(isolateScope.a).toBeDefined();
+      expect(isolateScope.b).toBeDefined();
+
+      var result = isolateScope.addNumbers();
+      expect(result).toBe(5);
     });
   });
 });
