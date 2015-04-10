@@ -549,19 +549,8 @@ describe('directives', function() {
   });
 
   describe('generating directives based on metadata', function() {
-    beforeEach(module(function($compileProvider) {
-      $compileProvider.directive('personView', makeEntityEditorDirective({
-        entityName: 'person',
-        template: '<div class="person">{{person.name}}</div>'
-      }));
-
-      $compileProvider.directive('projectView', makeEntityEditorDirective({
-        entityName: 'project',
-        template: '<div class="project">{{project.codename}}</div>'
-      }));
-
-      // TODO: can I extract it somewhere?
-      function makeEntityEditorDirective(metadata) {
+    beforeEach(module(function($provide) { // THE FRAMEWORK MODULE
+      $provide.constant('makeViewDirective', function(metadata) {
         if(!(metadata && metadata.entityName && metadata.template)) {
           throw new Error('Something is wrong with the metadata');
         }
@@ -576,7 +565,17 @@ describe('directives', function() {
             scope: scope
           };
         };
-      };
+      });
+    }, function($compileProvider, makeViewDirective) { // APP MODULE #1
+      $compileProvider.directive('personView', makeViewDirective({
+        entityName: 'person',
+        template: '<div class="person">{{person.name}}</div>'
+      }));
+    }, function($compileProvider, makeViewDirective) { // APP MODULE #2
+      $compileProvider.directive('projectView', makeViewDirective({
+        entityName: 'project',
+        template: '<div class="project">{{project.codename}}</div>'
+      }));
     }));
 
     var $scope;
