@@ -549,7 +549,8 @@ describe('directives', function() {
   });
 
   describe('generating directives based on metadata', function() {
-    beforeEach(module(function($provide) { // THE FRAMEWORK MODULE
+    // THE FRAMEWORK MODULE
+    beforeEach(module(function($provide) {
       $provide.constant('makeViewDirective', function(metadata) {
         if(!(metadata && metadata.entityName && metadata.template)) {
           throw new Error('Something is wrong with the metadata');
@@ -566,12 +567,18 @@ describe('directives', function() {
           };
         };
       });
-    }, function($compileProvider, makeViewDirective) { // APP MODULE #1
+    }));
+
+    // APP MODULE #1
+    beforeEach(module(function($compileProvider, makeViewDirective) {
       $compileProvider.directive('personView', makeViewDirective({
         entityName: 'person',
         template: '<div class="person">{{person.name}}</div>'
       }));
-    }, function($compileProvider, makeViewDirective) { // APP MODULE #2
+    }));
+
+    // APP MODULE #2
+    beforeEach(module(function($compileProvider, makeViewDirective) {
       $compileProvider.directive('projectView', makeViewDirective({
         entityName: 'project',
         template: '<div class="project">{{project.codename}}</div>'
