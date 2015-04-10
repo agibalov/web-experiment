@@ -1,21 +1,20 @@
-angular.module('test.filter', [])
-.filter('reverse', function() {
-  return function(text) {
-    if(!text || typeof text !== 'string') {
-      return '';
-    }
+describe('Reverse filter', function() {
+  beforeEach(module(function($filterProvider) {
+    $filterProvider.register('reverse', function() {
+      return function(text) {
+        if(!text || typeof text !== 'string') {
+          return '';
+        }
 
-    return text.split('').reverse().join('');
-  };
-});
+        return text.split('').reverse().join('');
+      };
+    });
+  }));
 
-describe('reverse', function() {
   var reverseFilter;
-  beforeEach(function() {
-    var $injector = angular.injector(['ng', 'test.filter']);
-    var $filter = $injector.get('$filter');
+  beforeEach(inject(function($filter) {
     reverseFilter = $filter('reverse');
-  });
+  }));
 
   it('should reverse a string', function() {
     expect(reverseFilter('hello')).toEqual('olleh');
