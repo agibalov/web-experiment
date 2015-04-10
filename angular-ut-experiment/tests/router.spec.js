@@ -33,7 +33,7 @@ describe('$routeProvider', function() {
 
     $location = $injector.get('$location');
     $rootScope = $injector.get('$rootScope');
-    $route = $injector.get('$route');    
+    $route = $injector.get('$route');
     $q = $injector.get('$q');
 
     onRouteChangeStart = jasmine.createSpy('onRouteChangeStart');
@@ -61,7 +61,7 @@ describe('$routeProvider', function() {
           $rootScope.$digest();
         });
 
-        it('should broadcast $routeChangeStart and $routeChangeSuccess', function() {          
+        it('should broadcast $routeChangeStart and $routeChangeSuccess', function() {
           expect(onRouteChangeStart).toHaveBeenCalled();
           expect(onRouteChangeSuccess).toHaveBeenCalled();
           expect(onRouteChangeError).not.toHaveBeenCalled();
@@ -93,7 +93,7 @@ describe('$routeProvider', function() {
           beforeEach(function() {
             $rootScope.$apply(function() {
               dataDeferred.resolve('async data');
-            });            
+            });
           });
 
           it('should broadcast $routeChangeSuccess', function() {
@@ -117,13 +117,8 @@ describe('$routeProvider', function() {
 
           it('should broadcast $routeChangeError', function() {
             expect(onRouteChangeError).toHaveBeenCalled();
-            expect(onRouteChangeSuccess).not.toHaveBeenCalled();            
+            expect(onRouteChangeSuccess).not.toHaveBeenCalled();
             expect(onRouteChangeError.calls.mostRecent().args[3/*rejection*/]).toBe('no async data');
-          });
-
-          // that's surprising, true
-          xit('should keep $route.current undefined', function() {
-            expect($route.current).toBeUndefined();
           });
 
           // that's quite weird, but expected
@@ -153,5 +148,5 @@ describe('$routeProvider', function() {
         expect($route.current).toBeUndefined();
       });
     });
-  });  
+  });
 });
