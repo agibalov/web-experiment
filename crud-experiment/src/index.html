@@ -1,0 +1,38 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>hello</title>
+  </head>
+  <body>
+    <h1>hello there</h1>
+    <div ng-controller="AppController">
+      <entity-editor entity="myCategory" on-submit-entity="handleEntity(entity)">
+        <input type="text" ng-model="entity.name">
+
+        <related-entity-editor entities="entity.posts">
+          <ul>
+            <li ng-repeat="post in entities">
+              <button type="button" ng-click="removeItem(post)">Remove</button>
+              {{post.title}}
+              (messageFromController: {{$parent.messageFromController}})
+            </li>
+          </ul>
+
+          <ng-form ng-init="newPost={}">
+            <h5>New post</h5>
+            (messageFromController: {{$parent.$parent.messageFromController}}, entity.name={{$parent.entity.name}})<br/>
+            <input type="text" ng-model="newPost.title">
+            <button type="button" ng-click="addItem(newPost); newPost={};">Add</button>
+          </ng-form>
+        </related-entity-editor>
+
+        <hr>
+        <button type="submit">Submit!</button>
+      </entity-editor>
+    </div>
+
+    <script src="/angular/angular.js"></script>
+    <script src="/angular-route/angular-route.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>
