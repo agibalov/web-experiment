@@ -1,0 +1,32 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>hello</title>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <style>
+      .the-element {
+        transition: all linear 0.5s;
+      }
+
+      .the-element.ng-hide {
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" ng-controller="AppController">
+      {{message}}
+
+      <div ng-init="checked=true">
+        <input type="checkbox" ng-model="checked">
+        <div class="the-element" ng-show="checked">
+          hello
+        </div>
+      </div>
+    </div>
+
+    <script src="/angular/angular.js"></script>
+    <script src="/angular-animate/angular-animate.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>
