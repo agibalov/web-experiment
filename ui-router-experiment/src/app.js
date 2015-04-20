@@ -3,11 +3,11 @@ angular.module('app', ['ui.router'])
   $stateProvider
   .state('index', {
     url: '',
-    onEnter: function() {
-      console.log('index - onEnter');
+    onEnter: function(indexCommonThing) {
+      console.log('index - onEnter', indexCommonThing);
     },
-    onExit: function() {
-      console.log('index - onExit');
+    onExit: function(indexCommonThing) {
+      console.log('index - onExit', indexCommonThing);
     },
     resolve: {
       // available to both sub-views
