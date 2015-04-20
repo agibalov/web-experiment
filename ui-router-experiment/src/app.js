@@ -31,18 +31,23 @@ angular.module('app', ['ui.router'])
     }
   })
   .state('stateA', {
-    url: 'a',
-    onEnter: function() {
-      console.log('stateA - onEnter');
+    url: 'a/:something',
+    onEnter: function(something) {
+      console.log('stateA - onEnter, something=', something);
     },
     onExit: function() {
       console.log('stateA - onExit');
     },
+    resolve: {
+      something: function($stateParams) {
+        return $stateParams.something;
+      }
+    },
     views: {
       viewA: {
         template: 'stateA-viewA: {{stateAMessageForViewA}}',
-        controller: function($scope) {
-          $scope.stateAMessageForViewA = '333';
+        controller: function($scope, $stateParams) {
+          $scope.stateAMessageForViewA = '333, something=' + $stateParams.something;
         }
       },
       viewB: {
