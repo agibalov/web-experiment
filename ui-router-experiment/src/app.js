@@ -9,17 +9,23 @@ angular.module('app', ['ui.router'])
     onExit: function() {
       console.log('index - onExit');
     },
+    resolve: {
+      // available to both sub-views
+      indexCommonThing: function() {
+        return 'omg';
+      }
+    },
     views: {
       viewA: {
         template: 'index-viewA: {{indexMessageForViewA}}',
-        controller: function($scope) {
-          $scope.indexMessageForViewA = '111';
+        controller: function($scope, indexCommonThing) {
+          $scope.indexMessageForViewA = '111' + indexCommonThing;
         }
       },
       viewB: {
         template: 'index-viewB: {{indexMessageForViewB}}',
-        controller: function($scope) {
-          $scope.indexMessageForViewB = '222';
+        controller: function($scope, indexCommonThing) {
+          $scope.indexMessageForViewB = '222' + indexCommonThing;
         }
       },
     }
