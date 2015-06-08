@@ -2,7 +2,7 @@ html5-experiment
 ================
 
 * https://rawgit.com/loki2302/html5-experiment/master/svg/hello-svg.html
-* https://rawgit.com/loki2302/html5-experiment/master/svg/hello-d3.html
+* https://rawgit.com/loki2302/html5-experiment/master/d3/index.html
 * https://rawgit.com/loki2302/html5-experiment/master/canvas/app.html
 * https://rawgit.com/loki2302/html5-experiment/master/canvas/kinetic.html
 * https://rawgit.com/loki2302/html5-experiment/master/canvas/box2d-app.html

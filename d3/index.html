@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+	<head>
+		<title>d3</title>
+		<style>
+			circle {
+				fill: #666;
+				transition: 0.3s;
+			}
+
+			circle:hover {
+				fill: #999;
+			}
+
+			path {
+				stroke: #666;
+				stroke-width: 3px;
+				transition: 0.3s;
+				fill: none;
+			}
+
+			path:hover {
+				stroke: #999;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="bower_components/d3/d3.min.js"></script>
+		<script>
+			var svg = d3.select('body')
+			.append('svg')
+			.attr('width', 640)
+			.attr('height', 340)
+			.attr('style', 'background-color:#333')
+			.append('g')
+			.attr('transform', 'translate(20,20)');
+
+			var data = {
+				name: 'parent',
+				children: [
+					{ 
+						name: 'c1' 
+					},
+					{ 
+						name: 'c2',
+						children: [
+							{ name: 'c2c0' },
+							{ 
+								name: 'c2c1',
+								children: [
+									{ name: 'c2c1c1' },
+									{ name: 'c2c1c2' },
+									{ name: 'c2c1c3' },
+									{ name: 'c2c1c4' },
+									{ name: 'c2c1c5' },
+								]
+							},
+							{ name: 'c2c2' },
+							{ 
+								name: 'c2c3',
+								children: [
+									{ name: 'c2c3c1' },
+									{ name: 'c2c3c2' }
+								]
+							},
+						]
+					}
+				]
+			};
+
+			var tree = d3.layout.tree().size([300, 400]);
+			var nodes = tree.nodes(data);
+			var links = tree.links(nodes);
+			console.log('nodes', nodes);
+			console.log('links', links);
+
+			// links
+			var link = svg.selectAll('path')
+				.data(links);
+
+			var diagonal = d3.svg.diagonal()
+				.projection(function(d) {
+					return [d.y, d.x];
+				});
+
+			var linkEnter = link.enter()
+				.append('path')
+				.attr('d', diagonal);
+
+			// nodes
+			var node = svg.selectAll('g.node')
+				.data(nodes);
+
+			var nodeEnter = node.enter()
+				.append('g')
+				.attr('class', 'node');
+
+			nodeEnter
+				.append('circle')
+				.attr('cx', function(d) {return d.y;})
+				.attr('cy', function(d) {return d.x;})
+				.attr('r', 10);
+
+			nodeEnter
+				.append('text')
+				.attr('x', function(d) {return d.y;})
+				.attr('y', function(d) {return d.x;})
+				.attr('text-anchor', 'middle')
+				.attr('style', 'fill:#aaa;background-color:pink;')
+				.text(function(d) { return d.name + '(' + d.depth + ')'; });			
+		</script>
+	</body>
+</html>
