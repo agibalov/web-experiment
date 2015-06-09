@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+	<head></head>
+	<body>
+		<canvas id="c" width="700" height="700" style="background-color: #eee;"></canvas>
+
+		<script>
+			var context = document.getElementById('c').getContext('2d');
+
+			function Vector(x, y) {
+				this.x = x;
+				this.y = y;
+			};
+			Vector.prototype.add = function(v) {
+				return new Vector(this.x + v.x, this.y + v.y);
+			};
+			Vector.prototype.sub = function(v) {
+				return new Vector(this.x - v.x, this.y - v.y);
+			};
+			Vector.prototype.mul = function(s) {
+				return new Vector(this.x * s, this.y * s);
+			};
+			Vector.prototype.dotProduct = function(v) {
+				return this.x * v.x + this.y * v.y;
+			};
+			Vector.prototype.distanceTo = function(v) {
+				var dx = v.x - this.x;
+				var dy = v.y - this.y;
+				return Math.sqrt(dx*dx + dy*dy);
+			};
+			Vector.prototype.length = function() {
+				var dx = this.x;
+				var dy = this.y;
+				return Math.sqrt(dx*dx + dy*dy);
+			};
+			Vector.prototype.normalize = function() {				
+				var length = this.length();
+				return new Vector(this.x / length, this.y / length);
+			};
+
+			function Node(position) {
+				this.position = position;
+				this.velocity = new Vector(0, 0);
+				this.acceleration = new Vector(0, 0);
+			};
+
+			var nodes = [];
+			nodes.push(new Node(new Vector(350-60, 350)));
+			nodes.push(new Node(new Vector(350-40, 350)));
+			nodes.push(new Node(new Vector(350-20, 350)));
+			nodes.push(new Node(new Vector(350, 350)));
+			nodes.push(new Node(new Vector(350+20, 350)));			
+			nodes.push(new Node(new Vector(350+40, 350)));
+			nodes.push(new Node(new Vector(350+100, 350)));
+			nodes.push(new Node(new Vector(350+100, 350+100)));
+
+			/*for(var i = -100; i <= 100; i += 10) {
+				for(var j = -100; j <= 100; j += 10) {
+					nodes.push(new Node(new Vector(350+j, 350+i)));
+				}
+			}*/
+
+			window.requestAnimationFrame(function draw() {				
+				var forces = [];
+				for(var i = 0; i < nodes.length; ++i) {
+					var destination = nodes[i];
+					var destinationForce = new Vector(0, 0);
+					for(var j = 0; j < nodes.length; ++j) {
+						var source = nodes[j];
+						if(source === destination) {
+							continue;
+						}
+
+						var distance = destination.position.sub(source.position);
+						var distanceLength = distance.length();
+						var direction = distance.normalize();
+
+						var dx = distanceLength - 200;
+						var f = direction.mul(-dx / 100);
+						
+						destinationForce = destinationForce.add(f);
+					}
+					forces.push({
+						node: destination,
+						force: destinationForce
+					});
+				}
+
+				var dt = 1;
+				for(var i = 0; i < forces.length; ++i) {
+					var force = forces[i];
+					force.node.acceleration = force.force;
+					force.node.velocity = force.node.velocity.add(force.node.acceleration.mul(dt)).mul(0.9*dt);
+					force.node.position = force.node.position.add(force.node.velocity.mul(dt/2));
+				}
+
+				context.clearRect(0, 0, 700, 700);
+				for(var i = 0; i < nodes.length; ++i) {
+					var node = nodes[i];
+					context.beginPath();
+					context.arc(node.position.x,node.position.y, 8, 0, 2*Math.PI);
+					context.fill();
+				}
+
+				window.requestAnimationFrame(draw);
+			});
+			
+		</script>
+	</body>
+</html>
