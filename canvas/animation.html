@@ -2,7 +2,7 @@
 <html>
 	<head></head>
 	<body>
-		<canvas id="c" width="700" height="700" style="background-color: #eee;"></canvas>
+		<canvas id="c" width="1100" height="700" style="background-color: #eee;"></canvas>
 
 		<script>
 			var context = document.getElementById('c').getContext('2d');
@@ -41,65 +41,140 @@
 			function Node(position) {
 				this.position = position;
 				this.velocity = new Vector(0, 0);
-				this.acceleration = new Vector(0, 0);
+			};
+			Node.prototype.tick = function(force, dt) {
+				var acceleration = force;
+				this.velocity = this.velocity.add(acceleration.mul(dt)).mul(0.9*dt);
+				this.position = this.position.add(this.velocity.mul(dt/2));
+			};
+			Node.prototype.influence = function(target) {
+				var distance = target.position.sub(this.position);
+				var distanceLength = distance.length();
+				var direction = distance.normalize();
+
+				if(distanceLength >= 100) {
+					return new Vector(0, 0);
+				}
+
+				var dx = distanceLength - 100;
+				var f = direction.mul(-dx / 50);
+				
+				return f;
+			};
+			Node.prototype.render = function(context) {
+				context.beginPath();
+				context.arc(this.position.x, this.position.y, 8, 0, 2*Math.PI);
+				context.fill();
+
+				context.beginPath();
+				context.arc(this.position.x, this.position.y, 50, 0, 2*Math.PI);
+				context.stroke();
 			};
 
-			var nodes = [];
-			nodes.push(new Node(new Vector(350-60, 350)));
-			nodes.push(new Node(new Vector(350-40, 350)));
-			nodes.push(new Node(new Vector(350-20, 350)));
-			nodes.push(new Node(new Vector(350, 350)));
-			nodes.push(new Node(new Vector(350+20, 350)));			
-			nodes.push(new Node(new Vector(350+40, 350)));
-			nodes.push(new Node(new Vector(350+100, 350)));
-			nodes.push(new Node(new Vector(350+100, 350+100)));
+			function Point(position, nodes) {
+				this.position = position;
+				this.nodes = nodes;
+			};
+			Point.prototype.tick = function(force, dt) {
+				// do nothing
+			};
+			Point.prototype.influence = function(target) {
+				var shouldPull = this.nodes.indexOf(target) !== -1;
+				if(shouldPull) {
+					var distance = target.position.sub(this.position);
+					var distanceLength = distance.length();
+					var direction = distance.normalize();
 
-			/*for(var i = -100; i <= 100; i += 10) {
-				for(var j = -100; j <= 100; j += 10) {
-					nodes.push(new Node(new Vector(350+j, 350+i)));
+					var dx = distanceLength - 200;
+					var f = direction.mul(-dx / 100);
+
+					return f;					
 				}
-			}*/
+
+				var distance = target.position.sub(this.position);
+				var distanceLength = distance.length();
+				var direction = distance.normalize();
+
+				if(distanceLength > 100) {
+					return new Vector(0, 0);
+				}
+
+				var dx = distanceLength - 100;
+				var f = direction.mul(-dx / 100);
+				
+				return f;
+			};
+			Point.prototype.render = function(context) {
+				for(var i = 0; i < this.nodes.length; ++i) {
+					var node = this.nodes[i];
+					context.beginPath();
+					context.moveTo(this.position.x, this.position.y);
+					context.lineTo(node.position.x, node.position.y);
+					context.stroke();
+				}
+
+				context.beginPath();
+				context.arc(this.position.x, this.position.y, 8, 0, 2*Math.PI);
+				context.stroke();
+			};
+
+			var items = [];			
+			/*items.push(new Node(new Vector(200-20, 350)));
+			items.push(new Node(new Vector(200+0, 350)));
+			items.push(new Node(new Vector(200+20, 350)));
+			items.push(new Node(new Vector(500-20, 350)));
+			items.push(new Node(new Vector(500+20, 350)));
+			items.push(new Node(new Vector(100-20, 100)));
+			items.push(new Node(new Vector(100+20, 100)));
+			items.push(new Node(new Vector(130-20, 200)));
+			items.push(new Node(new Vector(130+20, 200)));
+			items.push(new Point(new Vector(200, 500), [items[0], items[1], items[2]]));
+			items.push(new Point(new Vector(230, 500), [items[3], items[4]]));
+			items.push(new Point(new Vector(260, 500), [items[5], items[6]]));
+			items.push(new Point(new Vector(290, 500), [items[7], items[8]]));*/
+			for(var i = 0; i < 20; ++i) {
+				var node = new Node(new Vector(300+i*30, 150));
+				items.push(node);
+				items.push(new Point(new Vector(300+i*20, 350), [node]));
+
+				node = new Node(new Vector(300+i*30, 550));
+				items.push(node);
+				items.push(new Point(new Vector(300+i*20, 450), [node]));
+			}
 
 			window.requestAnimationFrame(function draw() {				
-				var forces = [];
-				for(var i = 0; i < nodes.length; ++i) {
-					var destination = nodes[i];
-					var destinationForce = new Vector(0, 0);
-					for(var j = 0; j < nodes.length; ++j) {
-						var source = nodes[j];
-						if(source === destination) {
-							continue;
-						}
-
-						var distance = destination.position.sub(source.position);
-						var distanceLength = distance.length();
-						var direction = distance.normalize();
-
-						var dx = distanceLength - 200;
-						var f = direction.mul(-dx / 100);
-						
-						destinationForce = destinationForce.add(f);
-					}
-					forces.push({
-						node: destination,
-						force: destinationForce
+				var influences = [];
+				for(var i = 0; i < items.length; ++i) {
+					var item = items[i];
+					influences.push({
+						item: item,
+						force: new Vector(0, 0)
 					});
 				}
 
-				var dt = 1;
-				for(var i = 0; i < forces.length; ++i) {
-					var force = forces[i];
-					force.node.acceleration = force.force;
-					force.node.velocity = force.node.velocity.add(force.node.acceleration.mul(dt)).mul(0.9*dt);
-					force.node.position = force.node.position.add(force.node.velocity.mul(dt/2));
+				for(var i = 0; i < items.length; ++i) {
+					var source = items[i];
+					for(var j = 0; j < items.length; ++j) {
+						var target = items[j];
+						if(source === target) {
+							continue;
+						}
+
+						var f = source.influence(target);
+						influences[j].force = influences[j].force.add(f);
+					}
 				}
 
-				context.clearRect(0, 0, 700, 700);
-				for(var i = 0; i < nodes.length; ++i) {
-					var node = nodes[i];
-					context.beginPath();
-					context.arc(node.position.x,node.position.y, 8, 0, 2*Math.PI);
-					context.fill();
+				var dt = 1;
+				for(var i = 0; i < influences.length; ++i) {
+					var influence = influences[i];
+					influence.item.tick(influence.force, dt);
+				}
+
+				context.clearRect(0, 0, 1100, 700);
+				for(var i = 0; i < items.length; ++i) {
+					var item = items[i];
+					item.render(context);
 				}
 
 				window.requestAnimationFrame(draw);
