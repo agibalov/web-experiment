@@ -6,7 +6,8 @@ module.exports = function(grunt) {
         src: [
           'bower_components/jquery/dist/jquery.min.js',
           'bower_components/angular/angular.min.js',
-          'bower_components/threejs/build/three.min.js'
+          'bower_components/threejs/build/three.min.js',
+          'bower_components/threejs/examples/js/controls/OrbitControls.js'
         ],
         dest: '<%= buildDir %>/everything.js'
       }
@@ -16,7 +17,8 @@ module.exports = function(grunt) {
         files: {
           '<%= buildDir %>/angular-and-threejs.html': ['angular-and-threejs.html'],
           '<%= buildDir %>/app.html': ['app.html'],
-          '<%= buildDir %>/geometry.html': ['geometry.html']
+          '<%= buildDir %>/geometry.html': ['geometry.html'],
+          '<%= buildDir %>/projection.html': ['projection.html']
         }
       }
     },

@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+	<head>
+	</head>
+	<body style="padding:0;margin:0;">
+		<canvas id="c" width="900" height="600"></canvas>
+		<canvas id="c2d" width="900" height="600" style="position: absolute; left: 0; top: 0;"></canvas>
+
+		<script src="everything.js"></script>
+		<script>
+			var canvas = document.getElementById('c');
+			var width = canvas.width;
+			var height = canvas.height;
+
+			var scene = new THREE.Scene();
+			var renderer = new THREE.WebGLRenderer({
+				antialiasing: true,
+				canvas: canvas
+			});
+			renderer.setSize(width, height);
+			renderer.setClearColor(0x999999);
+
+			var camera = new THREE.PerspectiveCamera(
+				90, width / height, 0.1, 10000);
+			camera.position.set(0, 0, -50);
+			camera.lookAt(new THREE.Vector3(0, 0, 0));
+			scene.add(camera);
+
+			var light = new THREE.DirectionalLight(0xffffff);
+			light.position.set(0, 0, -100);
+			scene.add(light);			
+
+			var boxGeometry = new THREE.BoxGeometry(20, 20, 20);
+			var boxMaterial = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+			var boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+			scene.add(boxMesh);
+
+			function Label(position) {
+				this.position = position;
+			};
+
+			var labels = [];
+			labels.push(new Label(new THREE.Vector3(-10, -10, -10)));
+			labels.push(new Label(new THREE.Vector3(-10, 10, -10)));
+			labels.push(new Label(new THREE.Vector3(10, 10, -10)));
+			labels.push(new Label(new THREE.Vector3(10, -10, -10)));
+			labels.push(new Label(new THREE.Vector3(-10, -10, 10)));
+			labels.push(new Label(new THREE.Vector3(-10, 10, 10)));
+			labels.push(new Label(new THREE.Vector3(10, 10, 10)));
+			labels.push(new Label(new THREE.Vector3(10, -10, 10)));
+
+			var controls = new THREE.OrbitControls(camera);
+			controls.damping = 0.2;
+			controls.addEventListener('change', redraw);
+			redraw();
+
+			function redraw() {
+				renderer.render(scene, camera);
+
+				var overlayCanvasElement = document.getElementById('c2d');
+				var context = overlayCanvasElement.getContext('2d');
+				context.clearRect(0, 0, width, height);
+
+				var labelPositions = [];
+				for(var i = 0; i < labels.length; ++i) {
+					var label = labels[i];
+
+					var from = to2d(label.position, camera);
+					var to = from.clone().add(new THREE.Vector2(100, 100));
+					var labelPosition = {
+						from: from,
+						to: to
+					};
+					labelPositions.push(labelPosition);
+				}
+
+				for(var i = 0; i < labelPositions.length; ++i) {
+					var labelPosition = labelPositions[i];				
+
+					var from = labelPosition.from;
+					var to = labelPosition.to;
+
+					context.beginPath();
+					context.moveTo(from.x, from.y);
+					context.lineTo(to.x, to.y);
+					context.strokeStyle = '#ffffff';
+					context.lineWidth = 5;
+					context.stroke();
+
+					context.beginPath();
+					context.arc(from.x, from.y, 5, 0, 2 * Math.PI, false);
+					context.fillStyle = '#ffffff';
+					context.fill();
+
+					context.beginPath();
+					context.arc(to.x, to.y, 5, 0, 2 * Math.PI, false);
+					context.fillStyle = '#ffffff';
+					context.fill();
+				}
+			}
+
+			function to2d(position, camera) {
+				var p = position.clone();
+				p.project(camera);
+				return new THREE.Vector2((1 + p.x) * width / 2, (1 - p.y) * height / 2);
+			}
+		</script>
+	</body>
+</html>
