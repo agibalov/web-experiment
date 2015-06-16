@@ -64,12 +64,14 @@
 				var context = overlayCanvasElement.getContext('2d');
 				context.clearRect(0, 0, width, height);
 
+				var center = to2d(new THREE.Vector3(0, 0, 0), camera);
+
 				var labelPositions = [];
 				for(var i = 0; i < labels.length; ++i) {
 					var label = labels[i];
 
 					var from = to2d(label.position, camera);
-					var to = from.clone().add(new THREE.Vector2(100, 100));
+					var to = from.clone().add(from.clone().sub(center).normalize().multiplyScalar(100));
 					var labelPosition = {
 						from: from,
 						to: to
