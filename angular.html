@@ -5,8 +5,8 @@
     <link rel="stylesheet" href="bower_components/foundation-apps/dist/css/foundation-apps.min.css">
   </head>
   <body ng-controller="AppController">
-    <button type="button" ng-click="showModal()">Modal</button>
-    <button type="button" ng-click="showNotification()">Notification</button>
+    <a href="#" class="button" ng-click="showModal()">Modal</a>
+    <a href="#" class="button" ng-click="showNotification()">Notification</a>
 
     <div zf-modal="" id="myModal">
       <h1>Hello!</h1>
@@ -17,7 +17,7 @@
 
     <script src="bower_components/hammerjs/hammer.min.js"></script> <!-- required for notifications -->
     <script src="bower_components/angular/angular.min.js"></script>
-    <script src="bower_components/foundation-apps/dist/js/foundation-apps.min.js"></script>    
+    <script src="bower_components/foundation-apps/dist/js/foundation-apps.min.js"></script>
     <script>
       angular.module("app", ["foundation.modal", "foundation.notification"]).controller("AppController", function($scope, FoundationApi) {
         $scope.message = "hi there!";
@@ -40,14 +40,14 @@
     </script>
 
     <!-- copied from Bower, looks like its not supposed to work without server -->
-    <script type="text/ng-template" id="components/modal/modal.html">      
+    <script type="text/ng-template" id="components/modal/modal.html">
       <div class="modal-overlay" ng-click="hideOverlay()">
         <aside class="modal" ng-click="$event.stopPropagation();" ng-transclude></aside>
       </div>
     </script>
 
     <!-- copied from Bower, looks like its not supposed to work without server -->
-    <script type="text/ng-template" id="components/notification/notification-set.html">      
+    <script type="text/ng-template" id="components/notification/notification-set.html">
       <div class="notification-container {{position}}">
         <zf-notification ng-repeat="notification in notifications"
           title="notification.title"
@@ -59,7 +59,7 @@
     </script>
 
     <!-- copied from Bower, looks like its not supposed to work without server -->
-    <script type="text/ng-template" id="components/notification/notification.html">      
+    <script type="text/ng-template" id="components/notification/notification.html">
       <div zf-swipe-close="swipe" class="notification {{ color }}">
         <a href="#" class="close-button" ng-click="hide(); $event.preventDefault(); $event.stopPropagation()">&times;</a>
         <div class="notification-icon" ng-if="image"><img ng-src="{{ image }}"/></div>
