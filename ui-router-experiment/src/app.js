@@ -4,6 +4,40 @@ angular.module('app', ['ui.router'])
 })
 .config(function($stateProvider) {
   $stateProvider
+  .state('things', {
+    abstract: true,
+    resolve: {
+      things: function() {
+        return ['thing1', 'thing2', 'thing3'];
+      }
+    },
+    views: {
+      viewA: {
+        template:
+        '<ul><li ng-repeat="thing in things"><a ui-sref="things.thing({ thing: thing })" ui-sref-opts="{location:' + "'replace'" + '}">{{thing}}</a></li></ul>' +
+        '<p>Navigating between these does not affect the backstack</p>',
+        controller: function($scope, things) {
+          $scope.things = things;
+        }
+      },
+      viewB: {
+        template: '<ui-view></ui-view>'
+      }
+    }
+  })
+  .state('things.none', {
+    url: '/things',
+    template: 'none selected',
+    controller: function($scope) {}
+  })
+  .state('things.thing', {
+    url: '/things/:thing',
+    template: 'Selected {{thing}} (total things: {{totalThings}})',
+    controller: function($scope, $stateParams, things) {
+      $scope.thing = $stateParams.thing;
+      $scope.totalThings = things.length;
+    }
+  })
   .state('index', {
     url: '/',
     onEnter: function(indexCommonThing) {
