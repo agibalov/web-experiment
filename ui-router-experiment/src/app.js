@@ -2,7 +2,7 @@ angular.module('app', ['ui.router'])
 .config(function($stateProvider) {
   $stateProvider
   .state('index', {
-    url: '',
+    url: '/',
     onEnter: function(indexCommonThing) {
       console.log('index - onEnter', indexCommonThing);
     },
@@ -31,7 +31,7 @@ angular.module('app', ['ui.router'])
     }
   })
   .state('stateA', {
-    url: 'a/:something',
+    url: '/a/:something',
     onEnter: function(something) {
       console.log('stateA - onEnter, something=', something);
     },
@@ -59,7 +59,7 @@ angular.module('app', ['ui.router'])
     }
   })
   .state('stateB', {
-    url: 'stateB',
+    url: '/stateB',
     onEnter: function() {
       console.log('stateB - onEnter');
     },
