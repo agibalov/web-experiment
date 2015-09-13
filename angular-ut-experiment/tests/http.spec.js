@@ -171,12 +171,12 @@ describe('$http', function() {
       var config = {
         // TODO: what is the real signature?
         transformRequest: function(request, headersGetter, status) {
-          console.log('request', request, headersGetter, status);
+          // console.log('request', request, headersGetter, status);
           return request;
         },
         // TODO: what is the real signature?
         transformResponse: function(data, headersGetter, status) {
-          console.log('response', data, headersGetter, status);
+          // console.log('response', data, headersGetter, status);
           return data;
         }
       };
@@ -274,6 +274,39 @@ describe('$http', function() {
           method: 'GET'
         })
       }));
+    }));
+  });
+
+  describe('mock request handler', function() {
+    it('should let me dynamically decide how to respond', inject(function($http, $httpBackend) {
+      var receivedRequest;
+      $httpBackend.whenPOST('/test').respond(function(method, url, data, headers) {
+        var deserializedData = JSON.parse(data);
+        receivedRequest = {
+          method: method,
+          url: url,
+          data: deserializedData,
+          headers: headers
+        };
+        // console.log('got request', method, url, data, headers);
+        return [201, {'hi': 'to you too'}, {}, 'response status text']
+      });
+
+      var receivedResponse;
+      $http.post('/test', {'hello': 'there'}).then(function(response) {
+        // console.log('got respone', response);
+        receivedResponse = response;
+      });
+
+      $httpBackend.flush();
+
+      expect(receivedRequest.method).toBe('POST');
+      expect(receivedRequest.url).toBe('/test');
+      expect(receivedRequest.data).toEqual({'hello': 'there'});
+
+      expect(receivedResponse.status).toBe(201);
+      expect(receivedResponse.statusText).toBe('response status text');
+      expect(receivedResponse.data).toEqual({'hi': 'to you too'});
     }));
   });
 });
