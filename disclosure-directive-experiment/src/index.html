@@ -1,0 +1,43 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>hello world</title>
+    <link rel="stylesheet" href="/angular/angular-csp.css">
+  </head>
+  <body ng-controller="AppController" ng-cloak>
+    <h1>omg</h1>
+    <disclosure title="The Title here">
+      <p>content line one</p>
+      <p>content line two</p>
+    </disclosure>
+    <disclosure title="The other title here">
+      <p>some first content line</p>
+      <p>some second content line</p>
+    </disclosure>
+
+    <script src="/angular/angular.min.js"></script>
+    <script>
+      angular
+      .module('app', [])
+      .controller('AppController', function() {
+      })
+      .directive('disclosure', function() {
+        return {
+          restrict: 'E',
+          transclude: true,
+          scope: {
+            title: '@'
+          },
+          template:
+          '<div>' +
+          '  <h3><button type="button" ng-click="showContent=!showContent">Toggle</button> {{title}}</h3>' +
+          '  <div ng-show="showContent" ng-transclude></div>' +
+          '</div>',
+          link: ['scope', function(scope) {
+            scope.showContent = false;
+          }]
+        };
+      });
+    </script>
+  </body>
+</html>
