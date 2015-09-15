@@ -1,0 +1,57 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>hello world</title>
+  </head>
+  <body ng-controller="AppController">
+    <div ui-view></div>
+
+    <script src="/angular/angular.js"></script>
+    <script src="/angular-ui-router/release/angular-ui-router.js"></script>
+    <script>
+      angular.module('app', ['ui.router'])
+      .config(function($urlRouterProvider) {
+      	$urlRouterProvider.otherwise("/");
+      })
+      .config(function($stateProvider) {
+        $stateProvider
+        .state('authenticated', {
+          abstract: true,
+          onEnter: function() { console.log('authenticated enter'); },
+          onExit: function() { console.log('authenticated exit'); },
+          template: '<div class="level0" ui-view></div>',
+          controller: function($scope, sessionToken) {
+            console.log('authenticated controller', sessionToken)
+          },
+          resolve: {
+            sessionToken: function($q) {
+              // access API and get the the session token
+              // if successful, the 'sessionToken' is resolved
+              // and it all goes to displayingdata
+              // otherwise it's rejected and $stateChangeError is triggered
+              return $q.when('good session token');
+              //return $q.reject('shit happened');
+            }
+          }
+        })
+        .state('authenticated.displayingdata', {
+          url: '/',
+          onEnter: function() { console.log('displayingdata enter'); },
+          onExit: function() { console.log('displayingdata exit'); },
+          template: '<div class="displayingdata">I am displayingdata</div>',
+          controller: function($scope, sessionToken) {
+            console.log('displayingdata controller', sessionToken)
+          }
+        });
+      })
+      .controller('AppController', function($scope) {
+        $scope.$on('$stateChangeError', function() {
+          console.log('got $stateChangeError');
+        });
+        $scope.$on('$stateChangeSuccess', function() {
+          console.log('got $stateChangeSuccess');
+        });
+      });
+    </script>
+  </body>
+</html>
