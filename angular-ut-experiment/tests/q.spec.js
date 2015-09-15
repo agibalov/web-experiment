@@ -3,7 +3,7 @@ describe('$q', function() {
     it('should successfully resolve a promise when all child promises are resolved', inject(function($rootScope, $q) {
       var deferredA = $q.defer();
       var deferredB = $q.defer();
-      
+
       var all = $q.all({
         a: deferredA.promise,
         b: deferredB.promise
@@ -35,7 +35,7 @@ describe('$q', function() {
     it('omg', inject(function($rootScope, $q) {
       var deferredA = $q.defer();
       var deferredB = $q.defer();
-      
+
       var all = $q.all({
         a: deferredA.promise,
         b: deferredB.promise
@@ -61,5 +61,63 @@ describe('$q', function() {
       $rootScope.$apply();
       expect(error).toBe('ERROR!!!');
     }));
+  });
+
+  describe('looping with promises', function() {
+    var qWhile;
+    beforeEach(inject(function($q, $rootScope) {
+      // !!! ONLY WORKS WITHIN THE DIGEST !!!
+      qWhile = function(conditionFunc, iterationFunc) {
+        var deferred = $q.defer();
+
+        var loop = function() {
+          if(!conditionFunc()) {
+            return deferred.resolve();
+          }
+
+          return $q.when(iterationFunc()).then(loop, deferred.reject);
+        };
+
+        loop();
+
+        return deferred.promise;
+      };
+    }));
+
+    it('should work in a positive case', function(done) {
+      inject(function($q, $rootScope) {
+        var log = [];
+        var i = 0;
+        $rootScope.$apply(function() {
+          qWhile(function() { return i < 5; }, function() {
+            log.push(i);
+            ++i;
+          }).then(function() {
+            expect(log).toEqual([0, 1, 2, 3, 4]);
+            expect(i).toEqual(5);
+            done();
+          });
+        });
+      });
+    });
+
+    it('should work in a negative case', function(done) {
+      inject(function($q, $rootScope) {
+        var log = [];
+        var i = 0;
+        $rootScope.$apply(function() {
+          qWhile(function() { return i < 5; }, function() {
+            log.push(i);
+            ++i;
+            return $q.reject('omg');
+          }).catch(function(e) {
+            expect(e).toEqual('omg');
+            expect(log).toEqual([0]);
+            expect(i).toEqual(1);
+            done();
+          });
+        });
+      });
+    });
   });
 });
