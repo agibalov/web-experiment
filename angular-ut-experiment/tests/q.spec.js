@@ -65,7 +65,7 @@ describe('$q', function() {
 
   describe('looping with promises', function() {
     var qWhile;
-    beforeEach(inject(function($q, $rootScope) {
+    beforeEach(inject(function($q) {
       // !!! ONLY WORKS WITHIN THE DIGEST !!!
       qWhile = function(conditionFunc, iterationFunc) {
         var deferred = $q.defer();
@@ -85,7 +85,7 @@ describe('$q', function() {
     }));
 
     it('should work in a positive case', function(done) {
-      inject(function($q, $rootScope) {
+      inject(function($rootScope) {
         var log = [];
         var i = 0;
         $rootScope.$apply(function() {
