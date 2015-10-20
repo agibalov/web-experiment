@@ -32,14 +32,14 @@
       })
       .controller('AppController', function($rootScope, $timeout, $state) {
         var bypass = false;
-        $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
           if(bypass) {
-            console.log('navigating without delay');
+            console.log('navigating without delay', toState.name, toParams, fromState.name, fromParams);
             bypass = false;
             return;
           }
 
-          console.log('delaying...');
+          console.log('delaying...', toState.name, toParams, fromState.name, fromParams);
           event.preventDefault();
           bypass = true;
           $timeout(function() {
