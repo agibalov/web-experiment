@@ -1,0 +1,85 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>hello</title>
+    <style>
+      .selected { background: red; }
+    </style>
+  </head>
+  <body ng-controller="AppController">
+    <person-list people="people" selected-person="selectedPerson" on-delete-person="deletePerson(person)"></person-list>
+    <p>{{selectedPerson.name}}</p>
+    <button type="button" ng-click="selectPersonFour()">Select Person Four</button>
+
+    <script src="angular/angular.min.js"></script>
+    <script src="angular-filter/dist/angular-filter.min.js"></script>
+    <script>
+      angular.module('app', ['angular.filter'])
+      .controller('AppController', function($scope) {
+        $scope.selectedPerson = null;
+        $scope.people = [
+          { id: 1, name: 'Person One', department: 'Development' },
+          { id: 2, name: 'Person Two', department: 'QA' },
+          { id: 3, name: 'Person Three', department: 'QA' },
+          { id: 4, name: 'Person Four', department: 'Development' },
+          { id: 5, name: 'Person Five', department: 'Development' },
+          { id: 5, name: 'Person Six' }
+        ];
+        $scope.selectPersonFour = function() {
+          $scope.selectedPerson = $scope.people[3];
+        };
+        $scope.deletePerson = function(p) {
+          console.log('DELETE PERSON', p);
+        };
+      })
+      .directive('personList', function() {
+        return {
+          restrict: 'E',
+          scope: {
+            people: '=',
+            selectedPerson: '=',
+            onDeletePerson: '&'
+          },
+          templateUrl: 'personList.html',
+          link: function(scope) {
+            scope.onPersonClick = function(person) {
+              console.log('CLICKED!', person);
+              scope.selectedPerson = person;
+            };
+
+            scope.onPersonDeleteClick = function(person) {
+              scope.onDeletePerson({ person: person });
+            };
+
+            scope.$watch('selectedPerson', function(newValue, oldValue) {
+              console.log('SELECTED!', newValue, oldValue);
+              doSelectPerson(newValue);
+            });
+
+            function doSelectPerson(person) {
+              scope.people.forEach(function(p) {
+                p.$selected = false;
+              });
+              if(person != null) {
+                person.$selected = true;
+              }
+            };
+          }
+        };
+      });
+    </script>
+    <script type="text/ng-template" id="personList.html">
+      <ul class="departments">
+        <li class="department" ng-repeat="(department, members) in people | defaults: { department: '' } | groupBy:'department'">
+          <h3>{{department}}</h3>
+          <ul class="members">
+            <li class="member" ng-repeat="member in members" ng-click="onPersonClick(member)" ng-class="{'selected': member.$selected}">
+              {{member.name}} ({{member.id}}, {{member.department}})
+              <button type="button" ng-click="onPersonDeleteClick(member)">Delete</button>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </script>
+  </body>
+</html>
