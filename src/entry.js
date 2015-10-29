@@ -1,3 +1,4 @@
+require('bootstrap/dist/css/bootstrap.css');
 require('./style.css');
 require('./app.js');
 var add = require('./add');
