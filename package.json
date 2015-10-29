@@ -1,0 +1,19 @@
+{
+  "name": "gulp-webpack-experiment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^0.21.0",
+    "del": "^2.0.2",
+    "gulp": "^3.9.0",
+    "gulp-webpack": "^1.5.0",
+    "raw-loader": "^0.5.1",
+    "style-loader": "^0.13.0"
+  }
+}
