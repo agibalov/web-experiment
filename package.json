@@ -9,11 +9,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "babel-core": "^5.8.33",
+    "babel-loader": "^5.3.3",
     "css-loader": "^0.21.0",
     "del": "^2.0.2",
     "gulp": "^3.9.0",
     "gulp-webpack": "^1.5.0",
     "raw-loader": "^0.5.1",
-    "style-loader": "^0.13.0"
+    "style-loader": "^0.13.0",
+    "webpack": "^1.12.2"
   }
 }

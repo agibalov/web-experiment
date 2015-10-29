@@ -20,7 +20,8 @@ gulp.task('webpack', function() {
       module: {
         loaders: [
           { test: /\.css$/, loader: 'style!css' },
-          { test: /\.txt$/, loader: 'raw' }
+          { test: /\.txt$/, loader: 'raw' },
+          { test: /\.babel.js$/, loader: 'babel' }
         ]
       }
     }))
