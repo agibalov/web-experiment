@@ -6,12 +6,12 @@ gulp.task('clean', function() {
   return del(['dist/']);
 });
 
-gulp.task('copy', function() {
+gulp.task('copy', ['clean'], function() {
   return gulp.src('./src/index.html')
     .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('webpack', function() {
+gulp.task('webpack', ['copy'], function() {
   return gulp.src('./src/entry.js')
     .pipe(webpack({
       output: {
@@ -28,4 +28,4 @@ gulp.task('webpack', function() {
     .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('default', ['clean', 'copy', 'webpack']);
+gulp.task('default', ['webpack']);

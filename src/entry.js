@@ -1,4 +1,5 @@
 require('./style.css');
+require('./app.js');
 var add = require('./add');
 var sub = require('./sub.babel.js');
 var message = require('./2and3is.txt');
