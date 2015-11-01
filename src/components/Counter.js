@@ -6,6 +6,7 @@ class Counter extends React.Component {
       <div>
         <button onClick={this.props.increment}>Increment</button>
         <button onClick={this.props.decrement}>Decrement</button>
+        <button onClick={this.props.incrementAsync}>Increment Async</button>
         <h3>{this.props.counter}</h3>
       </div>
     )
