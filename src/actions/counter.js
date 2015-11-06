@@ -1,5 +1,35 @@
+import 'babel-polyfill'
+
+export const INIT = 'INIT'
+export const SET_VALUE = 'SET_VALUE'
 export const INCREMENT = 'INCREMENT'
 export const DECREMENT = 'DECREMENT'
+
+export function init() {
+  function getInitialValue() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(123)
+      }, 1000)
+    })
+  }
+
+  return dispatch => {
+    (async () => {
+      const initialValue = await getInitialValue()
+      return initialValue
+    })().then(function(initialValue) {
+      dispatch(setValue(initialValue))
+    })
+  }
+}
+
+export function setValue(value) {
+  return {
+    type: SET_VALUE,
+    value: value
+  }
+}
 
 export function increment() {
   return {
@@ -10,31 +40,5 @@ export function increment() {
 export function decrement() {
   return {
     type: DECREMENT
-  }
-}
-
-export function incrementAsync() {
-  function doTheComputation() {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve('hi there')
-      }, 1000)
-    })
-  }
-
-  console.log('incrementAsync()')
-
-  return dispatch => {
-    console.log('incrementAsync() - thunk start');
-
-    (async () => {
-      console.log('incrementAsync() - before doTheComputation()')
-      let result = await doTheComputation()
-      console.log('incrementAsync() - after doTheComputation()', result)
-    })().then(function() {
-      console.log('incrementAsync() - before dispatch()')
-      dispatch(increment())
-      console.log('incrementAsync() - after dispatch()')
-    })
   }
 }

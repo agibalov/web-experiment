@@ -5,7 +5,7 @@ import App from './containers/App'
 import configureStore from './store/configureStore'
 
 const store = configureStore({
-  counter: 5
+  counter: -1
 })
 
 render(
@@ -14,25 +14,3 @@ render(
   </Provider>,
   document.getElementById('root')
 )
-
-// -------------------
-import 'babel-polyfill'
-
-function doSomething() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve('hi there');
-    }, 300);
-  })
-}
-
-async function run() {
-  console.log('x is', await doSomething())
-  console.log('x is', await doSomething())
-  console.log('x is', await doSomething())
-  return 123;
-};
-
-run().then(result => {
-  console.log('DONE!', result)
-})
