@@ -2,6 +2,7 @@ module.exports = {
   context: __dirname + '/src',
   entry: {
     'angular2': [
+      'zone.js/lib/browser/zone.js', // omg
       'rxjs',
       'reflect-metadata',
       'angular2/core'
