@@ -1,9 +1,9 @@
 import { expect } from 'chai'
 
-xdescribe('decorators', () => {
+describe('decorators', () => {
   it('should work', () => {
     function magic(target, key, description) {
-      console.log('magic!')
+      target.message = 'hello there' // applies to target object, not to method
     }
 
     class SomeClass {
@@ -14,8 +14,6 @@ xdescribe('decorators', () => {
     }
 
     const x = new SomeClass()
-    x.someMethod() // TypeError: x.someMethod is not a function
-
-    // https://github.com/babel/babel/issues/2645
+    expect(x.message).to.equal('hello there')
   })
 })
