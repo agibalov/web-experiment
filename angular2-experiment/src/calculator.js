@@ -9,7 +9,8 @@ import { CalculatorService } from './calculatorService'
     <input type="text" [(ngModel)]="b">
     <button type="button" (click)="onAdd()">Add</button>
     <span>The result is {{result}}</span>
-  `
+  ` //,
+  // providers: [CalculatorService] // does not work
 })
 // @Inject(CalculatorService) // does not work
 export class Calculator {
