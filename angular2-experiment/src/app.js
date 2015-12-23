@@ -1,16 +1,21 @@
 import { Component, Inject } from 'angular2/core'
-import { Hello } from './hello'
+import { ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig } from 'angular2/router'
+import { Page1 } from './page1'
 import { Calculator } from './calculator'
 
 @Component({
   selector: 'app',
   template: `
     <div class="app">
-      <hello [name]="'loki2302'"></hello>
-      <hello [name]="'qwerty'"></hello>
-      <calculator></calculator>
+      <a [routerLink]="['Page1']">Page 1</a>
+      <a [routerLink]="['Calculator']">Calculator</a>
+      <router-outlet></router-outlet>
     </div>`,
-  directives: [Hello, Calculator]
+  directives: [Calculator, ROUTER_DIRECTIVES]
 })
+@RouteConfig([
+  { path: '/page1', name: 'Page1', component: Page1, useAsDefault: true },
+  { path: '/calculator', name: 'Calculator', component: Calculator }
+])
 export class App {
 }

@@ -5,7 +5,8 @@ module.exports = {
       'zone.js/lib/browser/zone.js', // omg
       'rxjs',
       'reflect-metadata',
-      'angular2/core'
+      'angular2/core',
+      'angular2/router'
     ],
     'app': './index.js'
   },
