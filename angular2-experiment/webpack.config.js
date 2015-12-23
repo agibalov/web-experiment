@@ -1,3 +1,10 @@
+var webpack = require('webpack');
+
+var plugins = [];
+if(process.argv.indexOf('--production') !== -1) {
+  plugins.push(new webpack.optimize.UglifyJsPlugin());
+}
+
 module.exports = {
   context: __dirname + '/src',
   entry: {
@@ -26,5 +33,6 @@ module.exports = {
       { test: /\.eot$/, loader: 'file' },
       { test: /\.svg$/, loader: 'url?limit=10000&mimetype=image/svg+xml' }
     ]
-  }
+  },
+  plugins: plugins
 };
