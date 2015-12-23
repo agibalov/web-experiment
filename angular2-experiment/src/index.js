@@ -1,4 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css'
+// copy index.html to build directory
+import './index.html'
 
 // Angular requires these
 import 'zone.js/lib/browser/zone.js'

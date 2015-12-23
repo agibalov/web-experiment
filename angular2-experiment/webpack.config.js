@@ -25,7 +25,7 @@ module.exports = {
           plugins: ['transform-decorators-legacy']
         }
       },
-      { test: /\.html$/, loader: 'raw' },
+      { test: /\.html$/, loader: 'file?name=[name].[ext]' }, // interpret .html files as they are
       { test: /\.css$/, loader: 'style!css' },
       { test: /\.woff$/, loader: 'url?limit=10000&mimetype=application/font-woff' },
       { test: /\.woff2$/, loader: 'url?limit=10000&mimetype=application/font-woff2' },
