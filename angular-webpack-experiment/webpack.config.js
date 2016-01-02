@@ -11,7 +11,7 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         loader: 'babel',
         query: {
-          presets: ['es2015']
+          presets: ['es2015', 'stage-0']
         }
       },
       { test: /\.html$/, loader: 'raw' },

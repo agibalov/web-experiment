@@ -11,5 +11,5 @@ angular.module('app', [
   page2ControllerModule
 ])
 .config(function($urlRouterProvider) {
-  $urlRouterProvider.otherwise('/page1');
-});
+  $urlRouterProvider.otherwise('/page1')
+})
