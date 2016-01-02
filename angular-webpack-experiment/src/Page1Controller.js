@@ -1,8 +1,8 @@
-import 'babel-polyfill'
 import angular from 'angular'
 import uirouter from 'angular-ui-router'
+import dummy from './dummy'
 
-export default angular.module('page1Controller', [uirouter])
+export default angular.module('page1Controller', [uirouter, dummy])
 .config($stateProvider => {
   $stateProvider.state('page1', {
     url: '/page1',
@@ -35,23 +35,4 @@ export default angular.module('page1Controller', [uirouter])
     }
   })
 })
-.factory('dummyService', ($q, $timeout, $rootScope) => {
-  var count = 0
-  return {
-    getData: x => {
-      return $q(resolve => {
-        $timeout(() => {
-          resolve('i am data ' + x)
-        }, 1000)
-      })
-    },
-    getCount: () => {
-      return $q(resolve => {
-        $timeout(() => {
-          resolve(++count)
-        }, 500)
-      })
-    }
-  }
-})
-.name;
+.name

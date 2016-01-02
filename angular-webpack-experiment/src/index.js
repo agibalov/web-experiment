@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css'
 
+import 'babel-polyfill'
 import angular from 'angular'
 import appControllerModule from './AppController'
 import page1ControllerModule from './Page1Controller'
@@ -10,6 +11,6 @@ angular.module('app', [
   page1ControllerModule,
   page2ControllerModule
 ])
-.config(function($urlRouterProvider) {
+.config($urlRouterProvider => {
   $urlRouterProvider.otherwise('/page1')
 })
