@@ -1,0 +1,13 @@
+---
+title: Index Page
+layout: default
+type: index
+---
+
+Hello.
+
+<ul>
+  <% for article in @getCollection('html').findAll({ type: 'article' }).toJSON(): %>
+    <li><a href="<%= article.url %>"><%= article.title %></a></li>
+  <% end %>
+</ul>

@@ -1,0 +1,6 @@
+{
+  "name": "docpad-plugin-asciidoc",
+  "version": "2.0.0",
+  "main": "src/asciidoc.plugin.js",
+  "keywords": ["docpad", "docpad-plugin"]
+}

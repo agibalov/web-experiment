@@ -1,20 +1,21 @@
 {
-  "name": "no-skeleton.docpad",
-  "version": "0.1.0",
-  "description": "New DocPad project without using a skeleton",
-  "engines": {
-    "node": "0.10",
-    "npm": "1.3"
-  },
-  "dependencies": {
-    "docpad": "~6.69.1",
-    "docpad-plugin-eco": "~2.0.3",
-    "docpad-plugin-ghpages": "~2.4.3",
-    "docpad-plugin-marked": "~2.2.1",
-    "docpad-plugin-partials": "~2.9.1"
-  },
-  "main": "node_modules/docpad/bin/docpad-server",
+  "name": "docpad-experiment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "node_modules/docpad/bin/docpad-server"
+    "start": "node_modules/docpad/bin/docpad run",
+    "clean": "rm -rf ./out"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "asciidoctor.js": "^1.5.3",
+    "bootstrap": "^3.3.6",
+    "docpad": "^6.78.4",
+    "docpad-plugin-eco": "^2.1.0",
+    "docpad-plugin-ghpages": "^2.4.4",
+    "docpad-plugin-less": "^2.4.1",
+    "docpad-plugin-marked": "^2.3.0"
   }
 }

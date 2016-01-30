@@ -1,2 +1,0 @@
-<hr>
-<h5>&copy; 2014 by <a href="<%= @site.authorUrl %>" target="_blank"><%= @site.author %></a></h5>

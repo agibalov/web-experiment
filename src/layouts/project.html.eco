@@ -1,0 +1,13 @@
+---
+layout: default
+---
+
+<h2>Technologies</h2>
+<ul>
+  <% for tech in @document.technologies: %>
+    <li><%- tech %></li>
+  <% end %>
+</ul>
+
+<h2>Description</h2>
+<%- @content %>
