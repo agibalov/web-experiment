@@ -1,6 +1,9 @@
 title: "My Test Post"
 date: 2015-03-23 00:11:08
 tags:
+- some tag
+- some another tag
+category: Helloworlding
 ---
 
 Hello there. Here's some code:
