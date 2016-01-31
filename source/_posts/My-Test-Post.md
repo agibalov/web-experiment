@@ -8,3 +8,11 @@ Hello there. Here's some code:
 console.log('hello world');
 ```
 Bye.
+
+{% colorize 'red' %}
+Hi content! This should be red.
+{% endcolorize %}
+
+{% colorize 'pink' %}
+Hi content! This should be pink.
+{% endcolorize %}
