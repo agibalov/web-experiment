@@ -26,7 +26,7 @@ digraph g {
 
 ### Inclusion by tag
 
-{% inc 'scripts/include.js' lang:js tag:mysnippet %}
+{% inc 'scripts/inc.js' lang:js tag:mysnippet %}
 
 ### Complete inclusion
 
