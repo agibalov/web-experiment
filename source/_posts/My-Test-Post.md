@@ -28,6 +28,10 @@ digraph g {
 
 {% inc 'scripts/inc.js' lang:js tag:mysnippet %}
 
+### Inclusion by other tag
+
+{% inc 'scripts/inc.js' lang:js tag:myothersnippet %}
+
 ### Complete inclusion
 
 {% inc '.gitignore' %}

@@ -1,20 +1,22 @@
+"use strict";
+
 // A better 'include' with tag support (yet worse than Asciidoctor)
 
-var fs = require('fs');
-var highlight = require('hexo-util').highlight;
-var dedent = require('underscore.string').dedent;
+const fs = require('fs');
+const highlight = require('hexo-util').highlight;
+const dedent = require('underscore.string').dedent;
 
 const LOOKING_FOR_START_TAG = 0;
 const LOOKING_FOR_END_TAG = 1;
 const EXTRACTING_EVERYTHING = 2;
 
 hexo.extend.tag.register('inc', function(args, content) {
-  var filename = null;
-  var tagname = null;
-  var langname = null;
-  for(var i = 0; i < args.length; ++i) {
-    var arg = args[i];
-    var match = arg.match(/lang:(\w+)/i);
+  let filename = null;
+  let tagname = null;
+  let langname = null;
+  for(let i = 0; i < args.length; ++i) {
+    const arg = args[i];
+    let match = arg.match(/lang:(\w+)/i);
     if(match) {
       langname = match[1];
     } else {
@@ -31,34 +33,52 @@ hexo.extend.tag.register('inc', function(args, content) {
     throw new Error('Filename is not specified');
   }
 
-  var fileContent = fs.readFileSync(filename, 'utf-8');
-  var fileLines = fileContent.split('\n');
+  const fileContent = fs.readFileSync(filename, 'utf-8');
+  const fileLines = fileContent.split('\n');
 
-  var state;
+  let state;
   if(tagname) {
     state = LOOKING_FOR_START_TAG;
   } else {
     state = EXTRACTING_EVERYTHING;
   }
 
-  var extractedContent = '';
-  for(var i = 0; i < fileLines.length; ++i) {
+  const startTagRegex = /start::(\w+)[ \t]*$/;
+  const endTagRegex = /end::(\w+)[ \t]*$/;
+
+  let extractedContent = '';
+  for(let i = 0; i < fileLines.length; ++i) {
     // start::mysnippet
-    var line = fileLines[i];
+    const line = fileLines[i];
+    let shouldAppendThisLine = false;
     if(state === LOOKING_FOR_START_TAG) {
-      if(line.indexOf('start::' + tagname) > -1) {
+      const match = line.match(startTagRegex);
+      if(match && match[1] === tagname) {
         state = LOOKING_FOR_END_TAG;
       }
     } else if(state === LOOKING_FOR_END_TAG) {
-      if(line.indexOf('end::' + tagname) > -1) {
+      // start::myothersnippet
+      const match = line.match(endTagRegex);
+      if(match && match[1] === tagname) {
         state = LOOKING_FOR_START_TAG;
       } else {
-        extractedContent += line + '\n';
+        shouldAppendThisLine = true;
       }
+      // end::myothersnippet
     } else if(state === EXTRACTING_EVERYTHING) {
-      extractedContent += line + '\n';
+      shouldAppendThisLine = true;
     } else {
       throw new Error('Unexpected state');
+    }
+
+    if(shouldAppendThisLine) {
+      const lineIsAnotherStartOrEndTag =
+        startTagRegex.test(line) || endTagRegex.test(line);
+      if(lineIsAnotherStartOrEndTag) {
+        continue;
+      }
+
+      extractedContent += line + '\n';
     }
     // end::mysnippet
   }
