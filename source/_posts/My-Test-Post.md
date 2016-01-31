@@ -16,3 +16,10 @@ Hi content! This should be red.
 {% colorize 'pink' %}
 Hi content! This should be pink.
 {% endcolorize %}
+
+{% viz %}
+digraph g {
+  Interface -> "Implementation 1";
+  Interface -> "Implementation 2";
+}
+{% endviz %}
