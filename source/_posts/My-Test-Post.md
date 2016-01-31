@@ -23,3 +23,11 @@ digraph g {
   Interface -> "Implementation 2";
 }
 {% endviz %}
+
+### Inclusion by tag
+
+{% inc 'scripts/include.js' lang:js tag:mysnippet %}
+
+### Complete inclusion
+
+{% inc '.gitignore' %}
