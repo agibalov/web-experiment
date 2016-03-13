@@ -43,28 +43,31 @@ const TodoApp = ({store}) => {
   </div>
 }
 
-let lastId = 4
 const store = createStore((state, action) => {
   const type = action.type
   switch(type) {
     case 'ADD_TODO':
+      const newId = state.lastId
       return {
+        lastId: newId + 1,
         todos: [
           ...state.todos,
           {
-            id: lastId++,
+            id: newId,
             text: action.text
           }
         ]
       }
     case 'REMOVE_TODO':
       return {
+        ...state,
         todos: state.todos.filter(t => t.id !== action.id)
       }
     default:
       return state
   }
 }, {
+  lastId: 10,
   todos: [{ id: 1, text: 'omg' }, { id: 2, text: 'wtf' }, { id: 3, text: 'bbq' }]
 })
 
