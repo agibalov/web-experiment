@@ -49,7 +49,10 @@ render(
   <Router history={history}>
     <Route path="/" component={App}>
       <IndexRoute component={Page1} />
-      <Route path="page2" component={Page2} />
+      <Route path="page2" component={Page2}
+        onEnter={() => { console.log('Page 2 - onEnter') }}
+        onLeave={() => { console.log('Page 2 - onLeave') }}
+      />
       <Route path="addNumbers/:a/:b" component={AddNumbers} />
     </Route>
   </Router>,
