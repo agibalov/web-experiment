@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "webpack_server": "webpack-dev-server --port 8080 --content-base src"
   },
   "author": "",
   "license": "ISC",
@@ -12,8 +12,7 @@
     "react": "^0.14.1",
     "react-dom": "^0.14.1",
     "react-redux": "^4.0.0",
-    "redux": "^3.0.4",
-    "redux-thunk": "^1.0.0"
+    "redux": "^3.0.4"
   },
   "devDependencies": {
     "babel": "^6.0.14",
@@ -23,8 +22,6 @@
     "babel-preset-es2015": "^6.0.14",
     "babel-preset-react": "^6.0.14",
     "babel-preset-stage-2": "^6.0.14",
-    "del": "^2.0.2",
-    "gulp": "^3.9.0",
-    "webpack-stream": "^2.1.1"
+    "webpack": "^1.12.14"
   }
 }
