@@ -1,8 +1,10 @@
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    'todo-app': './todo-app/index.js',
+    'router-app': './router-app/index.js'
+  },
   output: {
-    path: './dist',
-    filename: 'everything.js'
+    filename: '[name].bundle.js'
   },
   module: {
     loaders: [

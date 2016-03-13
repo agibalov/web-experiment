@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "webpack_server": "webpack-dev-server --port 8080 --content-base src"
+    "todo-app": "webpack-dev-server --port 8080 --content-base ./todo-app",
+    "router-app": "webpack-dev-server --port 8080 --content-base ./router-app"
   },
   "author": "",
   "license": "ISC",
