@@ -1,6 +1,7 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { createStore } from 'redux'
+import { Provider, connect } from 'react-redux'
 
 const TodoItem = ({id, text, onRemoveClicked}) => {
   return <li>{text} (id={id}) <button type="button" onClick={onRemoveClicked}>X</button></li>
@@ -26,22 +27,43 @@ const removeTodo = (id) => {
   }
 }
 
-const TodoApp = ({store}) => {
-  const todos = store.getState().todos
+let TodoApp = ({ todos, onAddTodo, onRemoveTodo }, {store}) => {
   let textElement
   return <div>
     <input type="text" ref={(text) => {
       textElement = text
     }} />
     <button type="button" onClick={() => {
-      store.dispatch(addTodo(textElement.value))
+      onAddTodo(textElement.value)
       textElement.value = ''
     }}>Add</button>
-    <TodoList todos={todos} onRemoveTodo={(id) => {
-      store.dispatch(removeTodo(id))
-    }} />
+    <TodoList todos={todos} onRemoveTodo={onRemoveTodo} />
   </div>
 }
+TodoApp.contextTypes = {
+  store: React.PropTypes.object
+}
+
+// set TodoApp's 'data' properties from the store's state
+const mapStateToPropos = (state) => {
+  return {
+    todos: state.todos
+  }
+}
+
+// set TodoApp's 'behavior' properties explicitly using dispatch()
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onAddTodo: (text) => {
+      dispatch(addTodo(text))
+    },
+    onRemoveTodo: (id) => {
+      dispatch(removeTodo(id))
+    }
+  }
+}
+
+TodoApp = connect(mapStateToPropos, mapDispatchToProps)(TodoApp)
 
 const store = createStore((state, action) => {
   const type = action.type
@@ -71,9 +93,8 @@ const store = createStore((state, action) => {
   todos: [{ id: 1, text: 'omg' }, { id: 2, text: 'wtf' }, { id: 3, text: 'bbq' }]
 })
 
-const doRender = () => {
-  render(<TodoApp store={store} />, document.getElementById('root'))
-}
-
-store.subscribe(doRender)
-doRender()
+render(
+  <Provider store={store}>
+    <TodoApp />
+  </Provider>,
+  document.getElementById('root'))
