@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "todo-app": "webpack-dev-server --port 8080 --content-base ./todo-app",
-    "router-app": "webpack-dev-server --port 8080 --content-base ./router-app"
+    "router-app": "webpack-dev-server --port 8080 --content-base ./router-app",
+    "todo-app2": "webpack-dev-server --port 8080 --content-base ./todo-app2"
   },
   "author": "",
   "license": "ISC",
