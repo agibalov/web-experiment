@@ -175,21 +175,32 @@ const TodoListPage = connect(state => {
 })
 
 const CreateTodoPage = connect(state => {
-  return {}
+  return {
+    working: state.todos.working
+  }
 }, dispatch => {
   return {
     createTodo: (text) => {
       dispatch(createTodo(text))
     }
   }
-})(({createTodo}) => {
-  let textElement
+})(({working, createTodo}) => {
+  let content
+  if(working) {
+    content = <p>Working...</p>
+  } else {
+    let textElement
+    content = <div>
+      <input type="text" ref={e => textElement = e} />
+      <button type="button" onClick={() => {
+        createTodo(textElement.value)
+      }}>Create</button>
+    </div>
+  }
+
   return <div>
     <h3>Create Todo Page</h3>
-    <input type="text" ref={e => textElement = e} />
-    <button type="button" onClick={() => {
-      createTodo(textElement.value)
-    }}>Create</button>
+    {content}
   </div>
 })
 
@@ -246,9 +257,13 @@ const reducers = combineReducers({
         return state
 
       case 'TODO_CREATE_STARTED':
-        return state
+        return {
+          working: true
+        }
       case 'TODO_CREATE_SUCCEEDED':
-        return state
+        return {
+          working: false
+        }
       case 'TODO_CREATE_FAILED':
         return state
 
