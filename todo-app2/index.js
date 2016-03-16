@@ -151,10 +151,10 @@ const App = ({children}) => {
   </div>
 }
 
-const TodoListPage = connect(state => {
+const TodoListPage = connect(({todos}) => {
   return {
-    loading: state.todos.loading,
-    items: state.todos.items
+    loading: todos.loading,
+    items: todos.items
   }
 }, dispatch => {
   return {}
@@ -174,9 +174,9 @@ const TodoListPage = connect(state => {
   </div>
 })
 
-const CreateTodoPage = connect(state => {
+const CreateTodoPage = connect(({createTodo}) => {
   return {
-    working: state.todos.working
+    working: createTodo.working
   }
 }, dispatch => {
   return {
@@ -204,10 +204,10 @@ const CreateTodoPage = connect(state => {
   </div>
 })
 
-const TodoItemPage = connect((state) => {
+const TodoItemPage = connect(({todo}) => {
   return {
-    loading: state.todos.loading,
-    item: state.todos.item
+    loading: todo.loading,
+    item: todo.item
   }
 }, dispatch => {
   return {}
@@ -228,49 +228,63 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
 
+const todoReducer = (state = {}, action) => {
+  switch(action.type) {
+    case 'TODO_LOAD_STARTED':
+      return {
+        loading: true
+      }
+    case 'TODO_LOAD_SUCCEEDED':
+      return {
+        loading: false,
+        item: action.todo
+      }
+    case 'TODO_LOAD_FAILED':
+      return state
+    default:
+      return state
+  }
+}
+
+const todosReducer = (state = {}, action) => {
+  switch(action.type) {
+    case 'TODOS_LOAD_STARTED':
+      return {
+        loading: true
+      }
+    case 'TODOS_LOAD_SUCCEEDED':
+      return {
+        loading: false,
+        items: [...action.todos]
+      }
+    case 'TODOS_LOAD_FAILED':
+      return state
+    default:
+      return state
+  }
+}
+
+const createTodoReducer = (state = {}, action) => {
+  switch(action.type) {
+    case 'TODO_CREATE_STARTED':
+      return {
+        working: true
+      }
+    case 'TODO_CREATE_SUCCEEDED':
+      return {
+        working: false
+      }
+    case 'TODO_CREATE_FAILED':
+      return state
+    default:
+      return state
+  }
+}
+
 const reducers = combineReducers({
-  // WTH do I need to initialize the state here?
-  todos: (state = {}, action) => {
-    switch(action.type) {
-      case 'TODOS_LOAD_STARTED':
-        return {
-          loading: true
-        }
-      case 'TODOS_LOAD_SUCCEEDED':
-        return {
-          loading: false,
-          items: [...action.todos]
-        }
-      case 'TODOS_LOAD_FAILED':
-        return state
-
-      case 'TODO_LOAD_STARTED':
-        return {
-          loading: true
-        }
-      case 'TODO_LOAD_SUCCEEDED':
-        return {
-          loading: false,
-          item: action.todo
-        }
-      case 'TODO_LOAD_FAILED':
-        return state
-
-      case 'TODO_CREATE_STARTED':
-        return {
-          working: true
-        }
-      case 'TODO_CREATE_SUCCEEDED':
-        return {
-          working: false
-        }
-      case 'TODO_CREATE_FAILED':
-        return state
-
-      default:
-        return state
-    }
-  },
+  todos: todosReducer,
+  todo: todoReducer,
+  createTodo: createTodoReducer,
   routing: routerReducer
 })
 
