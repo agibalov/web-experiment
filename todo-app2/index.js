@@ -27,10 +27,26 @@ import reduxLoggerMiddleware from 'redux-logger'
 
 const historyImpl = hashHistory
 
+const diMiddleware = deps => store => next => action => {
+  if(typeof action === 'function') {
+    return next(action(deps))
+  } else {
+    return next(action)
+  }
+};
+
+import TodoService from './TodoService'
+
+const todoService = new TodoService()
+todoService.createTodoSync('omg')
+todoService.createTodoSync('wtf')
+todoService.createTodoSync('bbq')
+
 const store = createStore(
   reducers,
   applyMiddleware(
     routerMiddleware(historyImpl),
+    diMiddleware({ todoService }),
     reduxThunkMiddleware,
     reduxLoggerMiddleware()))
 

@@ -1,13 +1,3 @@
-
-// WTH does it do here? How do I inject service?
-import TodoService from './TodoService'
-
-const todoService = new TodoService()
-todoService.createTodoSync('omg')
-todoService.createTodoSync('wtf')
-todoService.createTodoSync('bbq')
-// WTH
-
 const todosLoadStarted = () => {
   return {
     type: 'TODOS_LOAD_STARTED'
@@ -85,44 +75,38 @@ const todoCreateFailed = () => {
 
 export { todoCreateFailed }
 
-const loadTodos = () => {
-  return dispatch => {
-    dispatch(todosLoadStarted())
-    todoService.getTodos().then(todos => {
-      dispatch(todosLoadSucceeded(todos))
-    }, () => {
-      dispatch(todosLoadFailed())
-    })
-  }
+const loadTodos = () => ({todoService}) => (dispatch) => {
+  dispatch(todosLoadStarted())
+  todoService.getTodos().then(todos => {
+    dispatch(todosLoadSucceeded(todos))
+  }, () => {
+    dispatch(todosLoadFailed())
+  })
 }
 
 export { loadTodos }
 
-const loadTodo = id => {
-  return dispatch => {
-    dispatch(todoLoadStarted(id))
-    todoService.getTodo(id).then(todo => {
-      dispatch(todoLoadSucceeded(todo))
-    }, () => {
-      dispatch(todoLoadFailed(id))
-    })
-  }
+const loadTodo = id => ({todoService}) => (dispatch) => {
+  dispatch(todoLoadStarted(id))
+  todoService.getTodo(id).then(todo => {
+    dispatch(todoLoadSucceeded(todo))
+  }, () => {
+    dispatch(todoLoadFailed(id))
+  })
 }
 
 export { loadTodo }
 
 import { push } from 'react-router-redux'
 
-const createTodo = (text) => {
-  return dispatch => {
-    dispatch(todoCreateStarted())
-    todoService.createTodo(text).then(id => {
-      dispatch(todoCreateSucceeded(id))
-      dispatch(push(`/${id}`))
-    }, () => {
-      dispatch(todoCreateFailed())
-    })
-  }
+const createTodo = (text) => ({todoService}) => (dispatch) => {
+  dispatch(todoCreateStarted())
+  todoService.createTodo(text).then(id => {
+    dispatch(todoCreateSucceeded(id))
+    dispatch(push(`/${id}`))
+  }, () => {
+    dispatch(todoCreateFailed())
+  })
 }
 
 export { createTodo }
