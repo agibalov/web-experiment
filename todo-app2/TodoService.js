@@ -19,6 +19,11 @@ class TodoService {
     return this.delayed(id)
   }
 
+  deleteTodo(id) {
+    this.todos = this.todos.filter(todo => todo.id != id)
+    return this.delayed()
+  }
+
   createTodoSync(text) {
     const id = ++this.lastId
     this.todos.push({

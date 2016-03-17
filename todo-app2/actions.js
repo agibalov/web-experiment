@@ -75,6 +75,27 @@ const todoCreateFailed = () => {
 
 export { todoCreateFailed }
 
+export function todoDeleteStarted(id) {
+  return {
+    type: 'TODO_DELETE_STARTED',
+    id
+  }
+}
+
+export function todoDeleteSucceeded(id) {
+  return {
+    type: 'TODO_DELETE_SUCCEEDED',
+    id
+  }
+}
+
+export function todoDeleteFailed(id) {
+  return {
+    type: 'TODO_DELETE_FAILED',
+    id
+  }
+}
+
 const loadTodos = () => ({todoService}) => (dispatch) => {
   dispatch(todosLoadStarted())
   todoService.getTodos().then(todos => {
@@ -110,3 +131,14 @@ const createTodo = (text) => ({todoService}) => (dispatch) => {
 }
 
 export { createTodo }
+
+const deleteTodo = (todoId) => ({todoService}) => (dispatch) => {
+  dispatch(todoDeleteStarted(todoId))
+  todoService.deleteTodo(todoId).then(() => {
+    dispatch(todoDeleteSucceeded(todoId))
+  }, () => {
+    dispatch(todoDeleteFailed())
+  })
+}
+
+export { deleteTodo }
