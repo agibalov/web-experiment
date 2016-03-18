@@ -1,4 +1,4 @@
-const createTodoReducer = (state = {}, action) => {
+export default (state = {}, action) => {
   switch(action.type) {
     case 'TODO_CREATE_STARTED':
       return {
@@ -14,5 +14,3 @@ const createTodoReducer = (state = {}, action) => {
       return state
   }
 }
-
-export default createTodoReducer

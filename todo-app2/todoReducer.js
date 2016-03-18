@@ -1,4 +1,4 @@
-const todoReducer = (state = {}, action) => {
+export default (state = {}, action) => {
   switch(action.type) {
     case 'TODO_LOAD_STARTED':
       return {
@@ -15,5 +15,3 @@ const todoReducer = (state = {}, action) => {
       return state
   }
 }
-
-export default todoReducer

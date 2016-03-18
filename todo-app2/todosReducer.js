@@ -1,4 +1,4 @@
-const todosReducer = (state = {}, action) => {
+export default (state = {}, action) => {
   switch(action.type) {
     case 'TODOS_LOAD_STARTED':
       return {
@@ -38,5 +38,3 @@ const todosReducer = (state = {}, action) => {
       return state
   }
 }
-
-export default todosReducer
