@@ -1,79 +1,61 @@
-const todosLoadStarted = () => {
+export function todosLoadStarted() {
   return {
     type: 'TODOS_LOAD_STARTED'
   }
 }
 
-export { todosLoadStarted }
-
-const todosLoadSucceeded = todos => {
+export function todosLoadSucceeded(todos) {
   return {
     type: 'TODOS_LOAD_SUCCEEDED',
     todos: todos
   }
 }
 
-export { todosLoadSucceeded }
-
-const todosLoadFailed = () => {
+export function todosLoadFailed() {
   return {
     type: 'TODOS_LOAD_FAILED'
   }
 }
 
-export { todosLoadFailed }
-
-const todoLoadStarted = id => {
+export function todoLoadStarted(id) {
   return {
     type: 'TODO_LOAD_STARTED',
     id
   }
 }
 
-export { todoLoadStarted }
-
-const todoLoadSucceeded = todo => {
+export function todoLoadSucceeded(todo) {
   return {
     type: 'TODO_LOAD_SUCCEEDED',
     todo
   }
 }
 
-export { todoLoadSucceeded }
-
-const todoLoadFailed = id => {
+export function todoLoadFailed(id) {
   return {
     type: 'TODO_LOAD_FAILED',
     id
   }
 }
 
-export { todoLoadFailed }
-
-const todoCreateStarted = () => {
+export function todoCreateStarted() {
   return {
     type: 'TODO_CREATE_STARTED'
   }
 }
 
-export { todoCreateStarted }
-
-const todoCreateSucceeded = id => {
+export function todoCreateSucceeded(id) {
   return {
     type: 'TODO_CREATE_SUCCEEDED',
     id
   }
 }
 
-export { todoCreateSucceeded }
-
-const todoCreateFailed = () => {
+export function todoCreateFailed() {
   return {
     type: 'TODO_CREATE_FAILED'
   }
 }
-
-export { todoCreateFailed }
 
 export function todoDeleteStarted(id) {
   return {
@@ -96,49 +78,49 @@ export function todoDeleteFailed(id) {
   }
 }
 
-const loadTodos = () => ({todoService}) => (dispatch) => {
-  dispatch(todosLoadStarted())
-  todoService.getTodos().then(todos => {
-    dispatch(todosLoadSucceeded(todos))
-  }, () => {
-    dispatch(todosLoadFailed())
-  })
+export function loadTodos() {
+  return ({todoService}) => (dispatch) => {
+    dispatch(todosLoadStarted())
+    todoService.getTodos().then(todos => {
+      dispatch(todosLoadSucceeded(todos))
+    }, () => {
+      dispatch(todosLoadFailed())
+    })
+  }
 }
 
-export { loadTodos }
-
-const loadTodo = id => ({todoService}) => (dispatch) => {
-  dispatch(todoLoadStarted(id))
-  todoService.getTodo(id).then(todo => {
-    dispatch(todoLoadSucceeded(todo))
-  }, () => {
-    dispatch(todoLoadFailed(id))
-  })
+export function loadTodo(id) {
+  return ({todoService}) => (dispatch) => {
+    dispatch(todoLoadStarted(id))
+    todoService.getTodo(id).then(todo => {
+      dispatch(todoLoadSucceeded(todo))
+    }, () => {
+      dispatch(todoLoadFailed(id))
+    })
+  }
 }
-
-export { loadTodo }
 
 import { push } from 'react-router-redux'
 
-const createTodo = (text) => ({todoService}) => (dispatch) => {
-  dispatch(todoCreateStarted())
-  todoService.createTodo(text).then(id => {
-    dispatch(todoCreateSucceeded(id))
-    dispatch(push(`/${id}`))
-  }, () => {
-    dispatch(todoCreateFailed())
-  })
+export function createTodo(text) {
+  return ({todoService}) => (dispatch) => {
+    dispatch(todoCreateStarted())
+    todoService.createTodo(text).then(id => {
+      dispatch(todoCreateSucceeded(id))
+      dispatch(push(`/${id}`))
+    }, () => {
+      dispatch(todoCreateFailed())
+    })
+  }
 }
 
-export { createTodo }
-
-const deleteTodo = (todoId) => ({todoService}) => (dispatch) => {
-  dispatch(todoDeleteStarted(todoId))
-  todoService.deleteTodo(todoId).then(() => {
-    dispatch(todoDeleteSucceeded(todoId))
-  }, () => {
-    dispatch(todoDeleteFailed())
-  })
+export function deleteTodo(todoId) {
+  return ({todoService}) => (dispatch) => {
+    dispatch(todoDeleteStarted(todoId))
+    todoService.deleteTodo(todoId).then(() => {
+      dispatch(todoDeleteSucceeded(todoId))
+    }, () => {
+      dispatch(todoDeleteFailed())
+    })
+  }
 }
-
-export { deleteTodo }
