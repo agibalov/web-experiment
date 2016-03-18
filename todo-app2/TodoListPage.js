@@ -9,7 +9,9 @@ const TodoListItem = ({ todo, onDeleteTodo }) => {
     content = <span>Deleting...</span>
   } else {
     content = <span>(<Link to={`/${todo.id}`}>see</Link>)
-    <button type="button" onClick={() => onDeleteTodo(todo.id)}>Delete</button></span>
+    <button type="button" onClick={() =>
+      onDeleteTodo(todo.id)
+    } className="btn btn-default">Delete</button></span>
   }
   return <li>
     {todo.text} {content}
@@ -22,7 +24,7 @@ const TodoList = ({ todoItems, onDeleteTodo }) => {
   </ul>
 }
 
-const TodoListPage = connect(({todos}) => {
+export default connect(({todos}) => {
   return {
     loading: todos.loading,
     items: todos.items
@@ -46,5 +48,3 @@ const TodoListPage = connect(({todos}) => {
     {content}
   </div>
 })
-
-export default TodoListPage

@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { createTodo } from './actions'
 
-const CreateTodoPage = connect(({createTodo}) => {
+export default connect(({createTodo}) => {
   return {
     working: createTodo.working
   }
@@ -18,12 +18,13 @@ const CreateTodoPage = connect(({createTodo}) => {
     content = <p>Working...</p>
   } else {
     let textElement
-    content = <div>
+    content = <form onSubmit={(e) => {
+      e.preventDefault()
+      createTodo(textElement.value)
+    }}>
       <input type="text" ref={e => textElement = e} />
-      <button type="button" onClick={() => {
-        createTodo(textElement.value)
-      }}>Create</button>
-    </div>
+      <button type="submit">Create</button>
+    </form>
   }
 
   return <div>
@@ -31,5 +32,3 @@ const CreateTodoPage = connect(({createTodo}) => {
     {content}
   </div>
 })
-
-export default CreateTodoPage

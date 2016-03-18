@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-const TodoItemPage = connect(({todo}) => {
+export default connect(({todo}) => {
   return {
     loading: todo.loading,
     item: todo.item
@@ -20,5 +20,3 @@ const TodoItemPage = connect(({todo}) => {
     {content}
   </div>
 })
-
-export default TodoItemPage

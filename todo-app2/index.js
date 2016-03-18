@@ -1,3 +1,5 @@
+import './style.less'
+
 import React from 'react'
 import { render } from 'react-dom'
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
