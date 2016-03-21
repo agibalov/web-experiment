@@ -12,10 +12,13 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel',
-        exclude: /node_modules/,
+        exclude: /node_modules/
+
+        // this part now comes from .babelrc
+        /*,
         query: {
           presets: ['es2015', 'stage-2', 'react']
-        }
+        }*/
       },
       { test: /\.less$/, loader: 'style!css!less' },
       { test: /\.woff$/, loader: 'url?limit=10000&mimetype=application/font-woff' },
