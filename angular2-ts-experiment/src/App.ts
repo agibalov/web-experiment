@@ -17,7 +17,7 @@ export class App {
     result: number = 0
     calculator: CalculatorService
 
-    constructor(@Inject(CalculatorService) calculator: CalculatorService) {
+    constructor(@Inject('calcService') calculator: CalculatorService) {
         this.calculator = calculator
     }
 
