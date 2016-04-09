@@ -15,46 +15,67 @@ import {
   formatEventType
 } from './TaskEventType'
 
-export default function appReducer(state, action) {
-  const session = schema.from(state)
+import { handleActions } from 'redux-actions'
 
-  if(action.type === 'CREATE_TASK') {
-    const t = session.Task.create({
-      text: action.text,
-      createdAt: action.createdAt,
+import {
+  CREATE_TASK,
+  DELETE_TASK,
+  SET_TASK_STATUS,
+  CREATE_TASK_EVENT
+} from './actions'
+
+export default handleActions({
+  [CREATE_TASK]: (state, { payload }) => {
+    const session = schema.from(state)
+
+    const task = session.Task.create({
+      text: payload.text,
+      createdAt: payload.createdAt,
       status: STATUS_NEW
     })
 
     session.TaskEvent.create({
-      task: t.id,
-      createdAt: action.createdAt,
+      task: task.id,
+      createdAt: payload.createdAt,
       type: EVENT_TYPE_CREATED,
       text: formatEventType(EVENT_TYPE_CREATED)
     })
-  }
 
-  if(action.type === 'DELETE_TASK') {
-    console.log('delete clicked', action.taskId)
-  }
+    return session.getNextState()
+  },
 
-  if(action.type === 'SET_TASK_STATUS') {
-    session.Task.withId(action.taskId).status = action.status
+  [DELETE_TASK]: (state, { payload }) => {
+    const session = schema.from(state)
+
+    console.log('delete clicked', payload.taskId)
+
+    return session.getNextState()
+  },
+
+  [SET_TASK_STATUS]: (state, { payload }) => {
+    const session = schema.from(state)
+
+    session.Task.withId(payload.taskId).status = payload.status
     session.TaskEvent.create({
-      task: action.taskId,
-      createdAt: action.createdAt,
+      task: payload.taskId,
+      createdAt: payload.createdAt,
       type: EVENT_TYPE_STATUS_CHANGE,
-      text: `${formatEventType(EVENT_TYPE_STATUS_CHANGE)} ${formatStatus(action.status)}`
+      text: `${formatEventType(EVENT_TYPE_STATUS_CHANGE)} ${formatStatus(payload.status)}`
     })
-  }
 
-  if(action.type === 'CREATE_TASK_EVENT') {
+    return session.getNextState()
+  },
+
+  [CREATE_TASK_EVENT]: (state, { payload }) => {
+    const session = schema.from(state)
+
     session.TaskEvent.create({
-      createdAt: action.createdAt,
-      task: action.taskId,
+      createdAt: payload.createdAt,
+      task: payload.taskId,
       type: EVENT_TYPE_UPDATE,
-      text: `${formatEventType(EVENT_TYPE_UPDATE)} ${action.text}`
+      text: `${formatEventType(EVENT_TYPE_UPDATE)} ${payload.text}`
     })
-  }
 
-  return session.getNextState()
-}
+    return session.getNextState()
+  }
+}, schema.getDefaultState())

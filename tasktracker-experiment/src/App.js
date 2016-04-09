@@ -14,6 +14,13 @@ import {
   formatClassName
 } from './TaskStatus'
 
+import {
+    createTask,
+    deleteTask,
+    setTaskStatus,
+    createTaskEvent
+} from './actions'
+
 const formatTime = (isoTime) => moment(isoTime).format('[on] MMMM D YYYY [at] h:mm:ss A')
 
 const EventItem = ({event}) => {
@@ -21,13 +28,13 @@ const EventItem = ({event}) => {
 }
 
 const Task = ({ task, submitTaskEvent, setTaskStatus, deleteTask }) => {
-  const events = task.events.map(e => <EventItem key={e.id} event={e} />)
-
   let eventsElement
-  if(events.length === 0) {
+  if(task.events.length === 0) {
     eventsElement = <div>No events so far</div>
   } else {
-    eventsElement = <ul>{events}</ul>
+    const mapEventToEventItem = e => <EventItem key={e.id} event={e} />
+    const eventItems = task.events.map(mapEventToEventItem)
+    eventsElement = <ul>{eventItems}</ul>
   }
 
   let inputRef
@@ -49,12 +56,13 @@ const Task = ({ task, submitTaskEvent, setTaskStatus, deleteTask }) => {
 }
 
 const App = ({ createTask, deleteTask, submitTaskEvent, setTaskStatus, tasks }) => {
-  const taskElements = tasks.map(t => <Task
-    key={t.id}
-    task={t}
-    submitTaskEvent={submitTaskEvent}
-    deleteTask={deleteTask}
-    setTaskStatus={setTaskStatus} />)
+  const mapTaskToTaskItem = t => <Task
+      key={t.id}
+      task={t}
+      submitTaskEvent={submitTaskEvent}
+      deleteTask={deleteTask}
+      setTaskStatus={setTaskStatus} />
+  const taskItems = tasks.map(mapTaskToTaskItem)
 
   let inputRef
   return <div className="container">
@@ -66,7 +74,7 @@ const App = ({ createTask, deleteTask, submitTaskEvent, setTaskStatus, tasks }) 
       <input type="text" ref={e => inputRef = e} className="form-control" placeholder="Task description" />
       <button type="submit" className="btn btn-default">Create</button>
     </form>
-    <ul>{taskElements}</ul>
+    <ul>{taskItems}</ul>
   </div>
 }
 
@@ -88,43 +96,37 @@ const tasksSelector = schema.createSelector((session) => {
   })
 })
 
-const mapStateToProps = (state) => {
+export default connect((state) => {
   return {
     tasks: tasksSelector(state.app)
   }
-}
-
-export default connect(mapStateToProps, (dispatch) => {
+}, (dispatch) => {
   return {
     createTask: (text) => {
-      dispatch({
-        type: 'CREATE_TASK',
+      dispatch(createTask({
         text: text,
         createdAt: moment().toISOString()
-      })
+      }))
     },
     deleteTask: (taskId) => {
-      dispatch({
-        type: 'DELETE_TASK',
+      dispatch(deleteTask({
         taskId: taskId,
         when: moment().toISOString()
-      })
+      }))
     },
     setTaskStatus: (taskId, status) => {
-      dispatch({
-        type: 'SET_TASK_STATUS',
+      dispatch(setTaskStatus({
         taskId: taskId,
         status: status,
         createdAt: moment().toISOString()
-      })
+      }))
     },
     submitTaskEvent: (text, taskId) => {
-      dispatch({
-        type: 'CREATE_TASK_EVENT',
+      dispatch(createTaskEvent({
         text: text,
         createdAt: moment().toISOString(),
         taskId: taskId
-      })
+      }))
     }
   }
 })(App)
