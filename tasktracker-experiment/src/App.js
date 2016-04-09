@@ -38,7 +38,7 @@ const Task = ({ task, submitTaskEvent, setTaskStatus, deleteTask }) => {
   }
 
   let inputRef
-  return <li key={task.id}>
+  return <li>
     ({task.id}) {task.text} <span className={classNames('label', formatClassName(task.status))}>{formatStatus(task.status)}</span> [{formatTime(task.createdAt)}]
     <button type="button" onClick={() => { deleteTask(task.id) }} className="btn btn-danger">Delete</button>
     <button type="button" onClick={() => { setTaskStatus(task.id, STATUS_NEW) }} className="btn btn-default">New</button>
