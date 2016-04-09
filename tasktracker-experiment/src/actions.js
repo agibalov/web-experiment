@@ -9,5 +9,5 @@ export const deleteTask = createAction(DELETE_TASK)
 export const SET_TASK_STATUS = 'SET_TASK_STATUS'
 export const setTaskStatus = createAction(SET_TASK_STATUS)
 
-export const CREATE_TASK_EVENT = 'CREATE_TASK_EVENT'
-export const createTaskEvent = createAction(CREATE_TASK_EVENT)
+export const SUBMIT_TASK_UPDATE = 'SUBMIT_TASK_UPDATE'
+export const submitTaskUpdate = createAction(SUBMIT_TASK_UPDATE)

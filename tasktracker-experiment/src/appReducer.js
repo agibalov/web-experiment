@@ -1,18 +1,13 @@
 import schema from './schema'
 
 import {
-  STATUS_NEW,
-  STATUS_IN_PROGRESS,
-  STATUS_DONE,
-  formatStatus
+  STATUS_NEW
 } from './TaskStatus'
 
 import {
   EVENT_TYPE_CREATED,
-  EVENT_TYPE_DELETED,
   EVENT_TYPE_STATUS_CHANGE,
-  EVENT_TYPE_UPDATE,
-  formatEventType
+  EVENT_TYPE_UPDATE
 } from './TaskEventType'
 
 import { handleActions } from 'redux-actions'
@@ -21,7 +16,7 @@ import {
   CREATE_TASK,
   DELETE_TASK,
   SET_TASK_STATUS,
-  CREATE_TASK_EVENT
+  SUBMIT_TASK_UPDATE
 } from './actions'
 
 export default handleActions({
@@ -37,8 +32,7 @@ export default handleActions({
     session.TaskEvent.create({
       task: task.id,
       createdAt: payload.createdAt,
-      type: EVENT_TYPE_CREATED,
-      text: formatEventType(EVENT_TYPE_CREATED)
+      type: EVENT_TYPE_CREATED
     })
 
     return session.getNextState()
@@ -55,25 +49,30 @@ export default handleActions({
   [SET_TASK_STATUS]: (state, { payload }) => {
     const session = schema.from(state)
 
-    session.Task.withId(payload.taskId).status = payload.status
+    const task = session.Task.withId(payload.taskId)
+    const oldStatus = task.status
+    const newStatus = payload.status
+
+    task.status = payload.status
     session.TaskEvent.create({
       task: payload.taskId,
       createdAt: payload.createdAt,
       type: EVENT_TYPE_STATUS_CHANGE,
-      text: `${formatEventType(EVENT_TYPE_STATUS_CHANGE)} ${formatStatus(payload.status)}`
+      oldStatus: oldStatus,
+      newStatus: newStatus
     })
 
     return session.getNextState()
   },
 
-  [CREATE_TASK_EVENT]: (state, { payload }) => {
+  [SUBMIT_TASK_UPDATE]: (state, { payload }) => {
     const session = schema.from(state)
 
     session.TaskEvent.create({
       createdAt: payload.createdAt,
       task: payload.taskId,
       type: EVENT_TYPE_UPDATE,
-      text: `${formatEventType(EVENT_TYPE_UPDATE)} ${payload.text}`
+      text: payload.text
     })
 
     return session.getNextState()
