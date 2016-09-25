@@ -9,15 +9,15 @@ import { NumberToWordPipe } from './number-to-word.pipe';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-	{ path: '', component: HomeComponent },
-	{ path: 'calculator', component: CalculatorComponent },
-	{ path: '**', component: PageNotFoundComponent }
+  { path: '', component: HomeComponent },
+  { path: 'calculator', component: CalculatorComponent },
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
-	imports: [ BrowserModule, RouterModule.forRoot(routes) ],
-	declarations: [ AppComponent, HomeComponent, CalculatorComponent, PageNotFoundComponent, NumberToWordPipe ],
-	bootstrap: [ AppComponent ]
+  imports: [ BrowserModule, RouterModule.forRoot(routes) ],
+  declarations: [ AppComponent, HomeComponent, CalculatorComponent, PageNotFoundComponent, NumberToWordPipe ],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule {
 }
