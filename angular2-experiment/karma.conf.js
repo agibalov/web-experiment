@@ -3,12 +3,10 @@ module.exports = function(config) {
     basePath: '',
     frameworks: ['jasmine'],
     files: [
-      './karma-shim.ts',
-      'src/**/*.spec.ts'
+      './karma-shim.ts'
     ],
     preprocessors: {
-      './karma-shim.ts': ['webpack'],
-      '**/*.spec.ts': ['webpack']
+      './karma-shim.ts': ['webpack']
     },
     webpack: require('./webpack.test-config.js'),
     plugins: [

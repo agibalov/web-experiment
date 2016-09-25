@@ -20,8 +20,3 @@ describe('CalculatorService', () => {
     expect(calculatorService.getMinusOne(2)).toEqual(1);
   }));
 });
-
-// Ideally, this code should be a part of shim, but I didn't manage to make it work
-import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
-TestBed.initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
-//
