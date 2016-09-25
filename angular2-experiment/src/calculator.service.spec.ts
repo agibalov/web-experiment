@@ -1,12 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { CalculatorService } from './calculator.service';
 
-describe('dummy', () => {
-  it('should work', () => {
-    expect(true).toBe(true);
-  })
-});
-
 describe('CalculatorService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [ CalculatorService ]

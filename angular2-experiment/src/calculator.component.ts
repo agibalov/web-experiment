@@ -5,8 +5,8 @@ import { CalculatorService } from './calculator.service';
   template: `<div>
     <h1>hello world {{counter | numberToWord }} ({{counter | numberToWord: true }})</h1>
     <input type="text" [value]="counter" #counterInput (blur)="setValue(counterInput.value)">
-    <button type="button" (click)="decrement()">Decrement</button>
-    <button type="button" (click)="increment()">Increment</button>
+    <button type="button" (click)="decrement()" class="decrease">Decrement</button>
+    <button type="button" (click)="increment()" class="increase">Increment</button>
   </div>`,
   providers: [ CalculatorService ]
 })
