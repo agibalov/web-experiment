@@ -4,13 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node_modules/.bin/karma start karma.conf.js",
     "postinstall": "node_modules/.bin/typings install",
     "run": "node_modules/.bin/webpack-dev-server --port 8080 --history-api-fallback --content-base ./src"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "jasmine-core": "^2.5.2",
+    "karma": "^1.3.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-webpack": "^1.8.0",
     "ts-loader": "^0.8.2",
     "typescript": "^2.0.3",
     "typings": "^1.4.0",
