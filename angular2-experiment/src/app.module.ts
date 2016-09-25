@@ -17,6 +17,7 @@ const routes: Routes = [
 @NgModule({
   imports: [ BrowserModule, RouterModule.forRoot(routes) ],
   declarations: [ AppComponent, HomeComponent, CalculatorComponent, PageNotFoundComponent, NumberToWordPipe ],
+  providers: [ CalculatorService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule {

@@ -7,8 +7,7 @@ import { CalculatorService } from './calculator.service';
     <input type="text" [value]="counter" #counterInput (blur)="setValue(counterInput.value)">
     <button type="button" (click)="decrement()" class="decrease">Decrement</button>
     <button type="button" (click)="increment()" class="increase">Increment</button>
-  </div>`,
-  providers: [ CalculatorService ]
+  </div>`
 })
 export class CalculatorComponent {
   private calculatorService: CalculatorService;
