@@ -16,6 +16,7 @@ import { Component } from '@angular/core';
     <nav>
       <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
       <a routerLink="calculator" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Calculator</a>
+      <a routerLink="dbtest" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">DbTest</a>
       <a routerLink="omgwtfbbq">Not Found</a>
     </nav>
     <router-outlet></router-outlet>
