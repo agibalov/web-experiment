@@ -4,12 +4,15 @@ import {Note} from "./note";
 @Component({
     template: `
     <div>
-        <p>There are {{notes.length}} notes</p>
-        <ul>
-            <li *ngFor="let note of notes;trackBy:id"><my-note 
-                [note]="note" 
-                (deleteNote)="deleteNote($event)"></my-note></li>
-        </ul>
+        <div *ngIf="notes.length > 0">
+            <p>There are {{notes.length}} notes</p>
+            <ul>
+                <li *ngFor="let note of notes;trackBy:id"><my-note 
+                    [note]="note" 
+                    (deleteNote)="deleteNote($event)"></my-note></li>
+            </ul>
+        </div>
+        <div *ngIf="notes.length == 0" style="color: orangered">There are no notes</div>
         <note-form [model]="newNote" (submitNote)="createNote($event)"></note-form>
     </div>`
 })
