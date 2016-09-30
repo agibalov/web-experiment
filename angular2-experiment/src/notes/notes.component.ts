@@ -6,10 +6,11 @@ import {Note} from "./note";
     <div>
         <p>There are {{notes.length}} notes</p>
         <ul>
-            <li *ngFor="let note of notes"><my-note 
+            <li *ngFor="let note of notes;trackBy:id"><my-note 
                 [note]="note" 
                 (deleteNote)="deleteNote($event)"></my-note></li>
         </ul>
+        <note-form [model]="newNote" (submitNote)="createNote($event)"></note-form>
     </div>`
 })
 export class NotesComponent {
@@ -19,7 +20,14 @@ export class NotesComponent {
         new Note('3', 'note three')
     ];
 
+    public newNote: Note = new Note(null, null);
+
     deleteNote(noteId: string): void {
-        console.log(`notes list :: deleteNote, noteId=${noteId}`);
+        this.notes = this.notes.filter(n => n.id !== noteId);
+    }
+
+    createNote(note: Note): void {
+        this.notes.push(note);
+        this.newNote = new Note(null, null);
     }
 }
