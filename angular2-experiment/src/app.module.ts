@@ -8,6 +8,7 @@ import { CalculatorService } from './calculator.service';
 import { DbTestComponent } from './dbtest.component';
 import { NumberToWordPipe } from './number-to-word.pipe';
 import { RouterModule, Routes } from '@angular/router';
+import { NotesModule } from "./notes/notes.module";
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -17,7 +18,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [ BrowserModule, RouterModule.forRoot(routes) ],
+  imports: [ BrowserModule, RouterModule.forRoot(routes), NotesModule ],
   declarations: [ 
     AppComponent, 
     HomeComponent, 
