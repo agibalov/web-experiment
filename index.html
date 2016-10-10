@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/css/reveal.min.css">
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/css/theme/white.min.css">
+
+        <!-- Highlighting for <pre><code></code></pre> and Markdown -->
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/lib/css/zenburn.min.css" />
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-transition="zoom">
+                    <h1>The Presentation</h1>
+                    <p>by loki2302</p>
+                    <small>Esc - overview mode. F - fullscreen. B - mute screen.</small>
+                </section>
+                <section data-transition="fade" data-transition-speed="slow">
+                    <section>
+                        Vertical Slide #1
+                    </section>
+                    <section>
+                        Vertical Slide #2
+                    </section>
+                    <section>
+                        Vertical Slide #3
+                    </section>
+                </section>
+                <section>
+                    <h2 class="fragment">Fragments</h2>
+                    <p><span class="fragment">Hello</span> <span class="fragment">World</span> <span class="fragment">!!!!111one</span></p>
+                    <h1 class="fragment highlight-red">:-)</h1>
+                </section>
+                <section>
+                    <h2>Fragments #2</h2>
+                    <p><span class="fragment" data-fragment-index="1">Hello</span> <span class="fragment" data-fragment-index="2">World</span> <span class="fragment" data-fragment-index="3">!!!!111one</span></p>
+                    <p class="fragment" data-fragment-index="2">Hello!</p>
+                    <p class="fragment highlight-red" data-fragment-index="3">There!</p>
+                </section>
+                <section data-background="#999">
+                    <h2>See how background has changed</h2>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                        # Markdown hello world
+
+                        **Hi** _there_.
+
+                        ```javascript
+                        (function() {
+                            console.log('hello world');    
+                        })();                        
+                        ```
+                    </script>
+                </section>
+                <section>
+                    <h1>I am code</h1>
+                    <pre><code class="javascript">
+(function() {
+    console.log('hello world');    
+})();
+                    </code></pre>
+                </section>
+                <section>
+                    <h1>The End</h1>
+                </section>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/js/reveal.min.js"></script>
+        
+        <!-- Markdown -->
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/plugin/markdown/marked.min.js"></script>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/plugin/markdown/markdown.min.js"></script>
+        
+        <!-- Highlighting for <pre><code></code></pre> and Markdown -->
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.3.0/plugin/highlight/highlight.min.js"></script>
+        
+        <script>
+            Reveal.initialize({
+                transition: 'concave',
+                slideNumber: 'c/t'
+            });
+            hljs.initHighlightingOnLoad();
+        </script>
+    </body>
+</html>
