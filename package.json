@@ -1,0 +1,23 @@
+{
+  "name": "revealjs-experiment",
+  "version": "1.0.0",
+  "description": "https://rawgit.com/loki2302/revealjs-experiment/master/index.html",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "node_modules/.bin/http-server . -p 8080"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loki2302/revealjs-experiment.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/loki2302/revealjs-experiment/issues"
+  },
+  "homepage": "https://github.com/loki2302/revealjs-experiment#readme",
+  "devDependencies": {
+    "http-server": "^0.9.0"
+  }
+}
