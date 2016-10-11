@@ -9,6 +9,7 @@ import { DbTestComponent } from './dbtest.component';
 import { NumberToWordPipe } from './number-to-word.pipe';
 import { RouterModule, Routes } from '@angular/router';
 import { NotesModule } from "./notes/notes.module";
+import { LoggingAspect } from './logging.aspect'; // TODO: it doesn't help
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -16,6 +17,8 @@ const routes: Routes = [
   { path: 'dbtest', component: DbTestComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
+
+LoggingAspect; // TODO: it doesn't help
 
 @NgModule({
   imports: [ BrowserModule, RouterModule.forRoot(routes), NotesModule ],
@@ -27,8 +30,15 @@ const routes: Routes = [
     NumberToWordPipe, 
     DbTestComponent 
   ],
-  providers: [ CalculatorService ],
+  providers: [
+    CalculatorService,
+    LoggingAspect // TODO: it doesn't help
+  ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule {
+  // TODO: it doesn't help
+  constructor(loggingAspect: LoggingAspect) {
+    console.log('AppModule instantiated! loggingAspect=', loggingAspect);
+  }
 }
