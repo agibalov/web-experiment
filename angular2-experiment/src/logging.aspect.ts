@@ -3,8 +3,12 @@ import {Injectable, Injector} from "@angular/core";
 
 @Injectable()
 export class LoggingAspect {
+    private injector: Injector;
+
     constructor(injector: Injector) {
+        // injector is not null when LoggingAspect gets injected into AppModule
         console.log('LoggingAspect instantiated! Injector=', injector);
+        this.injector = injector;
     }
 
     @beforeMethod({
@@ -24,6 +28,10 @@ export class LoggingAspect {
     }
 
     private dump(message: string, meta: Metadata) {
-        console.log(`${message} ${meta.className}::${meta.method.name}, args=${meta.method.args}, targetObj=`, meta.method.context, meta);
+        // this.injector is always null!
+        console.log(`${message} ${meta.className}::${meta.method.name}, args=${meta.method.args}, targetObj=`,
+            meta.method.context,
+            meta,
+            this.injector);
     }
 }

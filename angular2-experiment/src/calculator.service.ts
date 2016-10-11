@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Wove } from 'aspect.js'
-
-// TODO: It wouldn't work otherwise
-import {LoggingAspect} from "./logging.aspect";
-LoggingAspect;
+import { Wove } from 'aspect.js';
 
 @Wove()
 @Injectable()

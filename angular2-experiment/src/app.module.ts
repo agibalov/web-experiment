@@ -1,3 +1,6 @@
+// !!! should go before all components I want to apply it to
+import './logging.aspect';
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
@@ -9,7 +12,10 @@ import { DbTestComponent } from './dbtest.component';
 import { NumberToWordPipe } from './number-to-word.pipe';
 import { RouterModule, Routes } from '@angular/router';
 import { NotesModule } from "./notes/notes.module";
-import { LoggingAspect } from './logging.aspect'; // TODO: it doesn't help
+
+// TODO: this doesn't work. Even though everything is injected when injecting with Angular,
+// TODO: injector is null when aspect methods get called
+import { LoggingAspect } from './logging.aspect';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -17,8 +23,6 @@ const routes: Routes = [
   { path: 'dbtest', component: DbTestComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
-
-LoggingAspect; // TODO: it doesn't help
 
 @NgModule({
   imports: [ BrowserModule, RouterModule.forRoot(routes), NotesModule ],
@@ -32,13 +36,10 @@ LoggingAspect; // TODO: it doesn't help
   ],
   providers: [
     CalculatorService,
-    LoggingAspect // TODO: it doesn't help
+    LoggingAspect
   ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule {
-  // TODO: it doesn't help
-  constructor(loggingAspect: LoggingAspect) {
-    console.log('AppModule instantiated! loggingAspect=', loggingAspect);
-  }
+  constructor(loggingAspect: LoggingAspect) {}
 }

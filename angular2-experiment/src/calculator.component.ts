@@ -2,10 +2,6 @@ import { Component } from '@angular/core';
 import { CalculatorService } from './calculator.service';
 import { Wove } from "aspect.js";
 
-// TODO: It wouldn't work otherwise
-import {LoggingAspect} from "./logging.aspect";
-LoggingAspect;
-
 @Wove()
 @Component({
   template: `<div>
