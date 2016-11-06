@@ -1,0 +1,13 @@
+<% if(site.data.projects) { %>
+  <div class="widget-wrap">
+    <h3 class="widget-title">Projects</h3>
+    <div class="widget">
+      <ul>
+      <% for(projectKey in site.data.projects) { 
+      		const project = site.data.projects[projectKey]; %> 
+        <li><%= project.name %> (<%= project.description %>)</li>
+      <% } %>
+      </ul>
+    </div>
+  </div>
+<% } %>
