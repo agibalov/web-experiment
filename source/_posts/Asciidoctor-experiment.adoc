@@ -1,0 +1,37 @@
+title: Asciidoctor experiment
+date: 2016-11-06 15:37:53
+tags:
+---
+
+== Title 1
+
+=== Source code sample
+
+Some *dummy code* _goes_ `here`. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here.
+
+WARNING: the code below is useless.
+
+[source,java]
+----
+class SomeCode {
+  public int here() { return 123; }
+}
+----
+
+* This code
+* Does not
+* Do anything
+* Useful
+
+=== Inclusion sample
+
+Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here.
+
+[source,json]
+----
+include::package.json[]
+----
+
+Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here. Some dummy code goes here.
+
+Done.
