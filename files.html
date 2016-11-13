@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Hello World</title>
+	</head>
+	<body>
+		<input type="file" id="files" name="files[]" />
+		<a id="download-link" target="_blank">Download</a>
+		
+		<pre id="content"></pre>
+
+		<script>
+			// Download link
+			var file = new File(['hello there!\nomg\nwtf\nbbq\n'], '1.txt', { type: 'text/plain' });
+			var url = URL.createObjectURL(file);
+
+			var aElement = document.getElementById('download-link');
+			aElement.href = url;
+			aElement.download = 'thefile.txt';
+
+			// Upload handler
+			document.getElementById('files').addEventListener('change', function(event) {
+				var files = event.target.files;
+				console.log(files);
+
+				var reader = new FileReader();
+				reader.onload = function(event) {
+					var result = event.target.result;
+					console.log('result', result);
+					document.getElementById('content').innerHTML = result;
+				};
+				reader.readAsText(files[0]);
+			}, false);
+		</script>
+	</body>
+</html>
