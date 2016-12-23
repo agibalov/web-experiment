@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+	<head>
+	</head>
+	<body>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/zone.js/0.7.4/zone.js"></script>
+		<script>
+			function func() {
+				setTimeout(function() {
+					console.log('hello');
+				}, 1000);
+			}
+
+			const myZone = Zone.current.fork({
+				onScheduleTask(parent, current, target, task) {
+					parent.scheduleTask(target, task);
+					console.log(`onScheduleTask()`, parent, current, target, task);
+				},
+				onInvokeTask(parent, current, target, task) {
+					parent.invokeTask(target, task);
+					console.log(`onInvokeTask()`, parent, current, target, task);
+				}
+			});
+			myZone.run(func);
+		</script>
+	</body>
+</html>
