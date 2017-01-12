@@ -12,6 +12,7 @@ import './src/service.spec'
 import './src/component.spec'
 import './src/reflective-injector.spec'
 import './src/pipe.spec'
+import './src/directive.spec'
 
 import { TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
