@@ -2,15 +2,15 @@ import {Component} from "@angular/core";
 import {TestBed} from "@angular/core/testing";
 import {By} from "@angular/platform-browser";
 
-@Component({
-    selector: 'dummy',
-    template: '<h1>{{message}}</h1>'
-})
-class DummyComponent {
-    message = 'hello world!'
-}
-
 describe('DummyComponent', () => {
+    @Component({
+        selector: 'dummy',
+        template: '<h1>{{message}}</h1>'
+    })
+    class DummyComponent {
+        message = 'hello world!'
+    }
+
     it('should work', () => {
         TestBed.configureTestingModule({
             declarations: [ DummyComponent ]
