@@ -34,3 +34,29 @@ describe('NgIf', () => {
         expect(debugElement.query(By.css('h2'))).not.toBeNull();
     });
 });
+
+describe('NgFor', () => {
+    @Component({
+        selector: 'dummy',
+        template: `
+<h1 *ngFor="let item of items">{{item}}</h1>
+`
+    })
+    class DummyComponent {
+        items: string[];
+    }
+
+    it('should work', () => {
+        TestBed.configureTestingModule({
+            declarations: [ DummyComponent ]
+        });
+
+        const fixture = TestBed.createComponent(DummyComponent);
+        const componentInstance = fixture.componentInstance;
+        const debugElement = fixture.debugElement;
+
+        componentInstance.items = ['one', 'two', 'three'];
+        fixture.detectChanges();
+        expect(debugElement.queryAll(By.css('h1')).length).toBe(3);
+    });
+});
