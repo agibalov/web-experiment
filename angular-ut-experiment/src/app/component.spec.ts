@@ -1,5 +1,5 @@
 import {TestBed, async} from '@angular/core/testing';
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 
 describe('DummyComponent', () => {
   @Component({
@@ -86,5 +86,59 @@ describe('Lifecycle', () => {
       'onDestroy()',
       'after onDestroy()'
     ]);
+  }));
+});
+
+describe('Input properties', () => {
+  @Component({
+    selector: 'person',
+    template: `first={{first}}`
+  })
+  class PersonComponent implements OnChanges {
+    @Input() first: string;
+
+    constructor(@Inject('changeLog') private changeLog: SimpleChanges[]) {
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+      this.changeLog.push(changes);
+    }
+  }
+
+  @Component({
+    template: `<person [first]="firstName"></person>`
+  })
+  class HostComponent {
+    firstName: string;
+  }
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        HostComponent,
+        PersonComponent
+      ],
+      providers: [
+        { provide: 'changeLog', useValue: [] }
+      ],
+    }).compileComponents();
+  }));
+
+  it('should work', async(() => {
+    const fixture = TestBed.createComponent(HostComponent);
+    const hostComponent = fixture.debugElement.componentInstance;
+    const compiled = fixture.debugElement.nativeElement;
+
+    hostComponent.firstName = 'John';
+    expect(compiled.textContent).toBe('first=');
+
+    fixture.detectChanges();
+    expect(compiled.textContent).toBe('first=John');
+
+    const changeLog: SimpleChanges[] = TestBed.get('changeLog');
+    expect(changeLog.length).toBe(1);
+    expect(changeLog[0].first.previousValue).toBeUndefined();
+    expect(changeLog[0].first.currentValue).toBe('John');
+    expect(changeLog[0].first.firstChange).toBe(true);
   }));
 });
