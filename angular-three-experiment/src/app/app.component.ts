@@ -1,5 +1,5 @@
 import {
-    Component, Directive, ElementRef, Inject, Input, OnChanges, OnDestroy, OnInit,
+    Component, Directive, ElementRef, HostListener, Inject, Input, OnChanges, OnDestroy, OnInit,
     SimpleChanges
 } from '@angular/core';
 import {
@@ -34,19 +34,23 @@ export class ThreeDirective implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.render();
-
         this.resizePollHandle = setInterval(() => {
-            const { nativeElement } = this.element;
-            const { clientWidth, clientHeight } = nativeElement;
+            const canvas = this.element.nativeElement;
+            const { clientWidth, clientHeight } = canvas;
             const sizeHaveChanged =
-                nativeElement.width != clientWidth ||
-                nativeElement.height != clientHeight;
+                canvas.width != clientWidth ||
+                canvas.height != clientHeight;
 
             if(sizeHaveChanged) {
-                nativeElement.width = clientWidth;
-                nativeElement.height = clientHeight;
-                console.log('Resizing', nativeElement.width, nativeElement.height);
+                console.log('sizeHaveChanged', clientWidth, clientHeight);
+
+                canvas.width = clientWidth;
+                canvas.height = clientHeight;
+                this.renderer.setSize(clientWidth, clientHeight, false);
+                this.camera.aspect = clientWidth / clientHeight;
+                this.camera.updateProjectionMatrix();
+
+                this.render();
             }
         }, 1000);
     }
@@ -64,9 +68,8 @@ export class ThreeDirective implements OnInit, OnDestroy {
     selector: 'camera'
 })
 export class CameraDirective implements OnChanges {
-    @Input() width: number;
-    @Input() height: number;
     @Input() position: Vector3;
+    @Input() target: Vector3;
 
     private camera: PerspectiveCamera;
 
@@ -80,30 +83,35 @@ export class CameraDirective implements OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         console.log('CameraDirective changes', changes);
 
-        const width = changes.width && changes.width.currentValue;
-        const height = changes.height && changes.height.currentValue;
-        const position = changes.position && changes.position.currentValue;
-
-        if(width != null && height != null) {
-            this.camera.aspect = width / height;
-            this.camera.updateProjectionMatrix();
-            this.threeDirective.render();
-        }
-
-        if(position != null) {
-            this.camera.position.set(position.x, position.y, position.z);
-            this.threeDirective.render();
-        }
+        this.camera.position.set(this.position.x, this.position.y, this.position.z);
+        this.camera.lookAt(new Vector3(this.target.x, this.target.y, this.target.z));
+        this.threeDirective.render();
     }
 }
 
 @Component({
     selector: 'app-root',
     template: `
-        <canvas width="400" height="300" style="border: 1px solid red; width:30%; height:30%;" three>
-            <camera [width]="400" [height]="300" [position]="{x:0,y:0,z:0.5}"></camera>
+        <button type="button" (click)="move({x: -0.05, y: 0, z: 0})">Left</button>
+        <button type="button" (click)="move({x: +0.05, y: 0, z: 0})">Right</button>
+        <br>
+        <canvas style="border: 1px solid red; width:100%; height:50vh;" three (mousemove)="handleMouseMove($event)">
+            <camera [target]="cameraTarget" [position]="cameraPosition"></camera>
         </canvas>
     `
 })
 export class AppComponent {
+    cameraTarget = new Vector3(0, 0, 0);
+    cameraPosition = new Vector3(0, 0, 0.5);
+
+    move(delta: Vector3) {
+        this.cameraPosition = new Vector3(
+            this.cameraPosition.x + delta.x,
+            this.cameraPosition.y + delta.y,
+            this.cameraPosition.z + delta.z);
+    }
+
+    handleMouseMove(event: {x: number, y: number}) {
+        this.cameraPosition = new Vector3(Math.cos(event.x / 100) * 0.5, 0, Math.sin(event.x / 100) * 0.3);
+    }
 }
