@@ -24,39 +24,16 @@ class Task {
             </div>
             <div class="columns">
                 <div class="column"
+                     *ngFor="let status of ['todo', 'in-progress', 'done']"
                      droppable
-                     (onDrop)="move('todo', $event.dragData)"
+                     (onDrop)="move(status, $event.dragData)"
                      dragHintClass="drag-hint"
                      dragOverClass="drag-over">
                     <div class="box" 
-                         *ngFor="let task of tasksWithStatus('todo')" 
+                         *ngFor="let task of tasksWithStatus(status)" 
                          draggable 
                          [dragData]="task" 
                          dragClass="drag" 
-                         dragTransitClass="drag-transit">{{task.id}} {{task.text}} {{task.status}}</div>
-                </div>
-                <div class="column" 
-                     droppable 
-                     (onDrop)="move('in-progress', $event.dragData)"
-                     dragHintClass="drag-hint"
-                     dragOverClass="drag-over">
-                    <div class="box"
-                         *ngFor="let task of tasksWithStatus('in-progress')"
-                         draggable
-                         [dragData]="task"
-                         dragClass="drag"
-                         dragTransitClass="drag-transit">{{task.id}} {{task.text}} {{task.status}}</div>
-                </div>
-                <div class="column"
-                     droppable
-                     (onDrop)="move('done', $event.dragData)"
-                     dragHintClass="drag-hint"
-                     dragOverClass="drag-over">
-                    <div class="box"
-                         *ngFor="let task of tasksWithStatus('done')"
-                         draggable
-                         [dragData]="task"
-                         dragClass="drag"
                          dragTransitClass="drag-transit">{{task.id}} {{task.text}} {{task.status}}</div>
                 </div>
             </div>
