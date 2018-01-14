@@ -1,80 +1,30 @@
-import {Component, Directive, Input} from '@angular/core';
-import {DragulaService} from "ng2-dragula";
-
-class Task {
-    public isActive = false;
-
-    constructor(
-        public id: string,
-        public text: string,
-        public status: 'todo'|'in-progress'|'done')
-    {}
-}
+import {Component} from '@angular/core';
 
 @Component({
     selector: 'app-root',
     template: `
-        <div class="container">
-            <div class="columns">
-                <div class="column">
-                    <h1 class="title is-4">To Do</h1>
-                </div>
-                <div class="column">
-                    <h1 class="title is-4">In Progress</h1>
-                </div>
-                <div class="column">
-                    <h1 class="title is-4">Done</h1>
+        <nav class="navbar is-fixed-top is-light">
+            <div class="navbar-brand">
+                <div class="navbar-item has-text-weight-bold">JIRA &#9786;</div>
+                <button class="button navbar-burger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" routerLink="/"
+                       routerLinkActive="is-active"
+                       [routerLinkActiveOptions]="{exact:true}">ng-drag-drop</a>
+                    <a class="navbar-item" routerLink="/dragula"
+                       routerLinkActive="is-active"
+                       [routerLinkActiveOptions]="{exact:true}">ng2-dragula</a>
                 </div>
             </div>
-            <div class="columns">
-                <div class="column" [dragula]="'todo-bag'" [dragulaModel]="tasks">
-                    <div class="box" 
-                         *ngFor="let task of tasks" 
-                         [id]="task.id">{{task.id}} {{task.text}} {{task.status}}</div>
-                </div>
-                <div class="column" [dragula]="'in-progress-bag'">
-                </div>
-                <div class="column" [dragula]="'done-bag'">
-                </div>
-            </div>
-        </div>
-    `,
-    styles: [
-        '.gu-transit { background-color: yellow; }',
-        '.gu-mirror { background-color: pink; }'
-    ]
+        </nav>
+        <router-outlet></router-outlet>
+    `
 })
 export class AppComponent {
-    tasks: Task[] = [
-        new Task('1', 'Task one', 'todo'),
-        new Task('2', 'Task two', 'todo'),
-        new Task('3', 'Task three', 'todo'),
-        new Task('4', 'Task four', 'in-progress')
-    ];
-
-    constructor(private dragulaService: DragulaService) {
-        this.dragulaService.drag.subscribe(value => {
-            const bag = value[0];
-            const taskId = value[1].id;
-            console.log('drag', bag, taskId);
-        });
-
-        this.dragulaService.drop.subscribe(value => {
-            const bag = value[0];
-            const taskId = value[1].id;
-            console.log('drop', bag, taskId, this.tasks.map(t => t.id));
-        });
-
-        this.dragulaService.over.subscribe(value => {
-            const bag = value[0];
-            const taskId = value[1].id;
-            console.log('over', bag, taskId);
-        });
-
-        this.dragulaService.out.subscribe(value => {
-            const bag = value[0];
-            const taskId = value[1].id;
-            console.log('out', bag, taskId);
-        });
-    }
 }
