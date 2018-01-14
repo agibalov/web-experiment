@@ -1,4 +1,4 @@
-# ng2-dragula-experiment
+# dnd-experiment
 
 WIP
 
