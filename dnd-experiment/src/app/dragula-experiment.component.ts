@@ -1,13 +1,6 @@
 import {Component} from '@angular/core';
 import {DragulaService} from "ng2-dragula";
-
-class Task {
-    constructor(
-        public id: string,
-        public text: string,
-        public status: 'todo'|'in-progress'|'done')
-    {}
-}
+import {Task} from "./task";
 
 @Component({
     template: `
@@ -27,7 +20,11 @@ class Task {
                 <div class="column" [dragula]="'todo-bag'" [dragulaModel]="tasks">
                     <div class="box" 
                          *ngFor="let task of tasks" 
-                         [id]="task.id">{{task.id}} {{task.text}} {{task.status}}</div>
+                         [id]="task.id">
+                        <span class="tag is-primary">{{task.id}}</span>
+                        {{task.text}}
+                        <span class="tag is-warning">{{task.status}}</span>
+                    </div>
                 </div>
                 <div class="column" [dragula]="'in-progress-bag'">
                 </div>

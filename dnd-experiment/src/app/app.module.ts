@@ -7,6 +7,8 @@ import {DragulaExperimentComponent} from "./dragula-experiment.component";
 import {NgdragdropExperimentComponent} from "./ngdragdrop-experiment.component";
 import {RouterModule, Routes} from "@angular/router";
 import {NgDragDropModule} from "ng-drag-drop";
+import {NgxDndComponent} from "./ngx-dnd.component";
+import {NgxDnDModule} from "@swimlane/ngx-dnd";
 
 const appRoutes: Routes = [
     {
@@ -16,6 +18,10 @@ const appRoutes: Routes = [
     {
         path: 'dragula',
         component: DragulaExperimentComponent
+    },
+    {
+        path: 'ngxdnd',
+        component: NgxDndComponent
     }
 ];
 
@@ -23,12 +29,14 @@ const appRoutes: Routes = [
     declarations: [
         AppComponent,
         NgdragdropExperimentComponent,
-        DragulaExperimentComponent
+        DragulaExperimentComponent,
+        NgxDndComponent
     ],
     imports: [
         BrowserModule,
         DragulaModule,
         NgDragDropModule.forRoot(),
+        NgxDnDModule,
         RouterModule.forRoot(appRoutes)
     ],
     providers: [],

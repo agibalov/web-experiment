@@ -20,6 +20,9 @@ import {Component} from '@angular/core';
                     <a class="navbar-item" routerLink="/dragula"
                        routerLinkActive="is-active"
                        [routerLinkActiveOptions]="{exact:true}">ng2-dragula</a>
+                    <a class="navbar-item" routerLink="/ngxdnd"
+                       routerLinkActive="is-active"
+                       [routerLinkActiveOptions]="{exact:true}">ngx-dnd</a>
                 </div>
             </div>
         </nav>

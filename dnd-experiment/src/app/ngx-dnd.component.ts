@@ -18,16 +18,13 @@ import {Task, TaskStatus} from "./task";
             <div class="columns">
                 <div class="column"
                      *ngFor="let status of ['todo', 'in-progress', 'done']"
-                     droppable
-                     (onDrop)="move(status, $event.dragData)"
-                     dragHintClass="drag-hint"
-                     dragOverClass="drag-over">
+                     ngxDroppable="singletonDropZone"
+                     (drag)="drag(status, $event.el.id)"
+                     (drop)="drop(status, $event.el.id)">
                     <div class="box" 
                          *ngFor="let task of tasksWithStatus(status)" 
-                         draggable 
-                         [dragData]="task" 
-                         dragClass="drag" 
-                         dragTransitClass="drag-transit">
+                         [id]="task.id"
+                         ngxDraggable>
                         <span class="tag is-primary">{{task.id}}</span>
                         {{task.text}}
                         <span class="tag is-warning">{{task.status}}</span>
@@ -37,13 +34,11 @@ import {Task, TaskStatus} from "./task";
         </div>
     `,
     styles: [
-        '.drag {background-color: yellow;}',
-        '.drag-transit {background-color: pink;}',
-        '.drag-hint {outline:1px solid lightgrey;}',
-        '.drag-over {outline:1px solid fuchsia;}'
+        '.gu-transit { background-color: yellow; }',
+        '.gu-mirror { background-color: pink; }'
     ]
 })
-export class NgdragdropExperimentComponent {
+export class NgxDndComponent {
     private tasks: Task[] = [
         new Task('1', 'Task one', 'todo'),
         new Task('2', 'Task two', 'todo'),
@@ -55,8 +50,12 @@ export class NgdragdropExperimentComponent {
         return this.tasks.filter(task => task.status === status);
     }
 
-    move(toStatus: TaskStatus, task: Task) {
-        console.log(`drop ${task.id} to ${toStatus}`);
-        task.status = toStatus;
+    drag(status: TaskStatus, taskId: string) {
+        console.log(`drag ${taskId} from ${status}`);
+    }
+
+    drop(status: TaskStatus, taskId: string) {
+        console.log(`drop ${taskId} to ${status}`);
+        this.tasks.filter(task => task.id === taskId)[0].status = status;
     }
 }
