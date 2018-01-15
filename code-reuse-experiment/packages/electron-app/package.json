@@ -1,0 +1,37 @@
+{
+  "name": "electron-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron-webpack dev",
+    "compile": "electron-webpack",
+    "dist:linux": "npm run-script compile && electron-builder build --linux --x64",
+    "dist:windows": "npm run-script compile && electron-builder build --windows --x64"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@angular/common": "^5.2.0",
+    "@angular/compiler": "^5.2.0",
+    "@angular/core": "^5.2.0",
+    "@angular/forms": "^5.2.0",
+    "@angular/platform-browser": "^5.2.0",
+    "@angular/platform-browser-dynamic": "^5.2.0",
+    "core-js": "^2.5.3",
+    "rxjs": "^5.5.6",
+    "shared": "^1.0.0",
+    "source-map-support": "^0.5.0",
+    "zone.js": "^0.8.20",
+    "photon": "https://github.com/connors/photon.git#v0.1.2-alpha"
+  },
+  "devDependencies": {
+    "@types/node": "^9.3.0",
+    "electron": "^1.7.10",
+    "electron-builder": "^19.53.6",
+    "electron-webpack": "^1.11.0",
+    "electron-webpack-ts": "^1.2.0",
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0"
+  }
+}
