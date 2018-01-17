@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
 import {Page} from "tns-core-modules/ui/page";
 import {TextField} from "tns-core-modules/ui/text-field";
+import {Calculator} from "shared";
 
 @Component({
     selector: "my-app",
@@ -14,7 +15,9 @@ import {TextField} from "tns-core-modules/ui/text-field";
     `
 })
 export class AppComponent {
-    constructor(private page: Page) {
+    constructor(
+        private page: Page,
+        private calculator: Calculator) {
     }
 
     addNumbers() {
@@ -23,10 +26,10 @@ export class AppComponent {
 
         const numberA = parseInt(numberATextField.text, 10);
         const numberB = parseInt(numberBTextField.text, 10);
-        const result = numberA + numberB;
+        const result = this.calculator.addNumbers(numberA, numberB);
 
-        alert(`${numberA} + ${numberB} = ${result}`);
-
-        console.log(`${numberA} + ${numberB} = ${result}`);
+        const message = `${numberA} + ${numberB} = ${result}`;
+        console.log(message);
+        alert(message);
     }
 }

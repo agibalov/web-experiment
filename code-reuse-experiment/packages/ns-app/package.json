@@ -1,4 +1,7 @@
 {
+  "name": "ns-app",
+  "version": "1.0.0",
+  "private": true,
   "nativescript": {
     "id": "org.nativescript.HelloWorld",
     "tns-android": {
@@ -7,6 +10,10 @@
     "tns-ios": {
       "version": "3.4.1"
     }
+  },
+  "scripts": {
+    "android:start": "tns run android",
+    "ios:start": "tns run ios"
   },
   "dependencies": {
     "@angular/animations": "~5.1.0",
@@ -22,6 +29,7 @@
     "nativescript-theme-core": "~1.0.4",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~5.5.2",
+    "shared": "file:../shared",
     "tns-core-modules": "~3.4.0",
     "zone.js": "~0.8.18"
   },
