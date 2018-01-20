@@ -1,0 +1,21 @@
+{
+  "name": "sass-experiment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "gulp"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-connect": "^5.2.0",
+    "gulp-sass": "^3.1.0",
+    "rimraf": "^2.6.2",
+    "sass-module-importer": "^1.4.0"
+  },
+  "dependencies": {
+    "bulma": "^0.6.2"
+  }
+}
