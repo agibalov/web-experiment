@@ -1,0 +1,28 @@
+$body-background-color: #f9f;
+$body-color: #fcf;
+$strong-color: #fff;
+
+$family-primary: monospace;
+
+$radius-small: 0;
+$radius: 0;
+$radius: 0;
+
+$navbar-background-color: #444;
+$navbar-height: 5rem;
+$navbar-item-color: #999;
+$navbar-item-hover-color: #ccc;
+$navbar-item-hover-background-color: #555;
+$navbar-item-active-color: #fff;
+$navbar-item-active-background-color: #f0f;
+
+$button-color: #555;
+$button-background-color: #ccc;
+$button-border-color: #fff;
+$button-hover-color: #f0f;
+$button-hover-border-color: #f0f;
+
+/* bulma will compute the derived colors for 'primary' */
+$primary: #f60;
+
+@import "bulma/bulma.sass";
