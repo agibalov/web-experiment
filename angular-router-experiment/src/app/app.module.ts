@@ -6,11 +6,13 @@ import {AnotherPageComponent} from "./another-page.component";
 import {AppRoutingModule} from "./app-routing.module";
 import {HeroesModule} from "./heroes/heroes.module";
 import {NotesModule} from "./notes/notes.module";
+import {HomeNavComponent} from "./home-nav.component";
 
 @NgModule({
     declarations: [
         AppComponent,
         HomePageComponent,
+        HomeNavComponent,
         AnotherPageComponent
     ],
     imports: [

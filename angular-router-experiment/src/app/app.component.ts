@@ -44,6 +44,8 @@ import {Router} from "@angular/router";
                     <div class="navbar-item">
                         <button class="button" (click)="goToHeroDetails()">Go to hero details</button>
                     </div>
+
+                    <router-outlet name="nav"></router-outlet>
                 </div>
             </div>
         </nav>
