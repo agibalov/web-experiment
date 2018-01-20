@@ -1,9 +1,5 @@
-import {Component} from "@angular/core";
-
-interface Hero {
-    id: string;
-    name: string;
-}
+import {Component, OnInit} from "@angular/core";
+import {DatabaseService} from "../database.service";
 
 @Component({
     template: `
@@ -28,12 +24,13 @@ interface Hero {
         </div>
     `
 })
-export class HeroListComponent {
-    heroes: Hero[] = [
-        { id: '1', name: 'hero 1' },
-        { id: '2', name: 'hero 2' },
-        { id: '3', name: 'hero 3' },
-        { id: '4', name: 'hero 4' },
-        { id: '5', name: 'hero 5' }
-    ];
+export class HeroListComponent implements OnInit {
+    heroes = [];
+
+    constructor(private databaseService: DatabaseService) {}
+
+    async ngOnInit() {
+        const heroes = await (<any>this.databaseService.db).heroes.find().exec();
+        this.heroes = heroes;
+    }
 }

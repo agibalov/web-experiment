@@ -1,17 +1,30 @@
 import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute, ParamMap} from "@angular/router";
+import {DatabaseService} from "../database.service";
 
 @Component({
-    template: `hero details component {{heroId}}`
+    template: `
+        <div *ngIf="hero == null">hero is null</div>
+        <div *ngIf="hero != null">
+            hero details component {{hero.id}} {{hero.name}}
+        </div>
+    `
 })
 export class HeroDetailsComponent implements OnInit {
-    heroId: string;
+    hero: any;
 
-    constructor(private activatedRoute: ActivatedRoute) {}
+    constructor(
+        private activatedRoute: ActivatedRoute,
+        private databaseService: DatabaseService) {
+
+        console.log('HeroDetailsComponent::constructor()');
+    }
 
     ngOnInit(): void {
-        this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
-            this.heroId = params.get('heroId');
+        console.log('HeroDetailsComponent::ngOnInit()');
+
+        this.activatedRoute.paramMap.subscribe(async (params: ParamMap) => {
+            this.hero = await (<any>this.databaseService.db).heroes.findOne(params.get('heroId')).exec();
         });
     }
 }
