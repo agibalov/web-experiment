@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Router} from "@angular/router";
+import {NavigationEnd, NavigationStart, Router} from "@angular/router";
 
 @Component({
     selector: 'app-root',
@@ -58,7 +58,16 @@ import {Router} from "@angular/router";
 })
 export class AppComponent {
     constructor(private router: Router) {
-        console.log(router);
+        this.router.events
+            .subscribe(e=> {
+                if(e instanceof NavigationStart) {
+                    const navigationStartEvent = <NavigationStart>e;
+                    console.log(`NavigationStart: url=${navigationStartEvent.url}`);
+                } else if(e instanceof NavigationEnd) {
+                    const navigationEndEvent = <NavigationEnd>e;
+                    console.log(`NavigationEnd: url=${navigationEndEvent.url}, urlAfterRedirects=${navigationEndEvent.urlAfterRedirects}`);
+                }
+            });
     }
 
     async goToHeroDetails() {
