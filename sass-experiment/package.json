@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "bulma-variables-experiment": "APPNAME=bulma-variables-experiment webpack-dev-server",
-    "outlook-layout-experiment": "APPNAME=outlook-layout-experiment webpack-dev-server"
+    "outlook-layout-experiment": "APPNAME=outlook-layout-experiment webpack-dev-server",
+    "em-layout-experiment": "APPNAME=em-layout-experiment webpack-dev-server"
   },
   "author": "",
   "license": "ISC",
