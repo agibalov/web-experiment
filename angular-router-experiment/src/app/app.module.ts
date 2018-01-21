@@ -8,6 +8,7 @@ import {HeroesModule} from "./heroes/heroes.module";
 import {NotesModule} from "./notes/notes.module";
 import {HomeNavComponent} from "./home-nav.component";
 import {DatabaseService} from "./database.service";
+import {NotFoundPageComponent} from "./not-found-page.component";
 
 function makeDatabaseServiceInitializer(databaseService: DatabaseService) {
     return async () => {
@@ -20,13 +21,14 @@ function makeDatabaseServiceInitializer(databaseService: DatabaseService) {
         AppComponent,
         HomePageComponent,
         HomeNavComponent,
-        AnotherPageComponent
+        AnotherPageComponent,
+        NotFoundPageComponent
     ],
     imports: [
         BrowserModule,
-        AppRoutingModule,
         HeroesModule,
-        NotesModule
+        NotesModule,
+        AppRoutingModule // import order matters! The 404 route should go at the end
     ],
     providers: [
         {
