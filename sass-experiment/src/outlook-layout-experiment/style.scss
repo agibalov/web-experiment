@@ -1,0 +1,68 @@
+@import "bulma/bulma.sass";
+
+$padding: 5px;
+
+html {
+  overflow: hidden;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.outlook-container {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar {
+}
+
+.panes {
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.panes .folders {
+  width: 300px;
+  min-width: 300px;
+  padding: $padding;
+  overflow-y: scroll;
+}
+
+.panes .messages {
+  width: 300px;
+  min-width: 300px;
+  padding: $padding;
+  overflow-y: scroll;
+}
+
+.panes .preview {
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.panes .preview .subject {
+  padding: $padding;
+}
+
+.panes .preview .content {
+  flex-grow: 1;
+  padding: $padding;
+  overflow-y: scroll;
+}
+
+.status {
+  padding: $padding;
+  color: #ccc;
+  background-color: #333;
+}
