@@ -4,16 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "gulp"
+    "bulma-variables-experiment": "APPNAME=bulma-variables-experiment webpack-dev-server",
+    "outlook-layout-experiment": "APPNAME=outlook-layout-experiment webpack-dev-server"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-connect": "^5.2.0",
-    "gulp-sass": "^3.1.0",
-    "rimraf": "^2.6.2",
-    "sass-module-importer": "^1.4.0"
+    "css-loader": "^0.28.9",
+    "html-webpack-plugin": "^2.30.1",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.19.1",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1"
   },
   "dependencies": {
     "bulma": "^0.6.2"
