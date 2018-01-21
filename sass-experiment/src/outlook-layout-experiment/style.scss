@@ -18,51 +18,51 @@ body {
 
   display: flex;
   flex-direction: column;
-}
 
-.toolbar {
-}
+  .toolbar {
+  }
 
-.panes {
-  flex-grow: 1;
+  .panes {
+    flex-grow: 1;
 
-  display: flex;
-  flex-direction: row;
-}
+    display: flex;
+    flex-direction: row;
 
-.panes .folders {
-  width: 300px;
-  min-width: 300px;
-  padding: $padding;
-  overflow-y: scroll;
-}
+    .folders {
+      width: 300px;
+      min-width: 300px;
+      padding: $padding;
+      overflow-y: scroll;
+    }
 
-.panes .messages {
-  width: 300px;
-  min-width: 300px;
-  padding: $padding;
-  overflow-y: scroll;
-}
+    .messages {
+      width: 300px;
+      min-width: 300px;
+      padding: $padding;
+      overflow-y: scroll;
+    }
 
-.panes .preview {
-  flex-grow: 1;
+    .preview {
+      flex-grow: 1;
 
-  display: flex;
-  flex-direction: column;
-}
+      display: flex;
+      flex-direction: column;
 
-.panes .preview .subject {
-  padding: $padding;
-}
+      .subject {
+        padding: $padding;
+      }
 
-.panes .preview .content {
-  flex-grow: 1;
-  padding: $padding;
-  overflow-y: scroll;
-}
+      .content {
+        flex-grow: 1;
+        padding: $padding;
+        overflow-y: scroll;
+      }
+    }
+  }
 
-.status {
-  padding: $padding;
-  color: #ccc;
-  background-color: #333;
+  .status {
+    padding: $padding;
+    color: #ccc;
+    background-color: #333;
+  }
 }
