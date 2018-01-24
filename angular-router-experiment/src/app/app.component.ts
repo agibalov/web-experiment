@@ -39,7 +39,11 @@ import {NavigationEnd, NavigationStart, Router} from "@angular/router";
 
                     <a class="navbar-item" routerLink="/notes/123"
                        routerLinkActive="is-active"
-                       [routerLinkActiveOptions]="{exact:true}">NoteDetails</a>
+                       [routerLinkActiveOptions]="{exact:true}">Note123</a>
+
+                    <a class="navbar-item" routerLink="/notes/222"
+                       routerLinkActive="is-active"
+                       [routerLinkActiveOptions]="{exact:true}">Note222</a>
 
                     <div class="navbar-item">
                         <button class="button" (click)="goToHeroDetails()">Go to hero details</button>

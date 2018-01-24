@@ -4,6 +4,7 @@ import {NoteListComponent} from "./note-list.component";
 import {NoteDetailsComponent} from "./note-details.component";
 import {NoteListResolver} from "./note-list-resolver.service";
 import {CommonModule} from "@angular/common";
+import {Note123Guard} from "./note-123-guard.service";
 
 @NgModule({
     imports: [
@@ -15,7 +16,8 @@ import {CommonModule} from "@angular/common";
         NoteDetailsComponent
     ],
     providers: [
-        NoteListResolver
+        NoteListResolver,
+        Note123Guard
     ]
 })
 export class NotesModule {

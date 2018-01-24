@@ -3,6 +3,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {NoteListComponent} from "./note-list.component";
 import {NoteDetailsComponent} from "./note-details.component";
 import {NoteListResolver} from "./note-list-resolver.service";
+import {Note123Guard} from "./note-123-guard.service";
 
 const noteRoutes: Routes = [
     {
@@ -14,7 +15,8 @@ const noteRoutes: Routes = [
     },
     {
         path: 'notes/:noteId',
-        component: NoteDetailsComponent
+        component: NoteDetailsComponent,
+        canActivate: [ Note123Guard ]
     }
 ];
 
