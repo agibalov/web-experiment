@@ -9,6 +9,7 @@ const noteRoutes: Routes = [
     {
         path: 'notes',
         component: NoteListComponent,
+        runGuardsAndResolvers: 'paramsOrQueryParamsChange',
         resolve: {
             notes: NoteListResolver
         }

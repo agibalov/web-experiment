@@ -5,6 +5,14 @@ import 'rxjs/add/operator/delay';
 
 export class NoteListResolver implements Resolve<string[]> {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<string[]> {
-        return Observable.of(['note one', 'note two', 'note three']).delay(1000);
+        const sort = route.queryParams['sort'] || 'asc';
+
+        let data = ['note one', 'note two', 'note three'];
+        data.sort();
+        if(sort == 'desc') {
+            data.reverse();
+        }
+
+        return Observable.of(data).delay(1000);
     }
 }

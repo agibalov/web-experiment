@@ -33,17 +33,30 @@ import {NavigationEnd, NavigationStart, Router} from "@angular/router";
                        routerLinkActive="is-active"
                        [routerLinkActiveOptions]="{exact:true}">HeroDetails</a>
 
-                    <a class="navbar-item" routerLink="/notes"
-                       routerLinkActive="is-active"
-                       [routerLinkActiveOptions]="{exact:true}">Notes</a>
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link" routerLink="/notes"
+                           routerLinkActive="is-active">Notes</a>
+                        
+                        <div class="navbar-dropdown is-boxed">
+                            <a class="navbar-item" routerLink="/notes" [queryParams]="{ sort: 'asc' }"
+                               routerLinkActive="is-active"
+                               [routerLinkActiveOptions]="{exact:true}">List Ascending</a>
 
-                    <a class="navbar-item" routerLink="/notes/123"
-                       routerLinkActive="is-active"
-                       [routerLinkActiveOptions]="{exact:true}">Note123</a>
+                            <a class="navbar-item" routerLink="/notes" [queryParams]="{ sort: 'desc' }"
+                               routerLinkActive="is-active"
+                               [routerLinkActiveOptions]="{exact:true}">List Descending</a>
+                            
+                            <hr class="navbar-divider">
 
-                    <a class="navbar-item" routerLink="/notes/222"
-                       routerLinkActive="is-active"
-                       [routerLinkActiveOptions]="{exact:true}">Note222</a>
+                            <a class="navbar-item" routerLink="/notes/123"
+                               routerLinkActive="is-active"
+                               [routerLinkActiveOptions]="{exact:true}">Note #123 (guard)</a>
+
+                            <a class="navbar-item" routerLink="/notes/222"
+                               routerLinkActive="is-active"
+                               [routerLinkActiveOptions]="{exact:true}">Note #222 (no guard)</a>                            
+                        </div>
+                    </div>
 
                     <div class="navbar-item">
                         <button class="button" (click)="goToHeroDetails()">Go to hero details</button>
