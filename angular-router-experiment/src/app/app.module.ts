@@ -9,6 +9,7 @@ import {NotesModule} from "./notes/notes.module";
 import {HomeNavComponent} from "./home-nav.component";
 import {DatabaseService} from "./database.service";
 import {NotFoundPageComponent} from "./not-found-page.component";
+import {AnotherNavComponent} from "./another-nav.component";
 
 function makeDatabaseServiceInitializer(databaseService: DatabaseService) {
     return async () => {
@@ -22,6 +23,7 @@ function makeDatabaseServiceInitializer(databaseService: DatabaseService) {
         HomePageComponent,
         HomeNavComponent,
         AnotherPageComponent,
+        AnotherNavComponent,
         NotFoundPageComponent
     ],
     imports: [

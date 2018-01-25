@@ -3,7 +3,7 @@ import {Component} from "@angular/core";
 @Component({
     template: `
         <div class="navbar-item">
-            <button class="button is-success" (click)="doSomething()">Special button</button>
+            <button class="button is-success" (click)="doSomething()">Only on home page</button>
         </div>
     `
 })

@@ -4,6 +4,7 @@ import {HomePageComponent} from "./home-page.component";
 import {AnotherPageComponent} from "./another-page.component";
 import {HomeNavComponent} from "./home-nav.component";
 import {NotFoundPageComponent} from "./not-found-page.component";
+import {AnotherNavComponent} from "./another-nav.component";
 
 const appRoutes: Routes = [
     {
@@ -23,6 +24,12 @@ const appRoutes: Routes = [
         path: 'another',
         component: AnotherPageComponent
     },
+    { // surprisingly, this doesn't work while the '/' path works
+        path: 'another',
+        component: AnotherNavComponent,
+        outlet: 'nav'
+    },
+
     {
         path: '**',
         component: NotFoundPageComponent
