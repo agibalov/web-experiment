@@ -1,0 +1,17 @@
+{
+  "name": "ng2-ui-auth-experiment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "pm2 start ecosystem.yml",
+    "restart": "pm2 restart ecosystem.yml",
+    "stop": "pm2 stop ecosystem.yml",
+    "logs": "pm2 logs"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "pm2": "^2.9.3"
+  }
+}

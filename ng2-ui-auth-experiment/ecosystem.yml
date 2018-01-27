@@ -1,0 +1,11 @@
+apps:
+- name: frontend
+  cwd: frontend
+  interpreter: none
+  script: npm
+  args: [ 'start' ]
+- name: backend
+  cwd: .
+  interpreter: none
+  script: gradlew
+  args: [ 'backend:run' ]
