@@ -35,9 +35,3 @@ deploy:
 
     test: >-
       echo 'test?'
-
-# ONCE (to configure the host): Do pre-setup + clone (aka setup) + post-setup
-# pm2 deploy ecosystem.prod.yaml production setup
-
-# TO UPDATE
-# pm2 deploy ecosystem.prod.yaml production update
