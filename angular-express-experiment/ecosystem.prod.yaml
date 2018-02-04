@@ -1,0 +1,39 @@
+apps:
+- name: app
+  cwd: .
+  interpreter: none
+  script: npm
+  args: run app:start
+
+deploy:
+  production:
+    user: root
+    host: 67.205.161.188
+    ref: origin/master
+    repo: https://github.com/agibalov/angular2-experiment.git
+    path: /var/dummy
+
+    pre-setup: >-
+      apt-get install -y git &&
+      curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash &&
+      export NVM_DIR="$HOME/.nvm" &&
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" &&
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" &&
+      nvm install --lts &&
+      nvm use --lts
+
+    post-setup: >-
+      echo 'runs on the host after cloning the repo' &&
+      ls -la
+
+    pre-deploy-local: >-
+      echo 'runs locally before deployment'
+
+    post-deploy: >-
+      pushd angular-express-experiment &&
+      npm install &&
+      pm2 startOrRestart ecosystem.prod.yaml &&
+      popd
+
+# ONCE (to configure the host): Do pre-setup + clone (aka setup) + post-setup
+# pm2 deploy ecosystem.prod.yaml production setup
