@@ -20,7 +20,9 @@ deploy:
       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" &&
       [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" &&
       nvm install --lts &&
-      nvm use --lts
+      nvm use --lts &&
+      npm install -g pm2 &&
+      pm2 startup
 
     post-setup: >-
       echo 'runs on the host after cloning the repo' &&
@@ -32,7 +34,11 @@ deploy:
     pre-deploy: >-
       echo 'runs on the host before deployment'
 
-    post-deploy: pushd angular-express-experiment && ./hook-post-deploy.sh && popd
+    post-deploy: >-
+      pushd angular-express-experiment &&
+      ./hook-post-deploy.sh &&
+      pm2 save &&
+      popd
 
     test: >-
       echo 'test?'
