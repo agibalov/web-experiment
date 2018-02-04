@@ -41,5 +41,8 @@ deploy:
       pm2 startOrRestart ecosystem.prod.yaml &&
       popd
 
+    test: >-
+      echo 'test?'
+
 # ONCE (to configure the host): Do pre-setup + clone (aka setup) + post-setup
 # pm2 deploy ecosystem.prod.yaml production setup
