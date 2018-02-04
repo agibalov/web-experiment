@@ -23,10 +23,6 @@ export class DatabaseService {
         const todoCount = await todoRepository.count();
         console.log(`total: ${todoCount}`);
 
-        return await new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(`I have ${todoCount} todos and it's ${new Date()}`);
-            }, 300);
-        });
+        return `I have ${todoCount} todos and it's ${new Date()}`;
     }
 }
