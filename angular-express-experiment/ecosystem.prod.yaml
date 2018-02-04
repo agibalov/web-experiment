@@ -11,21 +11,12 @@ apps:
 deploy:
   production:
     user: root
-    host: 192.34.60.246
+    host: 165.227.92.76
     ref: origin/master
     repo: https://github.com/agibalov/angular2-experiment.git
     path: /var/dummy
 
-    pre-setup: >-
-      apt-get install -y git &&
-      curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash &&
-      export NVM_DIR="$HOME/.nvm" &&
-      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" &&
-      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" &&
-      nvm install --lts &&
-      nvm use --lts &&
-      npm install -g pm2 &&
-      pm2 startup
+    pre-setup: ./hook-pre-setup.sh
 
     post-setup: >-
       echo 'runs on the host after cloning the repo' &&
