@@ -32,7 +32,7 @@ deploy:
     pre-deploy: >-
       echo 'runs on the host before deployment'
 
-    post-deploy: hook-post-deploy.sh
+    post-deploy: pushd angular-express-experiment && ./hook-post-deploy.sh && popd
 
     test: >-
       echo 'test?'
