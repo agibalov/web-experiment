@@ -3,7 +3,10 @@ apps:
   cwd: .
   interpreter: none
   script: npm
-  args: run app:start
+  args: run backend:start
+  env:
+    SERVE_STATIC: true
+    PORT: 80
 
 deploy:
   production:
