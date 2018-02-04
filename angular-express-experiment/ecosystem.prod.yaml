@@ -37,7 +37,6 @@ deploy:
     post-deploy: >-
       pushd angular-express-experiment &&
       ./hook-post-deploy.sh &&
-      pm2 save &&
       popd
 
     test: >-
@@ -45,3 +44,6 @@ deploy:
 
 # ONCE (to configure the host): Do pre-setup + clone (aka setup) + post-setup
 # pm2 deploy ecosystem.prod.yaml production setup
+
+# TO UPDATE
+# pm2 deploy ecosystem.prod.yaml production update

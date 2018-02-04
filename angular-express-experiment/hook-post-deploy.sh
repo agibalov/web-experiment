@@ -5,3 +5,4 @@ export NVM_DIR="$HOME/.nvm"
 npm install
 npm run app:build
 pm2 startOrRestart ecosystem.prod.yaml
+pm2 save
