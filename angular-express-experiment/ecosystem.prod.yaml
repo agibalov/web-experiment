@@ -11,7 +11,7 @@ apps:
 deploy:
   production:
     user: root
-    host: 67.205.161.188
+    host: 192.34.60.246
     ref: origin/master
     repo: https://github.com/agibalov/angular2-experiment.git
     path: /var/dummy
