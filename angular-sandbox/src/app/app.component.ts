@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {ModalService} from './modal.service';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,8 @@ import {Component} from '@angular/core';
       <div *appRepeat="count; let i = index;">
         item #{{i}}
       </div>
+      
+      <button type="button" class="button" (click)="showModal()">Show modal</button>
     </div>
   `,
   styles: []
@@ -26,6 +29,9 @@ import {Component} from '@angular/core';
 export class AppComponent {
   show = true;
   count = 3;
+
+  constructor(private modalService: ModalService) {
+  }
 
   toggle() {
     this.show = !this.show;
@@ -37,5 +43,14 @@ export class AppComponent {
 
   decrement() {
     --this.count;
+  }
+
+  async showModal(): Promise<void> {
+    try {
+      await this.modalService.show('Hi there!!!').result;
+      console.log('Dialog closed with resolve!');
+    } catch (e) {
+      console.log('Dialog closed with reject!');
+    }
   }
 }
