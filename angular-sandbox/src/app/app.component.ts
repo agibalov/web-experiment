@@ -22,6 +22,9 @@ import {ModalService} from './modal.service';
       </div>
       
       <button type="button" class="button" (click)="showModal()">Show modal</button>
+      
+      <h1>Styles</h1>
+      <app-host></app-host>
     </div>
   `,
   styles: []

@@ -6,13 +6,16 @@ import {AppIfDirective} from './app-if.directive';
 import {AppRepeatDirective} from './app-repeat.directive';
 import {ModalService} from './modal.service';
 import {ModalComponent} from './modal.component';
+import {ChildComponent, HostComponent} from './stylish.components';
 
 @NgModule({
   declarations: [
     AppComponent,
     AppIfDirective,
     AppRepeatDirective,
-    ModalComponent
+    ModalComponent,
+    ChildComponent,
+    HostComponent
   ],
   entryComponents: [
     ModalComponent
