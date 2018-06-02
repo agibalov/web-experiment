@@ -6,6 +6,7 @@ import {CameraDirective} from './camera.directive';
 import {SceneDirective} from './scene.directive';
 import {DummyDirective} from './dummy.directive';
 import {ManipulatorDirective} from './manipulator.directive';
+import {GridDirective} from './grid.directive';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import {ManipulatorDirective} from './manipulator.directive';
     CameraDirective,
     SceneDirective,
     DummyDirective,
-    ManipulatorDirective
+    ManipulatorDirective,
+    GridDirective
   ],
   imports: [
     BrowserModule

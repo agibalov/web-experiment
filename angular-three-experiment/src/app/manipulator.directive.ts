@@ -6,7 +6,9 @@ import {Vector2} from 'three';
   selector: '[manipulator]'
 })
 export class ManipulatorDirective {
-  @Output() move = new EventEmitter<Vector2>();
+  @Output() manipulationBegin = new EventEmitter<void>();
+  @Output() manipulationUpdate = new EventEmitter<Vector2>();
+  @Output() manipulationEnd = new EventEmitter<void>();
 
   private startPos: Vector2;
 
@@ -23,13 +25,15 @@ export class ManipulatorDirective {
     if (this.startPos == null) {
       if (e.type === 'mousedown') {
         this.startPos = new Vector2(x, y);
+        this.manipulationBegin.emit();
       }
     } else {
       if (e.type === 'mousemove') {
         const currentPos = new Vector2(x, y);
         const diff = this.startPos.clone().sub(currentPos);
-        this.move.emit(diff);
+        this.manipulationUpdate.emit(diff);
       } else if (e.type === 'mouseup') {
+        this.manipulationEnd.emit();
         this.startPos = null;
       }
     }
