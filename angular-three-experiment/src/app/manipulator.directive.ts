@@ -1,7 +1,8 @@
-import {Directive, EventEmitter, HostListener, Output} from "@angular/core";
-import {Vector2} from "three";
+import {Directive, EventEmitter, HostListener, Output} from '@angular/core';
+import {Vector2} from 'three';
 
 @Directive({
+  // tslint:disable-next-line:directive-selector
   selector: '[manipulator]'
 })
 export class ManipulatorDirective {
@@ -19,16 +20,16 @@ export class ManipulatorDirective {
     const x = e.layerX / bounds.width;
     const y = e.layerY / bounds.width;
 
-    if(this.startPos == null) {
-      if(e.type === 'mousedown') {
+    if (this.startPos == null) {
+      if (e.type === 'mousedown') {
         this.startPos = new Vector2(x, y);
       }
     } else {
-      if(e.type === 'mousemove') {
+      if (e.type === 'mousemove') {
         const currentPos = new Vector2(x, y);
         const diff = this.startPos.clone().sub(currentPos);
         this.move.emit(diff);
-      } else if(e.type === 'mouseup') {
+      } else if (e.type === 'mouseup') {
         this.startPos = null;
       }
     }

@@ -1,6 +1,6 @@
-import {PerspectiveCamera, Vector3} from "three";
-import {Directive, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from "@angular/core";
-import {ThreeDirective} from "./three.directive";
+import {PerspectiveCamera, Vector3} from 'three';
+import {Directive, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {ThreeDirective} from './three.directive';
 
 @Directive({
   // tslint:disable-next-line:directive-selector

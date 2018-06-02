@@ -1,7 +1,7 @@
-import {Mesh, MeshLambertMaterial, SphereGeometry, Vector3} from "three";
-import {ThreeDirective} from "./three.directive";
-import {Directive, Inject, Input, OnDestroy, OnInit} from "@angular/core";
-import {SceneDirective} from "./scene.directive";
+import {Mesh, MeshLambertMaterial, SphereGeometry, Vector3} from 'three';
+import {ThreeDirective} from './three.directive';
+import {Directive, Inject, Input, OnDestroy, OnInit} from '@angular/core';
+import {SceneDirective} from './scene.directive';
 
 @Directive({
   // tslint:disable-next-line:directive-selector

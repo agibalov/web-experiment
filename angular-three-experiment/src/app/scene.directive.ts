@@ -1,6 +1,6 @@
-import {DirectionalLight, Scene} from "three";
-import {ThreeDirective} from "./three.directive";
-import {Directive, Inject, OnDestroy, OnInit} from "@angular/core";
+import {DirectionalLight, Scene} from 'three';
+import {ThreeDirective} from './three.directive';
+import {Directive, Inject, OnDestroy, OnInit} from '@angular/core';
 
 @Directive({
   // tslint:disable-next-line:directive-selector

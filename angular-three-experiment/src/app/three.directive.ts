@@ -1,5 +1,5 @@
-import {AfterContentChecked, AfterViewInit, Directive, ElementRef, OnDestroy, OnInit} from "@angular/core";
-import {Camera, PerspectiveCamera, Scene, WebGLRenderer} from "three";
+import {AfterContentChecked, Directive, ElementRef, OnDestroy, OnInit} from '@angular/core';
+import {Camera, PerspectiveCamera, Scene, WebGLRenderer} from 'three';
 
 @Directive({
   // tslint:disable-next-line:directive-selector
@@ -50,15 +50,15 @@ export class ThreeDirective implements OnInit, OnDestroy, AfterContentChecked {
     const canvas = this.element.nativeElement;
     const { clientWidth, clientHeight } = canvas;
     const sizeHaveChanged =
-      canvas.width != clientWidth ||
-      canvas.height != clientHeight;
+      canvas.width !== clientWidth ||
+      canvas.height !== clientHeight;
 
-    if(sizeHaveChanged) {
+    if (sizeHaveChanged) {
       canvas.width = clientWidth;
       canvas.height = clientHeight;
       this.renderer.setSize(clientWidth, clientHeight, false);
 
-      if(this.camera instanceof PerspectiveCamera) {
+      if (this.camera instanceof PerspectiveCamera) {
         this.camera.aspect = clientWidth / clientHeight;
         this.camera.updateProjectionMatrix();
       }
