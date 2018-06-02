@@ -1,19 +1,25 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-
-import {AppComponent, CameraDirective, ThreeDirective} from './app.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import {AppComponent} from "./app.component";
+import {ThreeDirective} from "./three.directive";
+import {CameraDirective} from "./camera.directive";
+import {SceneDirective} from "./scene.directive";
+import {DummyDirective} from "./dummy.directive";
+import {ManipulatorDirective} from "./manipulator.directive";
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        ThreeDirective,
-        CameraDirective
-    ],
-    imports: [
-        BrowserModule
-    ],
-    providers: [],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    ThreeDirective,
+    CameraDirective,
+    SceneDirective,
+    DummyDirective,
+    ManipulatorDirective
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }
