@@ -13,6 +13,7 @@ import {CameraDriver} from './camera-driver';
                 (manipulationBegin)="cameraDriver.handleManipulationBegin(three.camera)"
                 (manipulationRotationUpdate)="cameraDriver.handleRotationUpdate($event)"
                 (manipulationTranslationUpdate)="cameraDriver.handleTranslationUpdate($event)"
+                (manipulationZoomUpdate)="cameraDriver.handleZoomUpdate($event)"
                 (manipulationEnd)="cameraDriver.handleManipulationEnd()"
                 three #three="three">
           <camera [position]="cameraDriver.cameraPosition" [target]="cameraDriver.cameraTarget" fov="60"></camera>

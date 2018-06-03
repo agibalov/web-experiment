@@ -9,6 +9,7 @@ export class ManipulatorDirective {
   @Output() manipulationBegin = new EventEmitter<void>();
   @Output() manipulationRotationUpdate = new EventEmitter<Vector2>();
   @Output() manipulationTranslationUpdate = new EventEmitter<Vector2>();
+  @Output() manipulationZoomUpdate = new EventEmitter<number>();
   @Output() manipulationEnd = new EventEmitter<void>();
 
   private manipulationType: ManipulationType;
@@ -54,6 +55,14 @@ export class ManipulatorDirective {
         }
       }
     }
+  }
+
+  @HostListener('wheel', ['$event'])
+  onWheel(e: WheelEvent) {
+    e.preventDefault();
+    this.manipulationBegin.emit();
+    this.manipulationZoomUpdate.emit(e.deltaY > 0 ? 1 : -1);
+    this.manipulationEnd.emit();
   }
 
   @HostListener('contextmenu', ['$event'])

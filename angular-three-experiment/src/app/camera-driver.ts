@@ -25,25 +25,32 @@ export class CameraDriver {
     camera.matrixWorld.extractBasis(xAxis, yAxis, zAxis);
 
     this.manipulation = {
-      cameraPhiStart: this.cameraPhi,
-      cameraThetaStart: this.cameraTheta,
-      cameraTranslationStart: this.cameraTarget,
-      cameraHorizontalDirection: xAxis.normalize(),
-      cameraVerticalDirection: yAxis.negate().normalize()
+      phiStart: this.cameraPhi,
+      thetaStart: this.cameraTheta,
+      translationStart: this.cameraTarget,
+      horizontalAxis: xAxis.normalize(),
+      verticalAxis: yAxis.normalize(),
+      depthicalAxis: zAxis.normalize()
     };
   }
 
   handleRotationUpdate(position: Vector2) {
-    this.cameraPhi = this.manipulation.cameraPhiStart + position.x * 10;
-    this.cameraTheta = this.manipulation.cameraThetaStart + position.y * 10;
+    this.cameraPhi = this.manipulation.phiStart + position.x * 10;
+    this.cameraTheta = this.manipulation.thetaStart + position.y * 10;
   }
 
   handleTranslationUpdate(position: Vector2) {
-    const horizontalTranslation = this.manipulation.cameraHorizontalDirection.clone().multiplyScalar(position.x * 3);
-    const verticalTranslation = this.manipulation.cameraVerticalDirection.clone().multiplyScalar(position.y * 3);
-    this.cameraTarget = this.manipulation.cameraTranslationStart.clone()
+    const horizontalTranslation = this.manipulation.horizontalAxis.clone().multiplyScalar(position.x * 3);
+    const verticalTranslation = this.manipulation.verticalAxis.clone().multiplyScalar(-position.y * 3);
+    this.cameraTarget = this.manipulation.translationStart.clone()
       .add(horizontalTranslation)
       .add(verticalTranslation);
+  }
+
+  handleZoomUpdate(zoom: number) {
+    const translation = this.manipulation.depthicalAxis.clone().multiplyScalar(zoom * 0.1);
+    this.cameraTarget = this.manipulation.translationStart.clone()
+      .add(translation);
   }
 
   handleManipulationEnd() {
@@ -52,9 +59,10 @@ export class CameraDriver {
 }
 
 interface Manipulation {
-  cameraPhiStart: number;
-  cameraThetaStart: number;
-  cameraTranslationStart: Vector3;
-  cameraHorizontalDirection: Vector3;
-  cameraVerticalDirection: Vector3;
+  phiStart: number;
+  thetaStart: number;
+  translationStart: Vector3;
+  horizontalAxis: Vector3;
+  verticalAxis: Vector3;
+  depthicalAxis: Vector3;
 }
