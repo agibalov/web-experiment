@@ -6,27 +6,45 @@ import {CameraDriver} from './camera-driver';
   selector: 'app-root',
   // tslint:disable:no-trailing-whitespace
   template: `
-    <canvas style="width: 100%; height: 600px;" 
-            manipulator
-            (manipulationBegin)="cameraDriver.handleManipulationBegin()"
-            (manipulationRotationUpdate)="cameraDriver.handleRotationUpdate($event)"
-            (manipulationTranslationUpdate)="cameraDriver.handleTranslationUpdate($event)"
-            (manipulationEnd)="cameraDriver.handleManipulationEnd()"
-            three>
-      <camera [position]="cameraDriver.cameraPosition" [target]="cameraDriver.cameraTarget" fov="60" #theCamera></camera>
-      <scene>
-        <light [position]="cameraDriver.cameraPosition" [target]="cameraDriver.cameraTarget"></light>
-        <dummy *ngIf="showDummy" [position]="dummyPosition"></dummy>
-        <dummy *ngIf="showDummy" [position]="dummyPosition2"></dummy>
-        <grid></grid>
-      </scene>
-    </canvas>
-    <button (click)="showHideDummy()">Show/hide dummy</button>
-    <button (click)="toggleDummyPosition()">Toggle dummy position</button>
-    <pre>{{cameraDriver | json}}</pre>
+    <div class="columns">
+      <div class="column">
+        <canvas style="width: 100%; height: 600px;" 
+                manipulator
+                (manipulationBegin)="cameraDriver.handleManipulationBegin()"
+                (manipulationRotationUpdate)="cameraDriver.handleRotationUpdate($event)"
+                (manipulationTranslationUpdate)="cameraDriver.handleTranslationUpdate($event)"
+                (manipulationEnd)="cameraDriver.handleManipulationEnd()"
+                three>
+          <camera [position]="cameraDriver.cameraPosition" [target]="cameraDriver.cameraTarget" fov="60" #theCamera></camera>
+          <scene>
+            <light [position]="cameraDriver.cameraPosition" [target]="cameraDriver.cameraTarget"></light>
+            <dummy *ngIf="showDummy" [position]="dummyPosition"></dummy>
+            <dummy *ngIf="showDummy" [position]="dummyPosition2"></dummy>
+            <grid></grid>
+          </scene>
+        </canvas>
+      </div>
+      <div class="column is-one-third is-one-fifth-widescreen">
+        <vector-editor name="dummyPosition" [range]="2.0" [(ngModel)]="dummyPosition"></vector-editor>
+        <vector-editor name="dummyPosition2" [range]="2.0" [(ngModel)]="dummyPosition2"></vector-editor>
+        
+        <div class="buttons">
+          <button (click)="showHideDummy()" class="button is-small">Show/hide dummy</button>
+          <button (click)="toggleDummyPosition()" class="button is-small">Toggle dummy position</button>
+        </div>
+        
+        <pre class="debug">{{cameraDriver | json}}</pre>
+      </div>
+    </div>
   `,
   // tslint:enable:no-trailing-whitespace
-  styles: [``]
+  styles: [`
+    .debug {
+      padding: 0;
+      margin: 0;
+      font-size: 10px;
+    }
+  `]
 })
 export class AppComponent {
   dummyPosition: Vector3 = new Vector3(-0.1, 0, 0);

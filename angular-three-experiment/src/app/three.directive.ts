@@ -17,6 +17,7 @@ export class ThreeDirective implements OnInit, OnDestroy, AfterContentChecked {
       antialias: true,
       canvas: this.element.nativeElement
     });
+    this.renderer.setClearColor(0x000000);
   }
 
   render() {

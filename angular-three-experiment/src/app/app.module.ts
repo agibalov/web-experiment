@@ -8,6 +8,8 @@ import {DummyDirective} from './dummy.directive';
 import {ManipulatorDirective} from './manipulator.directive';
 import {GridDirective} from './grid.directive';
 import {LightDirective} from './light.directive';
+import {FormsModule} from '@angular/forms';
+import {VectorEditorComponent} from './vector-editor.component';
 
 @NgModule({
   declarations: [
@@ -18,10 +20,12 @@ import {LightDirective} from './light.directive';
     DummyDirective,
     ManipulatorDirective,
     GridDirective,
-    LightDirective
+    LightDirective,
+    VectorEditorComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -21,6 +21,8 @@
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
     "@types/three": "^0.92.3",
+    "bulma": "^0.7.1",
+    "bulma-slider": "^1.0.4",
     "core-js": "^2.5.4",
     "rxjs": "^6.0.0",
     "three": "^0.93.0",
