@@ -4,12 +4,18 @@ import {Directive, Inject, OnDestroy, OnInit} from '@angular/core';
 
 @Directive({
   // tslint:disable-next-line:directive-selector
-  selector: 'scene'
+  selector: 'scene',
+  providers: [
+    {
+      provide: Scene,
+      useFactory: () => new Scene()
+    }
+  ]
 })
 export class SceneDirective implements OnInit, OnDestroy {
-  scene: Scene = new Scene();
-
-  constructor(@Inject(ThreeDirective) private threeDirective: ThreeDirective) {
+  constructor(
+    @Inject(ThreeDirective) private threeDirective: ThreeDirective,
+    private scene: Scene) {
   }
 
   ngOnInit(): void {

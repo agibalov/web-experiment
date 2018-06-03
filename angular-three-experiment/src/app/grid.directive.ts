@@ -1,4 +1,4 @@
-import {Geometry, Line, LineBasicMaterial, Vector3} from 'three';
+import {Geometry, Line, LineBasicMaterial, Scene, Vector3} from 'three';
 import {Directive, Inject, OnDestroy, OnInit} from '@angular/core';
 import {SceneDirective} from './scene.directive';
 
@@ -9,7 +9,7 @@ import {SceneDirective} from './scene.directive';
 export class GridDirective implements OnInit, OnDestroy {
   private line: Line;
 
-  constructor(@Inject(SceneDirective) private sceneDirective: SceneDirective) {
+  constructor(private scene: Scene) {
     const geometry = new Geometry();
     for (let i = -200; i <= 200; ++i) {
       geometry.vertices.push(new Vector3(-200, 0, i));
@@ -25,10 +25,10 @@ export class GridDirective implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.sceneDirective.scene.add(this.line);
+    this.scene.add(this.line);
   }
 
   ngOnDestroy(): void {
-    this.sceneDirective.scene.remove(this.line);
+    this.scene.remove(this.line);
   }
 }

@@ -1,6 +1,5 @@
-import {DirectionalLight, Vector3} from 'three';
-import {Directive, Inject, Input, OnDestroy, OnInit} from '@angular/core';
-import {SceneDirective} from './scene.directive';
+import {DirectionalLight, Scene, Vector3} from 'three';
+import {Directive, Input, OnDestroy, OnInit} from '@angular/core';
 
 @Directive({
   // tslint:disable-next-line:directive-selector
@@ -9,7 +8,7 @@ import {SceneDirective} from './scene.directive';
 export class LightDirective implements OnInit, OnDestroy {
   private light = new DirectionalLight(0xffffffff);
 
-  constructor(@Inject(SceneDirective) private sceneDirective: SceneDirective) {
+  constructor(private scene: Scene) {
   }
 
   @Input() set position(value: Vector3) {
@@ -21,12 +20,12 @@ export class LightDirective implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.sceneDirective.scene.add(this.light);
-    this.sceneDirective.scene.add(this.light.target);
+    this.scene.add(this.light);
+    this.scene.add(this.light.target);
   }
 
   ngOnDestroy(): void {
-    this.sceneDirective.scene.remove(this.light);
-    this.sceneDirective.scene.remove(this.light.target);
+    this.scene.remove(this.light);
+    this.scene.remove(this.light.target);
   }
 }
