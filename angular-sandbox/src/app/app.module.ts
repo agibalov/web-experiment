@@ -2,29 +2,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {AppIfDirective} from './app-if.directive';
-import {AppRepeatDirective} from './app-repeat.directive';
-import {ModalService} from './modal.service';
-import {ModalComponent} from './modal.component';
-import {ChildComponent, HostComponent} from './stylish.components';
+import {RandomModule} from './random/random.module';
+import {StylingModule} from './styling/styling.module';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    AppIfDirective,
-    AppRepeatDirective,
-    ModalComponent,
-    ChildComponent,
-    HostComponent
-  ],
-  entryComponents: [
-    ModalComponent
+    AppComponent
   ],
   imports: [
-    BrowserModule
-  ],
-  providers: [
-    ModalService
+    BrowserModule,
+    RouterModule.forRoot([]),
+    RandomModule,
+    StylingModule
   ],
   bootstrap: [AppComponent]
 })
