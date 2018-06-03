@@ -12,7 +12,9 @@ import {RouterModule} from '@angular/router';
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot([]),
+    RouterModule.forRoot([
+      { path: '', pathMatch: 'full', redirectTo: 'random' }
+    ]),
     RandomModule,
     StylingModule
   ],

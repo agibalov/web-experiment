@@ -19,7 +19,9 @@ import {Component} from '@angular/core';
           </aside>
         </div>
         <div class="column">
-          <router-outlet></router-outlet>
+          <div class="container">
+            <router-outlet></router-outlet>
+          </div>
         </div>
       </div>
     </div>

@@ -1,8 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {ChildComponent, HostComponent} from './stylish.components';
 import {StylingPageComponent} from './styling-page.component';
 import {RouterModule} from '@angular/router';
+import {ChildComponent} from './child.component';
+import {HostComponent} from './host.component';
 
 @NgModule({
   declarations: [
