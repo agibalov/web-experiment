@@ -1,6 +1,5 @@
-import {Geometry, Line, LineBasicMaterial, Mesh, MeshLambertMaterial, SphereGeometry, Vector3} from 'three';
-import {ThreeDirective} from './three.directive';
-import {Directive, Inject, Input, OnDestroy, OnInit} from '@angular/core';
+import {Geometry, Line, LineBasicMaterial, Vector3} from 'three';
+import {Directive, Inject, OnDestroy, OnInit} from '@angular/core';
 import {SceneDirective} from './scene.directive';
 
 @Directive({
@@ -10,10 +9,7 @@ import {SceneDirective} from './scene.directive';
 export class GridDirective implements OnInit, OnDestroy {
   private line: Line;
 
-  constructor(
-    @Inject(ThreeDirective) private threeDirective: ThreeDirective,
-    @Inject(SceneDirective) private sceneDirective: SceneDirective) {
-
+  constructor(@Inject(SceneDirective) private sceneDirective: SceneDirective) {
     const geometry = new Geometry();
     for (let i = -200; i <= 200; ++i) {
       geometry.vertices.push(new Vector3(-200, 0, i));

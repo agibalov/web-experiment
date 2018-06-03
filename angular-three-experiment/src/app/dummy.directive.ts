@@ -1,5 +1,4 @@
 import {Mesh, MeshLambertMaterial, SphereGeometry, Vector3} from 'three';
-import {ThreeDirective} from './three.directive';
 import {Directive, Inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {SceneDirective} from './scene.directive';
 
@@ -10,10 +9,7 @@ import {SceneDirective} from './scene.directive';
 export class DummyDirective implements OnInit, OnDestroy {
   private mesh: Mesh;
 
-  constructor(
-    @Inject(ThreeDirective) private threeDirective: ThreeDirective,
-    @Inject(SceneDirective) private sceneDirective: SceneDirective) {
-
+  constructor(@Inject(SceneDirective) private sceneDirective: SceneDirective) {
     const geometry = new SphereGeometry(0.2, 7, 7);
     const material = new MeshLambertMaterial({
       color: 0xff0000

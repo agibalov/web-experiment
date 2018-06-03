@@ -7,6 +7,7 @@ import {SceneDirective} from './scene.directive';
 import {DummyDirective} from './dummy.directive';
 import {ManipulatorDirective} from './manipulator.directive';
 import {GridDirective} from './grid.directive';
+import {LightDirective} from './light.directive';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import {GridDirective} from './grid.directive';
     SceneDirective,
     DummyDirective,
     ManipulatorDirective,
-    GridDirective
+    GridDirective,
+    LightDirective
   ],
   imports: [
     BrowserModule

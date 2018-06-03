@@ -7,13 +7,16 @@ import {Vector2} from 'three';
 })
 export class ManipulatorDirective {
   @Output() manipulationBegin = new EventEmitter<void>();
-  @Output() manipulationUpdate = new EventEmitter<Vector2>();
+  @Output() manipulationRotationUpdate = new EventEmitter<Vector2>();
+  @Output() manipulationTranslationUpdate = new EventEmitter<Vector2>();
   @Output() manipulationEnd = new EventEmitter<void>();
 
+  private manipulationType: ManipulationType;
   private startPos: Vector2;
 
-  @HostListener('mouseenter', ['$event'])
-  @HostListener('mouseleave', ['$event'])
+  private readonly MOUSE_LEFT = 0;
+  private readonly MOUSE_RIGHT = 2;
+
   @HostListener('mousemove', ['$event'])
   @HostListener('mousedown', ['$event'])
   @HostListener('mouseup', ['$event'])
@@ -24,17 +27,31 @@ export class ManipulatorDirective {
 
     if (this.startPos == null) {
       if (e.type === 'mousedown') {
-        this.startPos = new Vector2(x, y);
-        this.manipulationBegin.emit();
+        if (e.button === this.MOUSE_LEFT) {
+          this.manipulationType = ManipulationType.Rotation;
+          this.startPos = new Vector2(x, y);
+          this.manipulationBegin.emit();
+        } else if (e.button === this.MOUSE_RIGHT) {
+          this.manipulationType = ManipulationType.Translation;
+          this.startPos = new Vector2(x, y);
+          this.manipulationBegin.emit();
+        }
       }
     } else {
       if (e.type === 'mousemove') {
         const currentPos = new Vector2(x, y);
         const diff = this.startPos.clone().sub(currentPos);
-        this.manipulationUpdate.emit(diff);
+        if (this.manipulationType === ManipulationType.Rotation) {
+          this.manipulationRotationUpdate.emit(diff);
+        } else if (this.manipulationType === ManipulationType.Translation) {
+          this.manipulationTranslationUpdate.emit(diff);
+        }
       } else if (e.type === 'mouseup') {
-        this.manipulationEnd.emit();
-        this.startPos = null;
+        if (e.button === this.MOUSE_LEFT || e.button === this.MOUSE_RIGHT) {
+          this.manipulationEnd.emit();
+          this.startPos = null;
+          this.manipulationType = null;
+        }
       }
     }
   }
@@ -43,4 +60,9 @@ export class ManipulatorDirective {
   onContextMenu(e: Event) {
     e.preventDefault();
   }
+}
+
+enum ManipulationType {
+  Rotation,
+  Translation
 }
