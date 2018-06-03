@@ -7,6 +7,7 @@ import {ModalService} from './modal.service';
 import {ModalComponent} from './modal.component';
 import {RandomPageComponent} from './random-page.component';
 import {RouterModule} from '@angular/router';
+import {DEMO_PAGE, DemoPage} from '../demo-page';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,15 @@ import {RouterModule} from '@angular/router';
     ])
   ],
   providers: [
-    ModalService
+    ModalService,
+    {
+      provide: DEMO_PAGE,
+      multi: true,
+      useValue: <DemoPage>{
+        title: 'Random',
+        routerLink: 'random'
+      }
+    }
   ]
 })
 export class RandomModule { }

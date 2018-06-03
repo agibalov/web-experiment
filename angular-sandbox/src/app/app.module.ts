@@ -14,7 +14,7 @@ import {RouterModule} from '@angular/router';
     BrowserModule,
     RouterModule.forRoot([
       { path: '', pathMatch: 'full', redirectTo: 'random' }
-    ]),
+    ], { enableTracing: true }),
     RandomModule,
     StylingModule
   ],

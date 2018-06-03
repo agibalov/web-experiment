@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {Component, Inject} from '@angular/core';
+import {DEMO_PAGE, DemoPage} from './demo-page';
 
 @Component({
   selector: 'app-root',
@@ -9,12 +10,10 @@ import {Component} from '@angular/core';
           <aside class="menu">
             <p class="menu-label">Random</p>
             <ul class="menu-list">
-              <li><a routerLink="random"
-                     routerLinkActive="is-active"
-                     [routerLinkActiveOptions]="{exact:true}">Random</a></li>
-              <li><a routerLink="styling"
-                     routerLinkActive="is-active"
-                     [routerLinkActiveOptions]="{exact:true}">Styling</a></li>
+              <li *ngFor="let page of demoPages">
+                <a [routerLink]="page.routerLink"
+                   routerLinkActive="is-active"
+                   [routerLinkActiveOptions]="{exact:true}">{{page.title}}</a></li>
             </ul>
           </aside>
         </div>
@@ -29,4 +28,6 @@ import {Component} from '@angular/core';
   styles: []
 })
 export class AppComponent {
+  constructor(@Inject(DEMO_PAGE) public demoPages: DemoPage[]) {
+  }
 }
