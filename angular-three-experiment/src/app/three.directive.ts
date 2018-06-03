@@ -8,7 +8,7 @@ import {Camera, PerspectiveCamera, Scene, WebGLRenderer} from 'three';
 })
 export class ThreeDirective implements OnInit, OnDestroy, AfterContentChecked {
   private renderer: WebGLRenderer;
-  private camera: Camera;
+  /*private*/ camera: Camera;
   private scene: Scene;
   private resizePollHandle: number;
 

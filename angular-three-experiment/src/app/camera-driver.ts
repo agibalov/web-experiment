@@ -1,18 +1,13 @@
-import {Vector2, Vector3} from 'three';
+import {Camera, Vector2, Vector3} from 'three';
 
 export class CameraDriver {
   cameraTarget = new Vector3(0, 0, 0);
 
-  cameraPhi = -Math.PI / 2;
-  cameraTheta = 0;
-  cameraDistance = 1;
+  private cameraPhi = -Math.PI / 2;
+  private cameraTheta = 0;
+  private cameraDistance = 1;
 
-  cameraPhiStart: number;
-  cameraThetaStart: number;
-
-  cameraTranslationStart: Vector3;
-  cameraHorizontalDirection: Vector3;
-  cameraVerticalDirection: Vector3;
+  manipulation: Manipulation = null;
 
   get cameraPosition() {
     const position = new Vector3(
@@ -23,39 +18,43 @@ export class CameraDriver {
     return position;
   }
 
-  handleManipulationBegin() {
-    this.cameraPhiStart = this.cameraPhi;
-    this.cameraThetaStart = this.cameraTheta;
-    this.cameraTranslationStart = this.cameraTarget;
+  handleManipulationBegin(camera: Camera) {
+    const xAxis = new Vector3();
+    const yAxis = new Vector3();
+    const zAxis = new Vector3();
+    camera.matrixWorld.extractBasis(xAxis, yAxis, zAxis);
 
-    this.cameraHorizontalDirection = new Vector3(
-      -Math.cos(this.cameraPhi + Math.PI / 2),
-      0,
-      Math.sin(this.cameraPhi + Math.PI / 2)
-    );
-    this.cameraVerticalDirection = new Vector3(
-      -Math.cos(this.cameraPhi) * Math.cos(this.cameraTheta + Math.PI / 2),
-      -Math.sin(this.cameraTheta + Math.PI / 2),
-      Math.sin(this.cameraPhi) * Math.cos(this.cameraTheta + Math.PI / 2)
-    );
+    this.manipulation = {
+      cameraPhiStart: this.cameraPhi,
+      cameraThetaStart: this.cameraTheta,
+      cameraTranslationStart: this.cameraTarget,
+      cameraHorizontalDirection: xAxis.normalize(),
+      cameraVerticalDirection: yAxis.negate().normalize()
+    };
   }
 
   handleRotationUpdate(position: Vector2) {
-    this.cameraPhi = this.cameraPhiStart + position.x * 10;
-    this.cameraTheta = this.cameraThetaStart + position.y * 10;
+    this.cameraPhi = this.manipulation.cameraPhiStart + position.x * 10;
+    this.cameraTheta = this.manipulation.cameraThetaStart + position.y * 10;
   }
 
   handleTranslationUpdate(position: Vector2) {
-    const horizontalTranslation = this.cameraHorizontalDirection.clone().multiplyScalar(position.x * 3);
-    const verticalTranslation = this.cameraVerticalDirection.clone().multiplyScalar(position.y * 3);
-    this.cameraTarget = this.cameraTranslationStart.clone()
+    const horizontalTranslation = this.manipulation.cameraHorizontalDirection.clone().multiplyScalar(position.x * 3);
+    const verticalTranslation = this.manipulation.cameraVerticalDirection.clone().multiplyScalar(position.y * 3);
+    this.cameraTarget = this.manipulation.cameraTranslationStart.clone()
       .add(horizontalTranslation)
       .add(verticalTranslation);
   }
 
   handleManipulationEnd() {
-    this.cameraPhiStart = null;
-    this.cameraThetaStart = null;
-    this.cameraTranslationStart = null;
+    this.manipulation = null;
   }
+}
+
+interface Manipulation {
+  cameraPhiStart: number;
+  cameraThetaStart: number;
+  cameraTranslationStart: Vector3;
+  cameraHorizontalDirection: Vector3;
+  cameraVerticalDirection: Vector3;
 }

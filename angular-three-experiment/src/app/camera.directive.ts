@@ -11,7 +11,7 @@ export class CameraDirective implements OnInit, OnDestroy, OnChanges {
   @Input() target: Vector3;
   @Input() fov: number;
 
-  private camera: PerspectiveCamera = new PerspectiveCamera(70);
+  camera: PerspectiveCamera = new PerspectiveCamera(70);
 
   constructor(@Inject(ThreeDirective) private threeDirective: ThreeDirective) {
   }
