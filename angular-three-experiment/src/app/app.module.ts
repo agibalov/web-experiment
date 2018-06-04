@@ -10,6 +10,8 @@ import {GridDirective} from './grid.directive';
 import {LightDirective} from './light.directive';
 import {FormsModule} from '@angular/forms';
 import {VectorEditorComponent} from './vector-editor.component';
+import {TrajectoryDirective} from './trajectory.directive';
+import {ExponentialPipe} from './exponential.pipe';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import {VectorEditorComponent} from './vector-editor.component';
     ManipulatorDirective,
     GridDirective,
     LightDirective,
-    VectorEditorComponent
+    VectorEditorComponent,
+    TrajectoryDirective,
+    ExponentialPipe
   ],
   imports: [
     BrowserModule,

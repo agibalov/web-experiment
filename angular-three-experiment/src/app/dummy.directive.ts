@@ -9,7 +9,7 @@ export class DummyDirective implements OnInit, OnDestroy {
   private mesh: Mesh;
 
   constructor(private scene: Scene) {
-    const geometry = new SphereGeometry(0.2, 7, 7);
+    const geometry = new SphereGeometry(0.03, 7, 7);
     const material = new MeshLambertMaterial({
       color: 0xff0000
     });

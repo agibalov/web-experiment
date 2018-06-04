@@ -1,6 +1,5 @@
 import {Geometry, Line, LineBasicMaterial, Scene, Vector3} from 'three';
-import {Directive, Inject, OnDestroy, OnInit} from '@angular/core';
-import {SceneDirective} from './scene.directive';
+import {Directive, OnDestroy, OnInit} from '@angular/core';
 
 @Directive({
   // tslint:disable-next-line:directive-selector

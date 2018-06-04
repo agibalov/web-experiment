@@ -7,16 +7,19 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
   template: `
     <pre>
 <ng-container *ngIf="name != null"><span class="has-text-weight-bold">{{name}}</span>
-</ng-container>  X: <input type="range" class="slider is-small is-circle" [min]="min" [max]="max" step="0.01" [(ngModel)]="x"> ({{x|number:'1.3-3'}})
-  Y: <input type="range" class="slider is-small is-circle" [min]="min" [max]="max" step="0.01" [(ngModel)]="y"> ({{y|number:'1.3-3'}})
-  Z: <input type="range" class="slider is-small is-circle" [min]="min" [max]="max" step="0.01" [(ngModel)]="z"> ({{z|number:'1.3-3'}})</pre>
+</ng-container>  X: <input type="range" class="slider is-small is-circle is-success" [min]="-inputRange" [max]="inputRange"
+                           [step]="inputStep" [(ngModel)]="visualX"> ({{realX|exponential}})
+  Y: <input type="range" class="slider is-small is-circle is-success" [min]="-inputRange" [max]="inputRange" [step]="inputStep"
+            [(ngModel)]="visualY"> ({{realY|exponential}})
+  Z: <input type="range" class="slider is-small is-circle is-success" [min]="-inputRange" [max]="inputRange" [step]="inputStep"
+            [(ngModel)]="visualZ"> ({{realZ|exponential}})</pre>
   `,
   styles: [`
     pre {
       margin: 0;
       padding: 0;
     }
-    
+
     input.slider {
       margin: 0;
     }
@@ -30,6 +33,9 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
   ]
 })
 export class VectorEditorComponent implements ControlValueAccessor {
+  readonly inputRange = 100;
+  readonly inputStep = 1;
+
   @Input() name: string;
   @Input() range = 1.0;
   vector: Vector3 = new Vector3(0, 0, 0);
@@ -53,38 +59,42 @@ export class VectorEditorComponent implements ControlValueAccessor {
     this.onChange(this.vector);
   }
 
-  get min() {
-    return -this.range;
-  }
-
-  get max() {
-    return this.range;
-  }
-
-  get x() {
+  get realX() {
     return this.vector != null ? this.vector.x : null;
   }
 
-  set x(value: number) {
-    this.vector = this.vector.setX(value).clone();
+  get visualX() {
+    return this.vector != null ? (this.vector.x / this.range) * this.inputRange : null;
+  }
+
+  set visualX(value: number) {
+    this.vector = this.vector.setX((value / this.inputRange) * this.range).clone();
     this.onChange(this.vector);
   }
 
-  get y() {
+  get realY() {
     return this.vector != null ? this.vector.y : null;
   }
 
-  set y(value: number) {
-    this.vector = this.vector.setY(value).clone();
+  get visualY() {
+    return this.vector != null ? (this.vector.y / this.range) * this.inputRange : null;
+  }
+
+  set visualY(value: number) {
+    this.vector = this.vector.setY((value / this.inputRange) * this.range).clone();
     this.onChange(this.vector);
   }
 
-  get z() {
+  get realZ() {
     return this.vector != null ? this.vector.z : null;
   }
 
-  set z(value: number) {
-    this.vector = this.vector.setZ(value).clone();
+  get visualZ() {
+    return this.vector != null ? (this.vector.z / this.range) * this.inputRange : null;
+  }
+
+  set visualZ(value: number) {
+    this.vector = this.vector.setZ((value / this.inputRange) * this.range).clone();
     this.onChange(this.vector);
   }
 }

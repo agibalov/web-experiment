@@ -3,11 +3,10 @@ import {Camera, Vector2, Vector3} from 'three';
 export class CameraDriver {
   cameraTarget = new Vector3(0, 0, 0);
 
-  private cameraPhi = -Math.PI / 2;
-  private cameraTheta = 0;
+  private cameraPhi = -Math.PI / 4;
+  private cameraTheta = -Math.PI / 8;
   private cameraDistance = 1;
-
-  manipulation: Manipulation = null;
+  private manipulation: Manipulation = null;
 
   get cameraPosition() {
     const position = new Vector3(
