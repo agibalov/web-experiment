@@ -7,6 +7,7 @@ import {Sample} from './lorentz.service';
   selector: 'trajectory'
 })
 export class TrajectoryDirective implements OnInit, OnDestroy {
+  private readonly scale = 1e-5;
   private geometry: Geometry = new Geometry();
   private line: Line;
 
@@ -21,12 +22,9 @@ export class TrajectoryDirective implements OnInit, OnDestroy {
     this.geometry.vertices = [];
     this.geometry.verticesNeedUpdate = true;
 
-    for (let i = 0; i < samples.length - 1; ++i) {
-      const currentSample = samples[i];
-      const nextSample = samples[i + 1];
-
-      this.geometry.vertices.push(currentSample.position);
-      this.geometry.vertices.push(nextSample.position);
+    for (let i = 0; i < samples.length; ++i) {
+      const sample = samples[i];
+      this.geometry.vertices.push(sample.position.clone().multiplyScalar(this.scale));
     }
   }
 

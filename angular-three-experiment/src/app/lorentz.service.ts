@@ -75,7 +75,7 @@ export class LorentzService {
 
         const sample = new Sample(
           time,
-          position.clone().multiplyScalar(1e-5),
+          position.clone(),
           velocity.clone(),
           acceleration.clone(),
           electricForce.clone(),
