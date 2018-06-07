@@ -61,27 +61,31 @@ export class LorentzService {
       const startTime = 0;
       const stopTime = 5;
       const timeStep = 1e-4;
+      const sampleEveryNIterations = 500;
 
       const samples: Sample[] = [];
 
       let velocity = this.startVelocity.clone();
       let position = this.startPosition.clone();
-      for (let time = startTime; time < stopTime; time += timeStep) {
+      for (let time = startTime, iteration = 0; time < stopTime; time += timeStep, ++iteration) {
         const electricForce = this.electricField.clone().multiplyScalar(particleCharge);
         const magneticForce = velocity.clone().cross(this.magneticField).multiplyScalar(particleCharge);
         const lorentzForce = electricForce.clone().add(magneticForce);
 
         const acceleration = lorentzForce.divideScalar(particleMass);
 
-        const sample = new Sample(
-          time,
-          position.clone(),
-          velocity.clone(),
-          acceleration.clone(),
-          electricForce.clone(),
-          magneticForce.clone(),
-          lorentzForce.clone());
-        samples.push(sample);
+        const shouldSaveSample = iteration % sampleEveryNIterations === 0;
+        if (shouldSaveSample) {
+          const sample = new Sample(
+            time,
+            position.clone(),
+            velocity.clone(),
+            acceleration.clone(),
+            electricForce.clone(),
+            magneticForce.clone(),
+            lorentzForce.clone());
+          samples.push(sample);
+        }
 
         velocity = velocity.clone().add(acceleration.clone().multiplyScalar(timeStep));
         position = position.clone().add(velocity.clone().multiplyScalar(timeStep));
