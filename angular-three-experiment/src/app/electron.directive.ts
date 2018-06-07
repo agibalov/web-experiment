@@ -3,9 +3,9 @@ import {Directive, Inject, Input, OnDestroy, OnInit} from '@angular/core';
 
 @Directive({
   // tslint:disable-next-line:directive-selector
-  selector: 'dummy'
+  selector: 'electron'
 })
-export class DummyDirective implements OnInit, OnDestroy {
+export class ElectronDirective implements OnInit, OnDestroy {
   private mesh: Mesh;
 
   constructor(private scene: Scene) {

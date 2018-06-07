@@ -4,7 +4,7 @@ import {AppComponent} from './app.component';
 import {ThreeDirective} from './three.directive';
 import {CameraDirective} from './camera.directive';
 import {SceneDirective} from './scene.directive';
-import {DummyDirective} from './dummy.directive';
+import {ElectronDirective} from './electron.directive';
 import {ManipulatorDirective} from './manipulator.directive';
 import {GridDirective} from './grid.directive';
 import {LightDirective} from './light.directive';
@@ -19,7 +19,7 @@ import {ExponentialPipe} from './exponential.pipe';
     ThreeDirective,
     CameraDirective,
     SceneDirective,
-    DummyDirective,
+    ElectronDirective,
     ManipulatorDirective,
     GridDirective,
     LightDirective,

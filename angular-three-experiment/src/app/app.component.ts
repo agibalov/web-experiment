@@ -1,11 +1,10 @@
 import {Component} from '@angular/core';
-import {Vector3} from 'three';
 import {CameraDriver} from './camera-driver';
-import {LorentzService} from './lorentz.service';
+import {LorentzService, Sample} from './lorentz.service';
 
 @Component({
   selector: 'app-root',
-  // tslint:disable:no-trailing-whitespace
+  // tslint:disable:no-trailing-whitespace max-line-length
   template: `
     <div class="columns">
       <div class="column">
@@ -20,7 +19,7 @@ import {LorentzService} from './lorentz.service';
           <camera [position]="cameraDriver.cameraPosition" [target]="cameraDriver.cameraTarget" fov="60"></camera>
           <scene>
             <light [position]="cameraDriver.cameraPosition" [target]="cameraDriver.cameraTarget"></light>
-            <dummy *ngIf="showDummy" [position]="dummyPosition"></dummy>
+            <electron *ngIf="showElectron" [position]="currentSample.position.clone().multiplyScalar(1e-5)"></electron>
             <trajectory *ngIf="showTrajectory" [samples]="lorentzService.trajectory"></trajectory>
             <grid *ngIf="showGrid"></grid>
           </scene>
@@ -30,11 +29,10 @@ import {LorentzService} from './lorentz.service';
         <vector-editor name="Start Velocity" [range]="1e6" [(ngModel)]="lorentzService.startVelocity"></vector-editor>
         <vector-editor name="Electric Field" [range]="1e-5" [(ngModel)]="lorentzService.electricField"></vector-editor>
         <vector-editor name="Magnetic Field" [range]="1e-10" [(ngModel)]="lorentzService.magneticField"></vector-editor>
-        <vector-editor name="Dummy Position" [range]="2.0" [(ngModel)]="dummyPosition"></vector-editor>
 
         <pre class="checkboxes">
 
-<label class="checkbox"><input type="checkbox" [(ngModel)]="showDummy"> Show dummy</label>
+<label class="checkbox"><input type="checkbox" [(ngModel)]="showElectron"> Show electron</label>
 <label class="checkbox"><input type="checkbox" [(ngModel)]="showTrajectory"> Show trajectory</label>
 <label class="checkbox"><input type="checkbox" [(ngModel)]="showGrid"> Show grid</label>
         </pre>
@@ -42,8 +40,21 @@ import {LorentzService} from './lorentz.service';
         <pre class="debug">{{cameraDriver | json}}</pre>
       </div>
     </div>
+    <div class="container is-fluid">
+      <input type="range" class="slider is-small is-fullwidth"
+             [min]="0"
+             [max]="lorentzService.trajectory.length - 1"
+             [step]="1"
+             [(ngModel)]="currentSampleIndex">
+      <p>{{currentSampleIndex + 1}} / {{lorentzService.trajectory.length}}</p>
+      
+      <pre class="debug">
+timestamp: {{currentSample.timestamp}}
+position: ({{currentSample.position.x|exponential}}, {{currentSample.position.y|exponential}}, {{currentSample.position.z|exponential}})
+velocity: ({{currentSample.velocity.x|exponential}}, {{currentSample.velocity.y|exponential}}, {{currentSample.velocity.z|exponential}})
+acceleration: ({{currentSample.acceleration.x|exponential}}, {{currentSample.acceleration.y|exponential}}, {{currentSample.acceleration.z|exponential}})</pre>
+    </div>
   `,
-  // tslint:enable:no-trailing-whitespace
   styles: [`
     .checkboxes {
       padding: 0;
@@ -56,12 +67,17 @@ import {LorentzService} from './lorentz.service';
       font-size: 10px;
     }
   `]
+  // tslint:enable:no-trailing-whitespace max-line-length
 })
 export class AppComponent {
   lorentzService = new LorentzService();
-  dummyPosition: Vector3 = new Vector3(-0.1, 0, 0);
-  showDummy = true;
+  showElectron = true;
   showTrajectory = true;
   showGrid = true;
   cameraDriver = new CameraDriver();
+  currentSampleIndex = 0;
+
+  get currentSample(): Sample {
+    return this.lorentzService.trajectory[this.currentSampleIndex];
+  }
 }
