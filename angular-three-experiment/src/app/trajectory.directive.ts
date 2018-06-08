@@ -1,5 +1,5 @@
-import {Geometry, Line, LineBasicMaterial, Scene, Vector3} from 'three';
-import {Directive, Inject, Input, OnDestroy, OnInit} from '@angular/core';
+import {BufferGeometry, Float32BufferAttribute, Line, LineBasicMaterial, Scene} from 'three';
+import {Directive, Input, OnDestroy, OnInit} from '@angular/core';
 import {Sample} from './lorentz.service';
 
 @Directive({
@@ -8,24 +8,26 @@ import {Sample} from './lorentz.service';
 })
 export class TrajectoryDirective implements OnInit, OnDestroy {
   private readonly scale = 1e-5;
-  private geometry: Geometry = new Geometry();
+  private geometry: BufferGeometry = new BufferGeometry();
+  private positionAttribute: Float32BufferAttribute;
   private line: Line;
 
   constructor(private scene: Scene) {
+    this.positionAttribute = new Float32BufferAttribute(new Float32Array(3 * 5000), 3);
+    this.positionAttribute.setDynamic(true);
+    this.geometry.addAttribute('position', this.positionAttribute);
+
     const material = new LineBasicMaterial({
       color: 0x00ff00
     });
     this.line = new Line(this.geometry, material);
+    this.line.scale.set(this.scale, this.scale, this.scale);
   }
 
   @Input() set samples(samples: Sample[]) {
-    this.geometry.vertices = [];
-    this.geometry.verticesNeedUpdate = true;
-
-    for (let i = 0; i < samples.length; ++i) {
-      const sample = samples[i];
-      this.geometry.vertices.push(sample.position.clone().multiplyScalar(this.scale));
-    }
+    this.positionAttribute.copyVector3sArray(samples.map(s => s.position));
+    this.positionAttribute.needsUpdate = true;
+    this.geometry.setDrawRange(0, samples.length);
   }
 
   ngOnInit(): void {

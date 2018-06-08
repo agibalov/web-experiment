@@ -37,7 +37,13 @@ import {LorentzService, Sample} from './lorentz.service';
 <label class="checkbox"><input type="checkbox" [(ngModel)]="showTrajectory"> Show trajectory</label>
 <label class="checkbox"><input type="checkbox" [(ngModel)]="showGrid"> Show grid</label>
 <label class="checkbox"><input type="checkbox" [(ngModel)]="showAxes"> Show axes</label>
+          
+<span class="has-text-weight-bold">Sample Rate</span>
+<input type="range" class="slider is-small is-circle is-success" [min]="10" [max]="1000" [step]="1"
+       [(ngModel)]="lorentzService.sampleRate"> ({{lorentzService.sampleRate}})
         </pre>
+
+        
 
         <pre class="debug">{{cameraDriver | json}}</pre>
       </div>
@@ -78,7 +84,17 @@ export class AppComponent {
   showGrid = true;
   showAxes = true;
   cameraDriver = new CameraDriver();
-  currentSampleIndex = 0;
+  _currentSampleIndex = 0;
+
+  // TODO: how do I get rid of duplicate Math.min() in get/set currentSampleIndex?
+  get currentSampleIndex() {
+    this._currentSampleIndex = Math.min(this._currentSampleIndex, this.lorentzService.trajectory.length - 1);
+    return this._currentSampleIndex;
+  }
+
+  set currentSampleIndex(value: number) {
+    this._currentSampleIndex = Math.min(value, this.lorentzService.trajectory.length - 1);
+  }
 
   get currentSample(): Sample {
     return this.lorentzService.trajectory[this.currentSampleIndex];

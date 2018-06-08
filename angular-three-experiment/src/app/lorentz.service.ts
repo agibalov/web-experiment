@@ -5,6 +5,7 @@ export class LorentzService {
   private _magneticField: Vector3 = new Vector3(1e-10, 0, 0);
   private _startVelocity: Vector3 = new Vector3(0, 3e5, 0);
   private _startPosition: Vector3 = new Vector3(0, 0, 0);
+  private _sampleRate = 500;
   private _samples: Sample[];
   private _shouldRecalculate = true;
 
@@ -52,6 +53,17 @@ export class LorentzService {
     return this._startPosition;
   }
 
+  set sampleRate(value: number) {
+    if (this._sampleRate !== value) {
+      this._sampleRate = value;
+      this._shouldRecalculate = true;
+    }
+  }
+
+  get sampleRate(): number {
+    return this._sampleRate;
+  }
+
   get trajectory(): Sample[] {
     if (this._shouldRecalculate) {
       this._shouldRecalculate = false;
@@ -61,7 +73,6 @@ export class LorentzService {
       const startTime = 0;
       const stopTime = 5;
       const timeStep = 1e-4;
-      const sampleEveryNIterations = 500;
 
       const samples: Sample[] = [];
 
@@ -74,7 +85,7 @@ export class LorentzService {
 
         const acceleration = lorentzForce.divideScalar(particleMass);
 
-        const shouldSaveSample = iteration % sampleEveryNIterations === 0;
+        const shouldSaveSample = iteration % this.sampleRate === 0;
         if (shouldSaveSample) {
           const sample = new Sample(
             time,
