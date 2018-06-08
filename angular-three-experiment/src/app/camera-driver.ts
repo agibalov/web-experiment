@@ -3,9 +3,9 @@ import {Camera, Vector2, Vector3} from 'three';
 export class CameraDriver {
   cameraTarget = new Vector3(0, 0, 0);
 
-  private cameraPhi = -Math.PI / 4;
-  private cameraTheta = -Math.PI / 8;
-  private cameraDistance = 1;
+  private cameraPhi = Math.PI / 4;
+  private cameraTheta = -Math.PI / 6;
+  private cameraDistance = 1.3;
   private manipulation: Manipulation = null;
 
   get cameraPosition() {

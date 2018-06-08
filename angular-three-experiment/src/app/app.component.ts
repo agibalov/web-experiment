@@ -22,6 +22,7 @@ import {LorentzService, Sample} from './lorentz.service';
             <electron *ngIf="showElectron" [position]="currentSample.position.clone().multiplyScalar(1e-5)"></electron>
             <trajectory *ngIf="showTrajectory" [samples]="lorentzService.trajectory"></trajectory>
             <grid *ngIf="showGrid"></grid>
+            <axes *ngIf="showAxes"></axes>
           </scene>
         </canvas>
       </div>
@@ -35,6 +36,7 @@ import {LorentzService, Sample} from './lorentz.service';
 <label class="checkbox"><input type="checkbox" [(ngModel)]="showElectron"> Show electron</label>
 <label class="checkbox"><input type="checkbox" [(ngModel)]="showTrajectory"> Show trajectory</label>
 <label class="checkbox"><input type="checkbox" [(ngModel)]="showGrid"> Show grid</label>
+<label class="checkbox"><input type="checkbox" [(ngModel)]="showAxes"> Show axes</label>
         </pre>
 
         <pre class="debug">{{cameraDriver | json}}</pre>
@@ -74,6 +76,7 @@ export class AppComponent {
   showElectron = true;
   showTrajectory = true;
   showGrid = true;
+  showAxes = true;
   cameraDriver = new CameraDriver();
   currentSampleIndex = 0;
 

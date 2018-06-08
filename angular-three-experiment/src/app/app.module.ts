@@ -12,6 +12,7 @@ import {FormsModule} from '@angular/forms';
 import {VectorEditorComponent} from './vector-editor.component';
 import {TrajectoryDirective} from './trajectory.directive';
 import {ExponentialPipe} from './exponential.pipe';
+import {AxesDirective} from './axes.directive';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {ExponentialPipe} from './exponential.pipe';
     LightDirective,
     VectorEditorComponent,
     TrajectoryDirective,
-    ExponentialPipe
+    ExponentialPipe,
+    AxesDirective
   ],
   imports: [
     BrowserModule,
