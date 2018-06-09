@@ -38,14 +38,13 @@ import {LorentzService, Sample} from './lorentz.service';
 <label class="checkbox"><input type="checkbox" [(ngModel)]="showGrid"> Show grid</label>
 <label class="checkbox"><input type="checkbox" [(ngModel)]="showAxes"> Show axes</label>
           
-<span class="has-text-weight-bold">Sample Rate</span>
-<input type="range" class="slider is-small is-circle is-success" [min]="10" [max]="1000" [step]="1"
-       [(ngModel)]="lorentzService.sampleRate"> ({{lorentzService.sampleRate}})
+<span class="has-text-weight-bold">Number of Samples</span>: <input type="range" class="slider is-small is-circle is-success"
+                                                              [min]="10" [max]="5000" [step]="1"
+                                                              [(ngModel)]="lorentzService.numberOfSamples"> ({{lorentzService.numberOfSamples}})
+<span class="has-text-weight-bold">Time of Flight</span>: <input type="range" class="slider is-small is-circle is-success"
+                                                                 [min]="0.1" [max]="10" [step]="1e-3"
+                                                                 [(ngModel)]="lorentzService.timeOfFlight"> ({{lorentzService.timeOfFlight | exponential}})
         </pre>
-
-        
-
-        <pre class="debug">{{cameraDriver | json}}</pre>
       </div>
     </div>
     <div class="container is-fluid">
@@ -55,12 +54,12 @@ import {LorentzService, Sample} from './lorentz.service';
              [step]="1"
              [(ngModel)]="currentSampleIndex">
       <p>{{currentSampleIndex + 1}} / {{lorentzService.trajectory.length}}</p>
-      
+
       <pre class="debug">
-timestamp: {{currentSample.timestamp}}
-position: ({{currentSample.position.x|exponential}}, {{currentSample.position.y|exponential}}, {{currentSample.position.z|exponential}})
-velocity: ({{currentSample.velocity.x|exponential}}, {{currentSample.velocity.y|exponential}}, {{currentSample.velocity.z|exponential}})
-acceleration: ({{currentSample.acceleration.x|exponential}}, {{currentSample.acceleration.y|exponential}}, {{currentSample.acceleration.z|exponential}})</pre>
+timestamp: {{currentSample.timestamp | exponential}}
+position: ({{currentSample.position.x | exponential}}, {{currentSample.position.y | exponential}}, {{currentSample.position.z | exponential}})
+velocity: ({{currentSample.velocity.x | exponential}}, {{currentSample.velocity.y | exponential}}, {{currentSample.velocity.z | exponential}})
+acceleration: ({{currentSample.acceleration.x | exponential}}, {{currentSample.acceleration.y | exponential}}, {{currentSample.acceleration.z | exponential}})</pre>
     </div>
   `,
   styles: [`

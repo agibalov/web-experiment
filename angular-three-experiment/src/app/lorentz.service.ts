@@ -1,11 +1,16 @@
 import {Vector3} from 'three';
 
 export class LorentzService {
+  private readonly particleMass = 9.1e-31;
+  private readonly particleCharge = 1.6e-19;
+  private readonly minSubSampleTimeChange = 1e-4;
+
   private _electricField: Vector3 = new Vector3(1e-7, 0, 0);
   private _magneticField: Vector3 = new Vector3(1e-10, 0, 0);
   private _startVelocity: Vector3 = new Vector3(0, 3e5, 0);
   private _startPosition: Vector3 = new Vector3(0, 0, 0);
-  private _sampleRate = 500;
+  private _numberOfSamples = 500;
+  private _timeOfFlight = 5;
   private _samples: Sample[];
   private _shouldRecalculate = true;
 
@@ -53,53 +58,63 @@ export class LorentzService {
     return this._startPosition;
   }
 
-  set sampleRate(value: number) {
-    if (this._sampleRate !== value) {
-      this._sampleRate = value;
+  set numberOfSamples(value: number) {
+    if (this._numberOfSamples !== value) {
+      this._numberOfSamples = value;
       this._shouldRecalculate = true;
     }
   }
 
-  get sampleRate(): number {
-    return this._sampleRate;
+  get numberOfSamples(): number {
+    return this._numberOfSamples;
+  }
+
+  set timeOfFlight(value: number) {
+    if (this._timeOfFlight !== value) {
+      this._timeOfFlight = value;
+      this._shouldRecalculate = true;
+    }
+  }
+
+  get timeOfFlight(): number {
+    return this._timeOfFlight;
   }
 
   get trajectory(): Sample[] {
     if (this._shouldRecalculate) {
       this._shouldRecalculate = false;
 
-      const particleMass = 9.1e-31;
-      const particleCharge = 1.6e-19;
-      const startTime = 0;
-      const stopTime = 5;
-      const timeStep = 1e-4;
-
+      const timeChangePerSample = this.timeOfFlight / this.numberOfSamples;
+      const timeChangePerSubSample = Math.min(timeChangePerSample, this.minSubSampleTimeChange);
+      const numberOfSubSamples = Math.floor(timeChangePerSample / timeChangePerSubSample);
       const samples: Sample[] = [];
 
       let velocity = this.startVelocity.clone();
       let position = this.startPosition.clone();
-      for (let time = startTime, iteration = 0; time < stopTime; time += timeStep, ++iteration) {
-        const electricForce = this.electricField.clone().multiplyScalar(particleCharge);
-        const magneticForce = velocity.clone().cross(this.magneticField).multiplyScalar(particleCharge);
-        const lorentzForce = electricForce.clone().add(magneticForce);
+      for (let sampleIndex = 0; sampleIndex < this.numberOfSamples; ++sampleIndex) {
+        for (let subSampleIndex = 0; subSampleIndex < numberOfSubSamples; ++subSampleIndex) {
+          const time = (sampleIndex * numberOfSubSamples + subSampleIndex) * timeChangePerSubSample;
+          const electricForce = this.electricField.clone().multiplyScalar(this.particleCharge);
+          const magneticForce = velocity.clone().cross(this.magneticField).multiplyScalar(this.particleCharge);
+          const lorentzForce = electricForce.clone().add(magneticForce);
 
-        const acceleration = lorentzForce.divideScalar(particleMass);
+          const acceleration = lorentzForce.divideScalar(this.particleMass);
 
-        const shouldSaveSample = iteration % this.sampleRate === 0;
-        if (shouldSaveSample) {
-          const sample = new Sample(
-            time,
-            position.clone(),
-            velocity.clone(),
-            acceleration.clone(),
-            electricForce.clone(),
-            magneticForce.clone(),
-            lorentzForce.clone());
-          samples.push(sample);
+          if (subSampleIndex === 0) {
+            const sample = new Sample(
+              time,
+              position.clone(),
+              velocity.clone(),
+              acceleration.clone(),
+              electricForce.clone(),
+              magneticForce.clone(),
+              lorentzForce.clone());
+            samples.push(sample);
+          }
+
+          velocity = velocity.clone().add(acceleration.clone().multiplyScalar(timeChangePerSubSample));
+          position = position.clone().add(velocity.clone().multiplyScalar(timeChangePerSubSample));
         }
-
-        velocity = velocity.clone().add(acceleration.clone().multiplyScalar(timeStep));
-        position = position.clone().add(velocity.clone().multiplyScalar(timeStep));
       }
 
       this._samples = samples;
