@@ -4,12 +4,17 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 @Component({
   selector: 'app-toggle-button',
   template: `
-    <button type="button" class="button" 
-            [@buttonState]="state" 
-            (click)="toggle()">{{ show ? 'Hide' : 'Show' }}</button>
-    <p [@textState]="state">Some text here</p>
+    <div @blockInitialRenderAnimations>
+      <button type="button" class="button" 
+              [@buttonState]="state" 
+              (click)="toggle()">{{ show ? 'Hide' : 'Show' }}</button>
+      <p *ngIf="show" @textState>Some text here</p>
+    </div>
   `,
   animations: [
+    trigger('blockInitialRenderAnimations', [
+      transition(':enter', [])
+    ]),
     trigger('buttonState', [
       state('hidden', style({
         color: '#aaa'
@@ -20,13 +25,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
       transition('visible => hidden', animate('1000ms'))
     ]),
     trigger('textState', [
-      state('hidden', style({
-        display: 'none'
-      })),
-      state('visible', style({
-        display: 'block'
-      })),
-      transition('hidden => visible', [
+      transition(':enter', [
         style({
           opacity: 0
         }),
@@ -34,7 +33,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
           opacity: 1
         }))
       ]),
-      transition('visible => hidden', [
+      transition(':leave', [
         animate('1000ms', style({
           opacity: 0
         }))
