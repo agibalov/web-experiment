@@ -5,10 +5,12 @@ import {RouterModule} from '@angular/router';
 import {AnimationsPageComponent} from './animations-page.component';
 import {DEMO_PAGE, DemoPage} from '../demo-page';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ToggleButtonComponent} from './toggle-button.component';
 
 @NgModule({
   declarations: [
-    AnimationsPageComponent
+    AnimationsPageComponent,
+    ToggleButtonComponent
   ],
   imports: [
     BrowserModule,
