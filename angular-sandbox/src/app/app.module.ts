@@ -5,6 +5,7 @@ import {AppComponent} from './app.component';
 import {RandomModule} from './random/random.module';
 import {StylingModule} from './styling/styling.module';
 import {RouterModule} from '@angular/router';
+import {AnimationsModule} from './animations/animations.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import {RouterModule} from '@angular/router';
       { path: '', pathMatch: 'full', redirectTo: 'random' }
     ], { enableTracing: true }),
     RandomModule,
-    StylingModule
+    StylingModule,
+    AnimationsModule
   ],
   bootstrap: [AppComponent]
 })
