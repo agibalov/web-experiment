@@ -7,12 +7,14 @@ import {DEMO_PAGE, DemoPage} from '../demo-page';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToggleButtonComponent} from './toggle-button.component';
 import {ListComponent} from './list.component';
+import {ExpandCollapsePanelComponent} from './expand-collapse-panel.component';
 
 @NgModule({
   declarations: [
     AnimationsPageComponent,
     ToggleButtonComponent,
-    ListComponent
+    ListComponent,
+    ExpandCollapsePanelComponent
   ],
   imports: [
     BrowserModule,

@@ -8,6 +8,9 @@ import {Component} from '@angular/core';
       
       <h3>List</h3>
       <app-list></app-list>
+      
+      <h3>Panel</h3>
+      <app-panel></app-panel>
     </div>
   `
 })
