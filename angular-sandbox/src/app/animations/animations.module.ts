@@ -6,11 +6,13 @@ import {AnimationsPageComponent} from './animations-page.component';
 import {DEMO_PAGE, DemoPage} from '../demo-page';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToggleButtonComponent} from './toggle-button.component';
+import {ListComponent} from './list.component';
 
 @NgModule({
   declarations: [
     AnimationsPageComponent,
-    ToggleButtonComponent
+    ToggleButtonComponent,
+    ListComponent
   ],
   imports: [
     BrowserModule,
