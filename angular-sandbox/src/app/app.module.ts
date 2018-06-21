@@ -6,6 +6,7 @@ import {RandomModule} from './random/random.module';
 import {StylingModule} from './styling/styling.module';
 import {RouterModule} from '@angular/router';
 import {AnimationsModule} from './animations/animations.module';
+import {CompositeComponentsModule} from './composite-components/composite-components.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import {AnimationsModule} from './animations/animations.module';
     ], { enableTracing: true }),
     RandomModule,
     StylingModule,
-    AnimationsModule
+    AnimationsModule,
+    CompositeComponentsModule
   ],
   bootstrap: [AppComponent]
 })
