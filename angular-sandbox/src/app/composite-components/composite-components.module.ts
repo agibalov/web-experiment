@@ -5,11 +5,13 @@ import {RouterModule} from '@angular/router';
 import {DEMO_PAGE, DemoPage} from '../demo-page';
 import {CompositeComponentsPageComponent} from './composite-components-page.component';
 import {DecoratorComponent} from './decorator.component';
+import {HeaderComponent} from './header.component';
 
 @NgModule({
   declarations: [
     CompositeComponentsPageComponent,
-    DecoratorComponent
+    DecoratorComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
