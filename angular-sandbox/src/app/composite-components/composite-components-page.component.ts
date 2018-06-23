@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, TemplateRef, ViewChild} from '@angular/core';
 
 @Component({
   template: `
@@ -24,14 +24,22 @@ import {Component} from '@angular/core';
       </app-header>
 
       <h1>Custom list</h1>
+      <div class="buttons">
+        <button type="button" class="button is-small" (click)="addItem()">Add</button>
+        <button type="button" class="button is-small" (click)="removeItem()">Remove</button>
+        <button type="button" class="button is-small" (click)="toggleItemTemplate()">Toggle item template</button>
+      </div>
       <app-custom-list [items]="items" 
                        [headerTemplate]="customHeaderTemplate"
-                       [itemTemplate]="customItemTemplate"></app-custom-list>
+                       [itemTemplate]="itemTemplate"></app-custom-list>
       <ng-template #customHeaderTemplate let-itemCount="itemCount">
         I am external header ({{itemCount}})
       </ng-template>
-      <ng-template #customItemTemplate let-item="item">
+      <ng-template #customItemTemplate1 let-item="item">
         external template: {{item.id}} {{item.text}}
+      </ng-template>
+      <ng-template #customItemTemplate2 let-item="item">
+        <span class="has-text-weight-bold">EXTERNAL TEMPLATE TWO</span>: {{item.id}} {{item.text}}
       </ng-template>
     </div>
   `,
@@ -52,8 +60,34 @@ import {Component} from '@angular/core';
   `]
 })
 export class CompositeComponentsPageComponent {
+  @ViewChild('customItemTemplate1')
+  private customItemTemplate1: TemplateRef<any>;
+
+  @ViewChild('customItemTemplate2')
+  private customItemTemplate2: TemplateRef<any>;
+
+  useTemplateOne = true;
   items = [
     { id: '1', text: 'item one' },
     { id: '2', text: 'item two' }
   ];
+
+  addItem() {
+    this.items.push({
+      id: `${new Date().getMilliseconds()}`,
+      text: `Item ${new Date().toISOString()}`
+    });
+  }
+
+  removeItem() {
+    this.items.pop();
+  }
+
+  toggleItemTemplate() {
+    this.useTemplateOne = !this.useTemplateOne;
+  }
+
+  get itemTemplate() {
+    return this.useTemplateOne ? this.customItemTemplate1 : this.customItemTemplate2;
+  }
 }
