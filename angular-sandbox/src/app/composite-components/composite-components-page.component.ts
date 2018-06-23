@@ -6,7 +6,7 @@ import {Component} from '@angular/core';
       <h1>Decorator component</h1>
       <p>Illustrates how a single ng-content element works.</p>
       <app-decorator>transclude this stuff please</app-decorator>
-      
+
       <h1>Header component</h1>
       <p>Illustrates how multiple ng-content elements work.</p>
       <app-header>
@@ -22,6 +22,17 @@ import {Component} from '@angular/core';
           </div>
         </div>
       </app-header>
+
+      <h1>Custom list</h1>
+      <app-custom-list [items]="items" 
+                       [headerTemplate]="customHeaderTemplate"
+                       [itemTemplate]="customItemTemplate"></app-custom-list>
+      <ng-template #customHeaderTemplate let-itemCount="itemCount">
+        I am external header ({{itemCount}})
+      </ng-template>
+      <ng-template #customItemTemplate let-item="item">
+        external template: {{item.id}} {{item.text}}
+      </ng-template>
     </div>
   `,
   styles: [`
@@ -41,4 +52,8 @@ import {Component} from '@angular/core';
   `]
 })
 export class CompositeComponentsPageComponent {
+  items = [
+    { id: '1', text: 'item one' },
+    { id: '2', text: 'item two' }
+  ];
 }

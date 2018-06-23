@@ -6,12 +6,14 @@ import {DEMO_PAGE, DemoPage} from '../demo-page';
 import {CompositeComponentsPageComponent} from './composite-components-page.component';
 import {DecoratorComponent} from './decorator.component';
 import {HeaderComponent} from './header.component';
+import {CustomListComponent} from './custom-list.component';
 
 @NgModule({
   declarations: [
     CompositeComponentsPageComponent,
     DecoratorComponent,
-    HeaderComponent
+    HeaderComponent,
+    CustomListComponent
   ],
   imports: [
     BrowserModule,
