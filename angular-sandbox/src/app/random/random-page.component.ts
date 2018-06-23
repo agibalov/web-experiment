@@ -35,11 +35,47 @@ import {ModalService} from './modal.service';
       <ng-template #myNameAndAgeTemplate let-name="name" let-age="age">
         Name: {{name}}, age: {{age}}
       </ng-template>
+      
+      <h1>i18nPlural (a pipe - text only)</h1>
+      <table class="table">
+        <tbody>
+          <tr *ngFor="let userCount of [0, 1, 10]">
+            <td>for {{userCount}} users</td>
+            <td>
+              {{userCount|i18nPlural:userCountMapping}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <h1>NgPlural (a directive - template selector)</h1>
+      <table class="table">
+        <tbody>
+          <tr *ngFor="let userCount of [0, 1, 10]">
+            <td>for {{userCount}} users</td>
+            <td>
+              <div [ngPlural]="userCount">
+                <ng-template ngPluralCase="=0">
+                  <span class="tag is-warning">No users here</span>
+                </ng-template>
+                <ng-template ngPluralCase="=1">One user</ng-template>
+                <ng-template ngPluralCase="other"><span class="has-text-weight-bold">{{userCount}}</span> users</ng-template>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   `,
   styles: []
 })
 export class RandomPageComponent {
+  userCountMapping = {
+    '=0': 'No users',
+    '=1': '1 user',
+    'other': '# users'
+  };
+
   show = true;
   count = 3;
 
