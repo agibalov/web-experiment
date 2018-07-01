@@ -1,4 +1,3 @@
----
 name: Electron Model
 post-reference: electron-model
 ---

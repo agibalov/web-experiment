@@ -1,12 +1,8 @@
-# Hexo Configuration
-## Docs: http://hexo.io/docs/configuration.html
-## Source: https://github.com/hexojs/hexo/
-
 # Site
 title: Hexo Experiment
 subtitle: The Ultimate Hexo Experiment
 description: where no man has gone before
-author: loki2302
+author: Andrey A.
 author_title: Software Engineer
 language: en
 timezone:
@@ -16,7 +12,7 @@ location: Worldwide
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://loki2302.me/hexo-experiment
+url: http://agibalov.io/hexo-experiment
 root: /hexo-experiment/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -71,11 +67,11 @@ menu:
 
 # Contacts
 contacts:
-  github: https://github.com/loki2302
+  github: https://github.com/agibalov
   twitter: https://twitter.com/loki2302
 
 # Deployment
 deploy:
   type: git
-  repo: https://github.com/loki2302/hexo-experiment.git
+  repo: https://github.com/agibalov/hexo-experiment.git
   branch: gh-pages
