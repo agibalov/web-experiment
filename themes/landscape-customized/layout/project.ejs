@@ -2,7 +2,16 @@
   <div class="article-inner">
     <div class="article-entry">
       <h2><%= page.project.name %></h2>
-      <p><%= page.project.description %></p>
+
+      <%- page.project.content %>
+
+      <p>There are <%= page.posts.count() %> related posts.</p>
+
+      <ul>
+        <% page.posts.forEach(post => { %>
+        <li><a href="<%- url_for(post.path) %>"><%= post.title %></a></li>
+        <% }) %>
+      </ul>
     </div>
   </div>
 </article>
