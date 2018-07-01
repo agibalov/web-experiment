@@ -1,0 +1,23 @@
+<article>
+  <div class="article-inner">
+    <div class="article-entry">
+      <h2>Projects</h2>
+
+      <ul>
+        <%
+        for(let key in site.data.projects) {
+          if(!page.projects.hasOwnProperty(key)) {
+            continue;
+          }
+        %>
+        <li>
+          <a href="<%= url_for(`projects/${key}`) %>"><%= page.projects[key].name %></a>
+          (<%= page.projects[key].description %>)
+        </li>
+        <%
+        }
+        %>
+      </ul>
+    </div>
+  </div>
+</article>

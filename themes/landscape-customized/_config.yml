@@ -2,6 +2,7 @@
 menu:
   Home: /
   Archives: /archives
+  Projects: /projects
 rss: /atom.xml
 
 # Content
@@ -11,6 +12,7 @@ fancybox: true
 # Sidebar
 sidebar: right
 widgets:
+- sayings
 - category
 - tag
 - tagcloud
