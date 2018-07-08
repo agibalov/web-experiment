@@ -6,6 +6,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/merge';
+import 'rxjs/add/observable/forkJoin';
 
 describe('rxjs', () => {
   it('should allow me to use Subject for testing', () => {
@@ -114,6 +115,29 @@ describe('rxjs', () => {
 
       subject1.next('!!');
       expect(log).toEqual(['hello', 'world', '!', '!!']);
+    });
+  });
+
+  describe('forkJoin', () => {
+    it('should wait for all observables to complete and then provide their final values', () => {
+      const subject1 = new Subject<string>();
+      const subject2 = new Subject<string>();
+
+      const observable = Observable.forkJoin(subject1, subject2);
+      const log = [];
+      observable.subscribe(next => log.push(next));
+
+      subject1.next('hello');
+      expect(log).toEqual([]);
+
+      subject2.next('world');
+      expect(log).toEqual([]);
+
+      subject1.complete();
+      expect(log).toEqual([]);
+
+      subject2.complete();
+      expect(log).toEqual([['hello', 'world']]);
     });
   });
 });
