@@ -139,5 +139,36 @@ describe('rxjs', () => {
       subject2.complete();
       expect(log).toEqual([['hello', 'world']]);
     });
+
+    it('should work nice in the real world scenario', () => {
+      const getUserProfile = userId => Observable.of(`Profile of ${userId}`);
+      const getUserPosts = userId => Observable.of([
+        `Post 1 of ${userId}`,
+        `Post 2 of ${userId}`
+      ]);
+
+      const loadAllData = userId => {
+        return Observable.forkJoin(
+          getUserProfile(userId),
+          getUserPosts(userId))
+          .map(([profile, posts]) => {
+            return {
+              profile: profile,
+              posts: posts
+            };
+          });
+      };
+
+      let data;
+      loadAllData(123).subscribe(next => data = next);
+
+      expect(data).toEqual({
+        profile: 'Profile of 123',
+        posts: [
+          'Post 1 of 123',
+          'Post 2 of 123'
+        ]
+      });
+    });
   });
 });
