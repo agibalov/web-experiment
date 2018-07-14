@@ -4,7 +4,12 @@ import {FormControl, FormGroup} from '@angular/forms';
 @Component({
   template: `
     <div class="content">
-      <h3>Controls</h3>
+      <h3>Custom control</h3>
+      <button type="button" class="button is-small" (click)="myNumberControl.setValue(123)">Set to 123</button>
+      <app-number-editor [formControl]="myNumberControl"></app-number-editor>
+      <pre>{{myNumberControl.value}}</pre>
+      
+      <h3>Reactive form hello world</h3>
       <div [formGroup]="formGroup">
         <input type="text" class="input" formControlName="someText">
         <label class="checkbox">
@@ -17,10 +22,13 @@ import {FormControl, FormGroup} from '@angular/forms';
   `
 })
 export class ControlsPageComponent {
+  myNumberControl: FormControl;
   formGroup: FormGroup;
   events: string[] = [];
 
   constructor() {
+    this.myNumberControl = new FormControl(123);
+
     this.formGroup = new FormGroup({
       someText: new FormControl('some default text'),
       someBoolean: new FormControl(false)
