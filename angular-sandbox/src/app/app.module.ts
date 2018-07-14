@@ -7,6 +7,7 @@ import {StylingModule} from './styling/styling.module';
 import {RouterModule} from '@angular/router';
 import {AnimationsModule} from './animations/animations.module';
 import {CompositeComponentsModule} from './composite-components/composite-components.module';
+import {ControlsModule} from './controls/controls.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {CompositeComponentsModule} from './composite-components/composite-compon
     RandomModule,
     StylingModule,
     AnimationsModule,
-    CompositeComponentsModule
+    CompositeComponentsModule,
+    ControlsModule
   ],
   bootstrap: [AppComponent]
 })
