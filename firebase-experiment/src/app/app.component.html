@@ -1,0 +1,7 @@
+<button type="button" (click)="addTodo()">Add</button>
+<ul>
+  <li *ngFor="let todo of todos">
+    {{todo|json}}
+    <button type="button" (click)="deleteTodo(todo.id)">Delete</button>
+  </li>
+</ul>
