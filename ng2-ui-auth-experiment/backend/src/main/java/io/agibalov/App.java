@@ -2,8 +2,7 @@ package io.agibalov;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.RequestEntity;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -26,17 +26,19 @@ public class App {
     }
 
     @RestController
+    @Slf4j
     public static class DummyController {
-        private final static Logger LOGGER = LoggerFactory.getLogger(DummyController.class);
-
         // Make sure to enable Google+ API for this google app
         private final static String GOOGLE_CLIENT_ID = "293281611213-o3e5d2df4nh6s2dke25gck5n5em2mma5.apps.googleusercontent.com";
         private final static String GOOGLE_CLIENT_SECRET = "htvmbOD5l_hON4sVDKj90CdY";
 
+        private final static String FACEBOOK_CLIENT_ID = "1150208065128018";
+        private final static String FACEBOOK_CLIENT_SECRET = "aa4f8e33d6c7b1076d7c2ca2205a2b0b";
+
+        private final RestTemplate restTemplate = new RestTemplate();
+
         @PostMapping("/auth/google")
         public ResponseEntity<?> google(@RequestBody Ng2UiRequestDto ng2UiRequest) {
-            RestTemplate restTemplate = new RestTemplate();
-
             MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
             body.put("code", Arrays.asList(ng2UiRequest.oAuthData.code));
             body.put("client_id", Arrays.asList(ng2UiRequest.authorizationData.clientId));
@@ -58,6 +60,28 @@ public class App {
                     GoogleMeResponseDto.class);
 
             return ResponseEntity.ok(Collections.singletonMap("message", meResponse.getBody()));
+        }
+
+        @PostMapping("/auth/facebook")
+        public ResponseEntity<?> facebook(@RequestBody Ng2UiRequestDto ng2UiRequest) {
+            MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+            body.put("code", Arrays.asList(ng2UiRequest.oAuthData.code));
+            body.put("client_id", Arrays.asList(ng2UiRequest.authorizationData.clientId));
+            body.put("client_secret", Arrays.asList(FACEBOOK_CLIENT_SECRET));
+            body.put("redirect_uri", Arrays.asList(ng2UiRequest.authorizationData.redirectUri));
+
+            FacebookTokenResponseDto response = restTemplate.getForObject(
+                    UriComponentsBuilder.fromHttpUrl("https://graph.facebook.com/v2.5/oauth/access_token")
+                            .queryParams(body).toUriString(),
+                    FacebookTokenResponseDto.class);
+
+            FacebookMeResponseDto meDto = restTemplate.getForObject(
+                    "https://graph.facebook.com/v2.5/me?fields={fields}&access_token={accessToken}",
+                    FacebookMeResponseDto.class,
+                    "id,name",
+                    response.getAccessToken());
+
+            return ResponseEntity.ok(Collections.singletonMap("message", meDto));
         }
     }
 
@@ -141,5 +165,26 @@ public class App {
 
         @JsonProperty("displayName")
         private String displayName;
+    }
+
+    @Data
+    public static class FacebookTokenResponseDto {
+        @JsonProperty("access_token")
+        private String accessToken;
+
+        @JsonProperty("token_type")
+        private String tokenType;
+
+        @JsonProperty("expires_in")
+        private int expiresIn;
+    }
+
+    @Data
+    public static class FacebookMeResponseDto {
+        @JsonProperty("id")
+        private String id;
+
+        @JsonProperty("name")
+        private String name;
     }
 }

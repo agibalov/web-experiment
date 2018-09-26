@@ -7,8 +7,8 @@ import {AuthService} from "ng2-ui-auth";
         <div class="container">
             <pre>result: {{result|json}}</pre>
             
-            <button type="button" 
-                    class="button is-primary" (click)="signInWithGoogle()">Google</button>
+            <button type="button" class="button is-primary" (click)="signIn('google')">Google</button>
+            <button type="button" class="button is-primary" (click)="signIn('facebook')">Facebook</button>
         </div>
     `,
     styles: []
@@ -19,8 +19,8 @@ export class AppComponent {
     constructor(private authService: AuthService) {
     }
 
-    signInWithGoogle() {
-        this.authService.authenticate('google').subscribe({
+    signIn(provider: 'google'|'facebook') {
+        this.authService.authenticate(provider).subscribe({
             next: (result: any) => {
                 console.log('Result', result);
                 this.result = result;
