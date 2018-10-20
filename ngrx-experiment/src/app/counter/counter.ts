@@ -24,11 +24,11 @@ export class Set implements Action {
   constructor(public value: number) {}
 }
 
-export type CounterActionType = Increment | Decrement | Reset | Set;
+export type CounterActionsUnion = Increment | Decrement | Reset | Set;
 
 const initialState = 0;
 
-export function counterReducer(state: number = initialState, action: CounterActionType) {
+export function counterReducer(state: number = initialState, action: CounterActionsUnion): number {
   switch (action.type) {
     case CounterActionTypes.INCREMENT:
       return state + 1;
