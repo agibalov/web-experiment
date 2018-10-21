@@ -6,16 +6,20 @@ import { counterReducer } from './counter/counter';
 import { StoreModule } from '@ngrx/store';
 import { CounterComponent } from './counter/counter.component';
 import { RouterModule } from '@angular/router';
+import { TodoComponent } from './todo/todo.component';
+import { reducer } from './todo/todo';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CounterComponent
+    CounterComponent,
+    TodoComponent
   ],
   imports: [
     BrowserModule,
     StoreModule.forRoot({
-      count: counterReducer
+      count: counterReducer,
+      todos: reducer
     }),
     RouterModule.forRoot([
       {
@@ -26,6 +30,10 @@ import { RouterModule } from '@angular/router';
       {
         path: 'counter',
         component: CounterComponent
+      },
+      {
+        path: 'todo',
+        component: TodoComponent
       }
     ])
   ],
