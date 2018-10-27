@@ -1,1 +1,22 @@
-<button type="button" (click)="showModal()">Click me</button>
+<button type="button" (click)="showModal()">Show modal</button>
+
+<div class="container">
+  <div class="column"
+       cdkDropList
+       #todoList="cdkDropList"
+       [cdkDropListData]="todo"
+       [cdkDropListConnectedTo]="[doneList]"
+       (cdkDropListDropped)="drop($event)">
+    <div class="item" *ngFor="let item of todo" cdkDrag>{{item}}</div>
+  </div>
+  <div class="column"
+       cdkDropList
+       #doneList="cdkDropList"
+       [cdkDropListData]="done"
+       [cdkDropListConnectedTo]="[todoList]"
+       (cdkDropListDropped)="drop($event)">
+    <div class="item" *ngFor="let item of done" cdkDrag>{{item}}</div>
+  </div>
+</div>
+
+<pre>{{ { todo: todo, done: done }|json }}</pre>

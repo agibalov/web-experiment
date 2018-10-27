@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HelloComponent } from './hello/hello.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { HelloComponent } from './hello/hello.component';
   ],
   imports: [
     BrowserModule,
-    OverlayModule
+    OverlayModule,
+    DragDropModule
   ],
   providers: [],
   entryComponents: [ HelloComponent ],

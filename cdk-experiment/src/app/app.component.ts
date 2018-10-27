@@ -2,6 +2,7 @@ import { Component, Injector } from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, PortalInjector } from '@angular/cdk/portal';
 import { HelloComponent } from './hello/hello.component';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,17 @@ import { HelloComponent } from './hello/hello.component';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  todo = [
+    'Item one',
+    'Item two'
+  ];
+
+  done = [
+    'Item three',
+    'Item four',
+    'Item five'
+  ];
+
   constructor(private overlay: Overlay, private injector: Injector) {
   }
 
@@ -28,5 +40,16 @@ export class AppComponent {
 
     const helloPortal = new ComponentPortal(HelloComponent, null, portalInjector);
     overlayRef.attach(helloPortal);
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.container === event.previousContainer) {
+      const item = event.container.data[event.previousIndex];
+      event.container.data.splice(event.previousIndex, 1);
+      event.container.data.splice(event.currentIndex, 0, item);
+    } else {
+      const [ item ] = event.previousContainer.data.splice(event.previousIndex, 1);
+      event.container.data.splice(event.currentIndex, 0, item);
+    }
   }
 }
