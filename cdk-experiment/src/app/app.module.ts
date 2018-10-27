@@ -5,16 +5,20 @@ import { AppComponent } from './app.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HelloComponent } from './hello/hello.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ScrollDispatchModule } from '@angular/cdk/scrolling';
+import { ItemComponent } from './item/item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HelloComponent
+    HelloComponent,
+    ItemComponent
   ],
   imports: [
     BrowserModule,
     OverlayModule,
-    DragDropModule
+    DragDropModule,
+    ScrollDispatchModule
   ],
   providers: [],
   entryComponents: [ HelloComponent ],

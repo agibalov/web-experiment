@@ -20,3 +20,9 @@
 </div>
 
 <pre>{{ { todo: todo, done: done }|json }}</pre>
+
+<p>Item component instance count: {{itemInstanceCount}}</p>
+
+<cdk-virtual-scroll-viewport itemSize="50" class="dummy-viewport">
+  <app-item *cdkVirtualFor="let item of items" class="dummy-item" [content]="item"></app-item>
+</cdk-virtual-scroll-viewport>

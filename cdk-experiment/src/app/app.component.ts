@@ -3,6 +3,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, PortalInjector } from '@angular/cdk/portal';
 import { HelloComponent } from './hello/hello.component';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { ItemComponent } from './item/item.component';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,8 @@ export class AppComponent {
     'Item four',
     'Item five'
   ];
+
+  items: string[] = Array.from({ length: 100000 }).map((_, i) => `Item #${i + 1}`);
 
   constructor(private overlay: Overlay, private injector: Injector) {
   }
@@ -51,5 +54,9 @@ export class AppComponent {
       const [ item ] = event.previousContainer.data.splice(event.previousIndex, 1);
       event.container.data.splice(event.currentIndex, 0, item);
     }
+  }
+
+  get itemInstanceCount() {
+    return ItemComponent.InstanceCount;
   }
 }
