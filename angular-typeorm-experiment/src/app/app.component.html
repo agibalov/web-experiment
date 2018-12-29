@@ -1,0 +1,5 @@
+<button type="button" (click)="createTodo()">Create todo</button>
+<p>count: {{todos.length}} ({{count}})</p>
+<ul>
+  <li *ngFor="let todo of todos">{{todo.id}} {{todo.text}} <button type="button" (click)="deleteTodo(todo.id)">Delete</button></li>
+</ul>
