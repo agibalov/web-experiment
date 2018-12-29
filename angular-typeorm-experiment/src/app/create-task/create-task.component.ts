@@ -23,10 +23,6 @@ export class CreateTaskComponent {
     });
   }
 
-  get text() {
-    return this.formGroup.get('text');
-  }
-
   handleCancel() {
     this.doneCallback.onDone();
   }

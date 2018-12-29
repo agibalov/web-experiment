@@ -14,7 +14,7 @@ import { TaskComment } from '../task-comment';
 })
 export class EditTaskComponent implements OnInit, OnDestroy {
   private commentsSubscription: Subscription;
-  formGroup: FormGroup;
+  taskFormGroup: FormGroup;
 
   newCommentFormGroup: FormGroup;
   comments: TaskComment[] = [];
@@ -25,7 +25,7 @@ export class EditTaskComponent implements OnInit, OnDestroy {
     private readonly dataAccessService: DataAccessService,
     formBuilder: FormBuilder) {
 
-    this.formGroup = formBuilder.group({
+    this.taskFormGroup = formBuilder.group({
       text: ['', Validators.required]
     });
 
@@ -34,21 +34,19 @@ export class EditTaskComponent implements OnInit, OnDestroy {
     });
   }
 
-  get text() {
-    return this.formGroup.get('text');
-  }
-
-  get newCommentText() {
-    return this.newCommentFormGroup.get('text');
-  }
-
   async ngOnInit(): Promise<void> {
     const task = await this.dataAccessService.connection.manager.findOne(Task, this.taskId);
-    this.formGroup.reset({
+    this.taskFormGroup.reset({
       text: task.text
     });
 
-    this.commentsSubscription = this.dataAccessService.query(manager => manager.find(TaskComment, { where: { task: this.taskId } }))
+    this.commentsSubscription = this.dataAccessService.query(manager => manager.find(
+      TaskComment,
+      {
+        where: {
+          task: this.taskId
+        }
+      }))
       .subscribe(comments => this.comments = comments);
   }
 
@@ -63,7 +61,7 @@ export class EditTaskComponent implements OnInit, OnDestroy {
   async handleSave(): Promise<void> {
     const value: {
       text: string
-    } = this.formGroup.getRawValue();
+    } = this.taskFormGroup.getRawValue();
 
     const task = await this.dataAccessService.connection.manager.findOne(Task, this.taskId);
     task.text = value.text;

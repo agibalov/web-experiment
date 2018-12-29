@@ -8,30 +8,39 @@
     <section class="modal-card-body">
       <div class="columns">
         <div class="column">
-          <form [formGroup]="formGroup" (ngSubmit)="handleSave()">
+          <form [formGroup]="taskFormGroup" (ngSubmit)="handleSave()">
             <textarea class="textarea"
                       placeholder="Put text here"
                       formControlName="text"></textarea>
           </form>
         </div>
         <div class="column">
-          <form [formGroup]="newCommentFormGroup" (ngSubmit)="postComment()">
+          <form [formGroup]="newCommentFormGroup">
             <div class="field has-addons">
               <div class="control">
                 <input type="text" class="input" placeholder="Put text here" formControlName="text">
               </div>
               <div class="control">
-                <button class="button is-success" type="submit">Post</button>
+                <button class="button is-success"
+                        type="button"
+                        (click)="postComment()"
+                        [attr.disabled]="newCommentFormGroup.invalid ? '' : null">Post</button>
               </div>
             </div>
           </form>
           <div class="content is-small">
-            <p>Count: {{comments.length}}</p>
+            <small [ngPlural]="comments.length">
+              <ng-template ngPluralCase="=0">no comments yet</ng-template>
+              <ng-template ngPluralCase="=1">1 comment</ng-template>
+              <ng-template ngPluralCase="other">{{comments.length}} comments</ng-template>
+            </small>
             <ul>
               <li *ngFor="let comment of comments">
                 <span class="tag">{{comment.id}}</span>
                 {{comment.text}}
-                <button type="button" class="button is-danger is-small" (click)="deleteComment(comment.id)">Delete</button>
+                <button type="button"
+                        class="button is-danger is-small"
+                        (click)="deleteComment(comment.id)">Delete</button>
               </li>
             </ul>
           </div>
@@ -42,7 +51,7 @@
       <button type="button"
               class="button is-success"
               (click)="handleSave()"
-              [attr.disabled]="formGroup.invalid ? '' : null">Save changes</button>
+              [attr.disabled]="taskFormGroup.invalid ? '' : null">Save changes</button>
       <button type="button"
               class="button"
               (click)="handleCancel()">Cancel</button>

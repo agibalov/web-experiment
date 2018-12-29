@@ -19,11 +19,7 @@ interface TaskRow {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private tasksSubscription: Subscription;
-  private countSubscription: Subscription;
   private taskRowsSubscription: Subscription;
-  private tasks: Task[] = [];
-  private count = 0;
   private taskRows: TaskRow[] = [];
 
   constructor(
@@ -33,12 +29,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.tasksSubscription = this.dataAccessService.query(manager => manager.find(Task))
-      .subscribe(tasks => this.tasks = tasks);
-
-    this.countSubscription = this.dataAccessService.query(manager => manager.count(Task))
-      .subscribe(count => this.count = count);
-
     this.taskRowsSubscription = this.dataAccessService.query(manager => manager.query(`
       select
         task.id as taskId,
@@ -51,8 +41,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.tasksSubscription.unsubscribe();
-    this.countSubscription.unsubscribe();
     this.taskRowsSubscription.unsubscribe();
   }
 
