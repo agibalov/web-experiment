@@ -65,7 +65,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async deleteTask(id: number) {
-    await this.dataAccessService.connection.manager.delete(TaskComment, { task: id });
+    await this.dataAccessService.connection.manager.delete(TaskComment, { task: id } as any);
     await this.dataAccessService.connection.manager.delete(Task, id);
   }
 }
