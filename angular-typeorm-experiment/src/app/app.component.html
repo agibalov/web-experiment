@@ -1,5 +1,22 @@
-<button type="button" (click)="createTodo()">Create todo</button>
-<p>count: {{todos.length}} ({{count}})</p>
-<ul>
-  <li *ngFor="let todo of todos">{{todo.id}} {{todo.text}} <button type="button" (click)="deleteTodo(todo.id)">Delete</button></li>
-</ul>
+<div class="container">
+  <button type="button" (click)="showCreateTaskModal()" class="button">Create task</button>
+  <p>count: {{tasks.length}} ({{count}})</p>
+  <ul>
+    <li *ngFor="let task of tasks">
+      <span class="tag">{{task.id}}</span>
+      text={{task.text}}
+      <button type="button" (click)="showEditTaskModal(task.id)" class="button is-small">Edit</button>
+      <button type="button" (click)="deleteTask(task.id)" class="button is-small is-danger">Delete</button>
+    </li>
+  </ul>
+  <hr>
+  <ul>
+    <li *ngFor="let taskRow of taskRows">
+      <span class="tag">{{taskRow.taskId}}</span>
+      text={{taskRow.taskText}}
+      comments={{taskRow.taskCommentCount}}
+      <button type="button" (click)="showEditTaskModal(taskRow.taskId)" class="button is-small">Edit</button>
+      <button type="button" (click)="deleteTask(taskRow.taskId)" class="button is-small is-danger">Delete</button>
+    </li>
+  </ul>
+</div>

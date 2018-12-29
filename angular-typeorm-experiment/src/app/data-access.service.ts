@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Connection, createConnection, EntityManager, EntitySubscriberInterface, EventSubscriber, InsertEvent, RemoveEvent, UpdateEvent } from 'typeorm/browser';
-import { Todo } from './todo';
+import { Task } from './task';
 import { Observable } from 'rxjs';
 import { Subscriber } from 'rxjs/src/internal/Subscriber';
+import { TaskComment } from './task-comment';
 
 @Injectable()
 export class DataAccessService {
@@ -16,10 +17,11 @@ export class DataAccessService {
 
     const connection = await createConnection({
       type: 'sqljs',
-      entities: [ Todo ],
+      entities: [ Task, TaskComment ],
       synchronize: true,
       autoSave: true,
-      location: 'mydb'
+      location: 'mydb',
+      logging: true
     });
 
     connection.subscribers.push(new DelegatingSubscriber(() => this.refresh()));

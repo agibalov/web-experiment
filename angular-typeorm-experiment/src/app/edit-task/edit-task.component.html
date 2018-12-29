@@ -1,0 +1,51 @@
+<div class="modal is-active">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Edit task</p>
+      <button class="delete" aria-label="close" (click)="handleCancel()"></button>
+    </header>
+    <section class="modal-card-body">
+      <div class="columns">
+        <div class="column">
+          <form [formGroup]="formGroup" (ngSubmit)="handleSave()">
+            <textarea class="textarea"
+                      placeholder="Put text here"
+                      formControlName="text"></textarea>
+          </form>
+        </div>
+        <div class="column">
+          <form [formGroup]="newCommentFormGroup" (ngSubmit)="postComment()">
+            <div class="field has-addons">
+              <div class="control">
+                <input type="text" class="input" placeholder="Put text here" formControlName="text">
+              </div>
+              <div class="control">
+                <button class="button is-success" type="submit">Post</button>
+              </div>
+            </div>
+          </form>
+          <div class="content is-small">
+            <p>Count: {{comments.length}}</p>
+            <ul>
+              <li *ngFor="let comment of comments">
+                <span class="tag">{{comment.id}}</span>
+                {{comment.text}}
+                <button type="button" class="button is-danger is-small" (click)="deleteComment(comment.id)">Delete</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="modal-card-foot">
+      <button type="button"
+              class="button is-success"
+              (click)="handleSave()"
+              [attr.disabled]="formGroup.invalid ? '' : null">Save changes</button>
+      <button type="button"
+              class="button"
+              (click)="handleCancel()">Cancel</button>
+    </footer>
+  </div>
+</div>
