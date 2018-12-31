@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+    <head>
+        <title>emscripten hello world</title>
+    </head>
+    <body>
+        <script src="main.js"></script>
+        <script>
+            Module.onRuntimeInitialized = () => {
+                console.log('addNumbers 2 and 3:', Module._addNumbers(2, 3));
+
+                const namePointer = allocate(intArrayFromString('Andrey'), 'i8', ALLOC_NORMAL);
+                const greetingPointer = allocate(256, 0, ALLOC_NORMAL);
+                try {
+                    Module._makeGreeting(namePointer, greetingPointer);
+
+                    const s = Pointer_stringify(greetingPointer);
+                    console.log('greeting:', s);
+                } finally {
+                    _free(namePointer);
+                    _free(greetingPointer);
+                }
+            };
+        </script>
+    </body>
+</html>
