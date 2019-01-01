@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+    <head>
+        <title>hello world</title>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+        <script>
+            var Container = {
+                template: `<div class="container">
+                    <section class="hero">
+                      <div class="hero-body">
+                        <div class="container">
+                          <h1 class="title">
+                            <slot name="header"></slot>
+                          </h1>
+                        </div>
+                      </div>
+                    </section>
+                    <div class="content">
+                        <slot name="body"></slot>
+                    </div>
+                </div>`
+            };
+
+            var CounterMessage = {
+                template: `<span class="has-text-info">{{message}}</span>`,
+                props: ['count', 'message-prefix'],
+                computed: {
+                    message: function() {
+                        return `${this.messagePrefix} ${this.count}`;
+                    }
+                }
+            };
+
+            var CounterDriver = {
+                template: `<div class="buttons">
+                    <button type="button" @click="update(-5)" class="button">-5</button>
+                    <button type="button" @click="update(-1)" class="button">-1</button>
+                    <button type="button" @click="update(+1)" class="button">+1</button>
+                    <button type="button" @click="update(+5)" class="button">+5</button>
+                </div>`,
+                methods: {
+                    update: function(delta) {
+                        this.$emit('change', delta);
+                    }
+                }
+            };
+
+            var app = new Vue({
+                el: '#app',
+                components: {
+                    'container': Container,
+                    'counter-message': CounterMessage,
+                    'counter-driver': CounterDriver
+                },
+                data: {
+                    count: 0
+                },
+                methods: {
+                    change: function(delta) {
+                        this.count += delta;
+                    }
+                },
+                template: `<container>
+                    <template slot="header">
+                        <h1>The Counter</h1>
+                    </template>
+                    <template slot="body">
+                        <counter-message v-bind:count="count" message-prefix="Count is"></counter-message>
+                        <counter-driver @change="change($event)"></counter-driver>
+                    </template>
+                </container>`
+            });
+        </script>
+    </body>
+</html>
