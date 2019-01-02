@@ -70,7 +70,7 @@
                         <h1>The Counter</h1>
                     </template>
                     <template slot="body">
-                        <counter-message v-bind:count="count" message-prefix="Count is"></counter-message>
+                        <counter-message :count="count" message-prefix="Count is"></counter-message>
                         <counter-driver @change="change($event)"></counter-driver>
                     </template>
                 </container>`

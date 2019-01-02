@@ -52,22 +52,22 @@
                     <button type="button"
                         @click="update(-5)"
                         class="button"
-                        v-bind:class="{ 'is-loading': wip }"
+                        :class="{ 'is-loading': wip }"
                         :disabled="wip">-5</button>
                     <button type="button"
                         @click="update(-1)"
                         class="button"
-                        v-bind:class="{ 'is-loading': wip }"
+                        :class="{ 'is-loading': wip }"
                         :disabled="wip">-1</button>
                     <button type="button"
                         @click="update(+1)"
                         class="button"
-                        v-bind:class="{ 'is-loading': wip }"
+                        :class="{ 'is-loading': wip }"
                         :disabled="wip">+1</button>
                     <button type="button"
                         @click="update(+5)"
                         class="button"
-                        v-bind:class="{ 'is-loading': wip }"
+                        :class="{ 'is-loading': wip }"
                         :disabled="wip">+5</button>
                 </div>`,
                 computed: Vuex.mapState({
@@ -141,7 +141,7 @@
                         <h1>The Counter</h1>
                     </template>
                     <template slot="body">
-                        <counter-message v-bind:count="count" message-prefix="Count is"></counter-message>
+                        <counter-message :count="count" message-prefix="Count is"></counter-message>
                         <counter-driver @change="change($event)"></counter-driver>
                     </template>
                 </container>`
