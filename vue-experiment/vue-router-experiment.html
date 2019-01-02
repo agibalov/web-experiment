@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+    <head>
+        <title>hello vue router</title>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.2/dist/vue-router.js"></script>
+        <script>
+            var Page1 = {
+                template: `
+                    <p>I am page one (message={{message}})</p>
+                `,
+                props: [ 'message' ],
+                beforeRouteEnter: function(to, from, next) {
+                    console.log(`page1::beforeRouteEnter to=${to.path} from=${from.path}`);
+                    next();
+                },
+                beforeRouteLeave: function(to, from, next) {
+                    console.log(`page1::beforeRouteLeave to=${to.path} from=${from.path}`);
+                    next();
+                }
+            };
+            var Page2 = {
+                template: `
+                    <p>I am page two</p>
+                `
+            };
+            var UserPage = {
+                template: `
+                    <p>User page for user {{$route.params.id}} ({{userId}})</p>
+                `,
+                props: [ 'userId' ]
+            };
+            var NotFoundPage = {
+                template: `<p>I am the 404 page</p>`
+            };
+
+            var router = new VueRouter({
+                routes: [
+                    {
+                        path: '/',
+                        component: Page1,
+                        props: {
+                            message: 'hi there'
+                        }
+                    },
+                    {
+                        path: '/page2',
+                        component: Page2
+                    },
+                    {
+                        path: '/users/:id',
+                        name: 'user',
+                        component: UserPage,
+                        props: route => ({
+                            userId: route.params.id
+                        })
+                    },
+                    {
+                        path: '*',
+                        component: NotFoundPage
+                    }
+                ]
+            });
+            router.beforeEach((to, from, next) => {
+                console.log(`router::beforeEach to=${to.path} from=${from.path}`);
+                next();
+            });
+            router.afterEach((to, from) => {
+                console.log(`router::afterEach to=${to.path} from=${from.path}`);
+            });
+
+            var app = new Vue({
+                router,
+                el: '#app',
+                template: `<div>
+                    <nav class="navbar is-light">
+                        <div class="container">
+                            <div class="navbar-menu">
+                                <div class="navbar-start">
+                                    <router-link to="/"
+                                        class="navbar-item"
+                                        active-class="is-active"
+                                        exact>Page 1</router-link>
+                                    <router-link to="/page2"
+                                        class="navbar-item"
+                                        active-class="is-active"
+                                        exact>Page 2</router-link>
+                                    <router-link to="/users/111"
+                                        class="navbar-item"
+                                        active-class="is-active"
+                                        exact>User #111</router-link>
+                                    <router-link :to="{ name: 'user', params: { id: 222 } }"
+                                        class="navbar-item"
+                                        active-class="is-active"
+                                        exact>User #222</router-link>
+                                    <router-link to="/some-crazy-path/here"
+                                        class="navbar-item"
+                                        active-class="is-active"
+                                        exact>Some crazy path</router-link>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                    <div class="container">
+                        <router-view></router-view>
+                    </div>
+                </div>`
+            });
+        </script>
+    </body>
+</html>
