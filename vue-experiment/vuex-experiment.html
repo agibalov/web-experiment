@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+    <head>
+        <title>hello vuex</title>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+    </head>
+    <body>
+        <div id="app"></div>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vuex@3.0.1/dist/vuex.js"></script>
+        <script>
+            var Container = {
+                template: `<div class="container">
+                    <section class="hero">
+                      <div class="hero-body">
+                        <div class="container">
+                          <h1 class="title">
+                            <slot name="header"></slot>
+                          </h1>
+                        </div>
+                      </div>
+                    </section>
+                    <div class="content">
+                        <slot name="body"></slot>
+                    </div>
+                </div>`
+            };
+
+            var CounterMessage = {
+                template: `<div>
+                    <template v-if="wip">
+                        Working...
+                    </template>
+                    <template v-else>
+                        <span class="has-text-info">{{message}}</span>
+                    </template>
+                </div>`,
+                props: [ 'count', 'message-prefix' ],
+                computed: {
+                    ...Vuex.mapState({
+                        wip: state => state.wip
+                    }),
+                    message() {
+                        return `${this.messagePrefix} ${this.count}`;
+                    }
+                }
+            };
+
+            var CounterDriver = {
+                template: `<div class="buttons">
+                    <button type="button"
+                        @click="update(-5)"
+                        class="button"
+                        v-bind:class="{ 'is-loading': wip }"
+                        :disabled="wip">-5</button>
+                    <button type="button"
+                        @click="update(-1)"
+                        class="button"
+                        v-bind:class="{ 'is-loading': wip }"
+                        :disabled="wip">-1</button>
+                    <button type="button"
+                        @click="update(+1)"
+                        class="button"
+                        v-bind:class="{ 'is-loading': wip }"
+                        :disabled="wip">+1</button>
+                    <button type="button"
+                        @click="update(+5)"
+                        class="button"
+                        v-bind:class="{ 'is-loading': wip }"
+                        :disabled="wip">+5</button>
+                </div>`,
+                computed: Vuex.mapState({
+                    wip: state => state.wip
+                }),
+                methods: {
+                    update(delta) {
+                        this.$emit('change', delta);
+                    }
+                }
+            };
+
+            var myVuexStorePlugin = store => {
+                store.subscribe((mutation, state) => {
+                    console.log('myVuexStorePlugin', mutation, state);
+                });
+            };
+
+            var store = new Vuex.Store({
+                plugins: [ myVuexStorePlugin ],
+                strict: true,
+                state: {
+                    wip: false,
+                    count: 0
+                },
+                // mutations must only update the state, they must be synchronous
+                mutations: {
+                    setWip(state, isWip) {
+                        state.wip = isWip;
+                    },
+                    change(state, delta) {
+                        state.count += delta;
+                    }
+                },
+                // actions may be asynchronous and must commit mutations to update the state
+                actions: {
+                    async change(context, delta) {
+                        context.commit('setWip', true);
+                        try {
+                            await new Promise(resolve => {
+                                setTimeout(resolve, 500);
+                            });
+                            context.commit('change', delta);
+                        } finally {
+                            context.commit('setWip', false);
+                        }
+                        return 'hi there';
+                    }
+                }
+            });
+
+            var app = new Vue({
+                el: '#app',
+                store,
+                components: {
+                    'container': Container,
+                    'counter-message': CounterMessage,
+                    'counter-driver': CounterDriver
+                },
+                computed: Vuex.mapState({
+                    count: state => state.count
+                }),
+                methods: {
+                    async change(delta) {
+                        var result = await this.$store.dispatch('change', delta);
+                        console.log('got result from $store.dispatch()!', result);
+                    }
+                },
+                template: `<container>
+                    <template slot="header">
+                        <h1>The Counter</h1>
+                    </template>
+                    <template slot="body">
+                        <counter-message v-bind:count="count" message-prefix="Count is"></counter-message>
+                        <counter-driver @change="change($event)"></counter-driver>
+                    </template>
+                </container>`
+            });
+        </script>
+    </body>
+</html>
