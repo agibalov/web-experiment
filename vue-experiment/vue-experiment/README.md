@@ -13,3 +13,4 @@ A vue/vuex/vue-router hello world.
 
 1. Vuex forces the ugly redux-style spaghetti code: components calling actions, actions calling mutations, etc. What's even worse - even though I use TypeScript, the mutation/action signatures (names and parameters) are implicit. This means that I should have actions, typed action wrappers, mutations, typed mutation wrappers.
 2. [The recommended way to handle forms with Vuex is ridiculous](https://vuex.vuejs.org/guide/forms.html).
+3. When Vuex store is injected in Vue components, it's not explicitly declared, so `this.$store.` doesn't give you any hints at all.
