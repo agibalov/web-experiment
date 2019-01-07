@@ -1,0 +1,21 @@
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+
+import {AppComponent} from './app.component';
+import {SharedModule} from "shared";
+import {ReactiveFormsModule} from "@angular/forms";
+
+@NgModule({
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        BrowserModule,
+        ReactiveFormsModule,
+        SharedModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
+})
+export class AppModule {
+}

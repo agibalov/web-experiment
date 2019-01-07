@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Hello Angular 5 / TS</title>
+
+        <script src="https://unpkg.com/zone.js@0.8.20/dist/zone.js"></script>
+        <script src="https://unpkg.com/systemjs@0.19.31/dist/system.js"></script>
+        <script type="ignore" id="app.ts">
+            import {NgModule, Component} from '@angular/core';
+            import {BrowserModule} from "@angular/platform-browser";
+            import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+
+            @Component({
+                selector: 'my-app',
+                template: `
+                    <h1>Hello world!</h1>
+                    <p>A single-file Angular 5 TypeScript application</p>
+                    <p>Counter: {{count}}
+                    <button type="button" (click)="handleClick()">Click me!</button>
+                `
+            })
+            class AppComponent {
+                count = 0;
+
+                handleClick() {
+                    ++this.count;
+                }
+            }
+
+            @NgModule({
+                imports: [BrowserModule],
+                declarations: [AppComponent],
+                providers: [],
+                bootstrap: [AppComponent]
+            })
+            class AppModule {
+                constructor() {
+                    console.log('AppModule constructor');
+                }
+            }
+
+            platformBrowserDynamic().bootstrapModule(AppModule)
+                    .catch(err => console.log(err));
+        </script>
+
+        <script>
+            // A 'fetch' plugin that loads files from document's <script> tags.
+            System.registerDynamic('script-tag', [], true, function(require, exports, module) {
+                exports.fetch = function(load) {
+                    var components = load.address.split('/');
+                    var filename = components[components.length - 1];
+                    return new Promise(function(resolve, reject) {
+                        var el = document.getElementById(filename);
+                        var content = el.innerHTML;
+                        resolve(content);
+                    });
+                };
+            });
+            System.config({
+                meta: {
+                    '*.ts': {
+                        loader: 'script-tag'
+                    }
+                },
+                transpiler: 'ts',
+                packages: {
+                    "typescript": {
+                        "main": "lib/typescript.js",
+                        "meta": {
+                            "lib/typescript.js": {
+                                "exports": "ts"
+                            }
+                        }
+                    }
+                },
+                bundles: {
+                    "https://unpkg.com/rxjs-system-bundle@5.5.6/Rx.system.min.js": [
+                        "rxjs",
+                        "rxjs/*",
+                        "rxjs/operator/*",
+                        "rxjs/observable/*",
+                        "rxjs/scheduler/*",
+                        "rxjs/symbol/*",
+                        "rxjs/add/operator/*",
+                        "rxjs/add/observable/*",
+                        "rxjs/util/*"
+                    ]
+                },
+                map: {
+                    'typescript': 'https://unpkg.com/typescript@2.6.2',
+                    'ts': 'https://unpkg.com/plugin-typescript@8.0.0/lib/plugin.js',
+                    '@angular/core': 'https://unpkg.com/@angular/core@5.2.0/bundles/core.umd.js',
+                    '@angular/common': 'https://unpkg.com/@angular/common@5.2.0/bundles/common.umd.js',
+                    '@angular/compiler': 'https://unpkg.com/@angular/compiler@5.2.0/bundles/compiler.umd.js',
+                    '@angular/platform-browser': 'https://unpkg.com/@angular/platform-browser@5.2.0/bundles/platform-browser.umd.js',
+                    '@angular/platform-browser-dynamic': 'https://unpkg.com/@angular/platform-browser-dynamic@5.2.0/bundles/platform-browser-dynamic.umd.js'
+                },
+                typescriptOptions: {
+                    module: "system",
+                    emitDecoratorMetadata: true,
+                    experimentalDecorators: true
+                }
+            });
+            System.import('app.ts')
+                .catch(console.error.bind(console));
+        </script>
+    </head>
+    <body>
+        <my-app>Loading...</my-app>
+    </body>
+</html>

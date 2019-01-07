@@ -1,0 +1,4 @@
+rootProject.name = 'ng2-ui-auth-experiment'
+include 'frontend'
+include 'backend'
+

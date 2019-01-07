@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Hello Angular 5 / ES5</title>
+    </head>
+    <body>
+        <app></app>
+
+        <script src="https://unpkg.com/core-js@2.5.3/client/shim.js"></script>
+        <script src="https://unpkg.com/zone.js@0.8.20/dist/zone.js"></script>
+        <script src="https://unpkg.com/rxjs@5.5.6/bundles/Rx.min.js"></script>
+        <script src="https://unpkg.com/@angular/core@5.2.0/bundles/core.umd.js"></script>
+        <script src="https://unpkg.com/@angular/common@5.2.0/bundles/common.umd.js"></script>
+        <script src="https://unpkg.com/@angular/platform-browser@5.2.0/bundles/platform-browser.umd.js"></script>
+        <script src="https://unpkg.com/@angular/compiler@5.2.0/bundles/compiler.umd.js"></script>
+        <script src="https://unpkg.com/@angular/platform-browser-dynamic@5.2.0/bundles/platform-browser-dynamic.umd.js"></script>
+
+        <script>
+            function AppComponent() {
+                this.count = 0;
+            }
+
+            AppComponent.prototype.handleClick = function() {
+                ++this.count;
+            };
+
+            AppComponent.annotations = [
+                new ng.core.Component({
+                    selector: 'app',
+                    template: '<button type="button" (click)="handleClick()">Click me! {{count}}</button>'
+                })
+            ];
+
+            function AppModule() {}
+
+            AppModule.annotations = [
+                new ng.core.NgModule({
+                    imports: [ ng.platformBrowser.BrowserModule ],
+                    declarations: [ AppComponent ],
+                    bootstrap: [ AppComponent ]
+                })
+            ];
+
+            ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule);
+        </script>
+    </body>
+</html>

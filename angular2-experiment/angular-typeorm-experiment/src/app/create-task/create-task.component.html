@@ -1,0 +1,24 @@
+<div class="modal is-active">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Create task</p>
+      <button class="delete" aria-label="close" (click)="handleCancel()"></button>
+    </header>
+    <form [formGroup]="formGroup" (ngSubmit)="handleSave()">
+      <section class="modal-card-body">
+                <textarea class="textarea"
+                          placeholder="Put text here"
+                          formControlName="text"></textarea>
+      </section>
+      <footer class="modal-card-foot">
+        <button type="submit"
+                class="button is-success"
+                [attr.disabled]="formGroup.invalid ? '' : null">Save changes</button>
+        <button type="button"
+                class="button"
+                (click)="handleCancel()">Cancel</button>
+      </footer>
+    </form>
+  </div>
+</div>

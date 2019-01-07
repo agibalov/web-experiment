@@ -1,0 +1,14 @@
+apps:
+- name: frontend
+  cwd: .
+  interpreter: none
+  script: npm
+  args: run frontend:start
+- name: backend
+  cwd: .
+  interpreter: none
+  script: npm
+  args: run backend:start
+  # Watching doesn't work on Ubuntu 17.10
+  # Probably this issue: https://github.com/Unitech/pm2/issues/3323
+  watch: ./backend

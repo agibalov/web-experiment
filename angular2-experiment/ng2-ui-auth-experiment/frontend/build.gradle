@@ -1,0 +1,44 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
+    }
+}
+
+apply plugin: 'com.moowork.node'
+
+configurations {
+    distPackage
+}
+
+artifacts {
+    distPackage file: file("$buildDir/dist.jar"), builtBy: 'distJar'
+}
+
+task clean(type: Delete) {
+    delete buildDir
+    delete 'dist'
+}
+
+task npmBuild(type: NpmTask, dependsOn: 'npmInstall') {
+    inputs.files fileTree('src')
+    outputs.dir 'dist'
+    args = ['run-script', 'build']
+}
+
+task distJar(type: Jar, dependsOn: 'npmBuild') {
+    from fileTree('dist')
+    into 'resources'
+    archiveName = 'dist.jar'
+    destinationDir = buildDir
+}
+
+node {
+    version = '8.9.4'
+    npmVersion = '5.5.1'
+    download = true
+}

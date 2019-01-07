@@ -1,0 +1,5 @@
+<ngx-monaco-editor
+  [options]="{ theme: 'vs-dark', language: 'dummy' }"
+  [(ngModel)]="code"
+  (onInit)="onMonacoEditorInit($event)"></ngx-monaco-editor>
+<pre>{{message}}</pre>

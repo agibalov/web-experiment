@@ -1,0 +1,33 @@
+@import '~@angular/cdk/overlay-prebuilt.css';
+
+.item {
+  height: 50px;
+  border: 1px solid red;
+  background-color: white;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  margin: 10px;
+  background-color: #eee;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.25;
+}
+
+.dummy-viewport {
+  height: 200px;
+  border: 1px solid red;
+}
+
+.dummy-item {
+  height: 50px;
+}
