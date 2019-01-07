@@ -1,0 +1,21 @@
+{
+  "name": "reactjs-experiment",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "loki2302 <loki2302@loki2302.me>"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5"
+  }
+}
