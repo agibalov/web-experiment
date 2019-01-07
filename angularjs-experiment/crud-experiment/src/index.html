@@ -1,0 +1,76 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>hello</title>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+  </head>
+  <body>
+    <div class="container" ng-controller="AppController">
+      <div class="row">
+        <div class="col-xs-6">
+          <h3 class="page-header">Course: {{course.title}}</h3>
+          <input type="text" ng-model="course.title">
+
+          <list-editor for="course.teachers" as="teachersEditor">
+            <h3>Teachers</h4>
+            <ul ng-if="course.teachers.length > 0">
+              <li ng-repeat="teacher in course.teachers">
+                <input type="text" ng-model="teacher.name">
+                <button type="button" ng-click="teachersEditor.removeItem(teacher)">Remove</button>
+                message: {{messageFromController}}
+              </li>
+            </ul>
+            <div ng-if="course.teachers.length === 0" class="alert alert-info">
+              Empty here.
+              message: {{messageFromController}}
+            </div>
+          </list-editor>
+          <list-editor for="course.teachers" as="teachersEditor">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Add teacher</h3>
+              </div>
+              <div class="panel-body">
+                <input type="text" ng-model="teachersEditor.newItem.name">
+                <button type="button" ng-click="teachersEditor.addItem()">Add</button>
+                message: {{messageFromController}}
+              </div>
+            </div>
+          </list-editor>
+
+          <list-editor for="course.students" as="studentsEditor">
+            <h3>Students</h3>
+            <ul ng-if="course.students.length > 0">
+              <li ng-repeat="student in course.students">
+                <input type="text" ng-model="student.name">
+                <button type="button" ng-click="studentsEditor.removeItem(student)">Remove</button>
+                message: {{messageFromController}}
+              </li>
+            </ul>
+            <div ng-if="course.students.length === 0" class="alert alert-info">
+              Empty here.
+              message: {{messageFromController}}
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Add student</h3>
+              </div>
+              <div class="panel-body">
+                <input type="text" ng-model="studentsEditor.newItem.name">
+                <button type="button" ng-click="studentsEditor.addItem()">Add</button>
+                message: {{messageFromController}}
+              </div>
+            </div>
+          </list-editor>
+        </div>
+        <div class="col-xs-6">
+          <pre>{{course|json}}</pre>
+        </div>
+      </div>
+    </div>
+
+    <script src="/angular/angular.js"></script>
+    <script src="/angular-route/angular-route.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>

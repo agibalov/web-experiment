@@ -1,0 +1,119 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>notepad</title>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+  </head>
+  <body>
+    <h1>notepad</h1>
+    <div ui-view></div>
+
+    <script src="/angular/angular.js"></script>
+    <script src="/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script>
+      angular.module('app', ['ui.router', 'ui.bootstrap'])
+      .factory('DATA', function() {
+        var notes = [
+          { id: 1, text: 'note one' },
+          { id: 2, text: 'note two' },
+          { id: 3, text: 'note three' },
+          { id: 4, text: 'note four' },
+          { id: 5, text: 'note five' }
+        ];
+
+        return {
+          findAll: function() {
+            return notes;
+          },
+          findOne: function(id) {
+            return notes.find(function(note) {
+              return note.id == id;
+            }) || null;
+          }
+        };
+      })
+      .config(function($urlRouterProvider) {
+      	$urlRouterProvider.otherwise('/notes');
+      })
+      .config(function($stateProvider) {
+        $stateProvider
+        .state('notes', {
+          url: '/notes',
+          templateUrl: 'notes.html',
+          resolve: {
+            notes: function(DATA) {
+              return DATA.findAll();
+            }
+          },
+          controller: function($scope, notes) {
+            $scope.notes = notes;
+          }
+        })
+        .state('notes.view', {
+          url: '/:id',
+          templateUrl: 'note.html',
+          resolve: {
+            note: function($stateParams, DATA) {
+              return DATA.findOne($stateParams.id);
+            }
+          },
+          controller: function($scope, note) {
+            $scope.id = note.id;
+            $scope.text = note.text;
+          }
+        })
+        .state('notes.view.delete', {
+          url: '/delete',
+          onEnter: function($uibModal, $state) {
+            $uibModal.open({
+              templateUrl: 'delete.html',
+              controller: function($scope, $stateParams, $modalInstance) {
+                $scope.id = $stateParams.id;
+                $scope.cancel = function() {
+                  $modalInstance.close();
+                };
+                $scope.delete = function() {
+                  $modalInstance.close();
+                };
+              }
+            }).result.finally(function() {
+              $state.go('^');
+            });
+          }
+        });
+      });
+    </script>
+    <script type="text/ng-template" id="notes.html">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-3">
+            <ul>
+              <li ng-repeat="note in notes"><a ui-sref="notes.view({id: note.id})">{{note.text}}</a></li>
+            </ul>
+          </div>
+          <div class="col-xs-9">
+            <div ui-view></div>
+          </div>
+        </div>
+      </div>
+    </script>
+    <script type="text/ng-template" id="note.html">
+      <a ui-sref="notes.view.delete({id: id})">Delete</a>
+      <h3>{{id}}</h3>
+      <h4>{{text}}</h4>
+    </script>
+    <script type="text/ng-template" id="delete.html">
+      <div class="modal-header">
+        <h3 class="modal-title">Delete?</h3>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete #{{id}}?
+      </div>
+      <div class="modal-footer">
+        <button class="btn" type="button" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-danger" type="button" ng-click="delete()">Delete</button>
+      </div>
+    </script>
+  </body>
+</html>

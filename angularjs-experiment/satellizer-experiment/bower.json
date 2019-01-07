@@ -1,0 +1,22 @@
+{
+  "name": "satellizer-experiment",
+  "version": "0.0.0",
+  "homepage": "https://github.com/loki2302/angularjs-experiment",
+  "authors": [
+    "loki2302 <loki2302@loki2302.me>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.7",
+    "bootstrap": "~3.3.5",
+    "satellizer": "~0.12.5",
+    "angular-jwt": "~0.0.9"
+  }
+}

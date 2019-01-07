@@ -1,0 +1,53 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>events</title>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+  </head>
+  <body ng-controller="AppController">
+    <h1>events</h1>
+    <ul>
+      <li><a ui-sref="state1">State 1</a></li>
+      <li><a ui-sref="state2">State 2</a></li>
+    </ul>
+    <div ui-view></div>
+
+    <script src="/angular/angular.js"></script>
+    <script src="/angular-ui-router/release/angular-ui-router.js"></script>
+    <script>
+      angular.module('app', ['ui.router'])
+      .config(function($urlRouterProvider) {
+      	$urlRouterProvider.otherwise('/');
+      })
+      .config(function($stateProvider) {
+        $stateProvider
+        .state('state1', {
+          url: '/',
+          template: 'state one'
+        })
+        .state('state2', {
+          url: '/s2',
+          template: 'state two'
+        });
+      })
+      .controller('AppController', function($rootScope, $timeout, $state) {
+        var bypass = false;
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+          if(bypass) {
+            console.log('navigating without delay', toState.name, toParams, fromState.name, fromParams);
+            bypass = false;
+            return;
+          }
+
+          console.log('delaying...', toState.name, toParams, fromState.name, fromParams);
+          event.preventDefault();
+          bypass = true;
+          $timeout(function() {
+            console.log('navigating after delay');
+            $state.go(toState, toParams);
+          }, 500);
+        });
+      });
+    </script>
+  </body>
+</html>

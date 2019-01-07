@@ -1,0 +1,24 @@
+{
+  "name": "angular-e2e-experiment",
+  "version": "1.0.0",
+  "description": "`npm install -g protractor` `webdriver-manager update`  `webdriver-manager start` (this will run in the foreground, keep it running) `protractor conf.js` (this will run tests)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "loki2302",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^0.14.0",
+    "koa-body-parser": "^1.1.0",
+    "koa-router": "^3.8.0",
+    "koa-static": "^1.4.8"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-protractor-runner": "^1.1.4",
+    "grunt-protractor-webdriver": "^0.2.0",
+    "grunt-run": "^0.3.0",
+    "grunt-shell": "^1.1.1"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "angular-ut-experiment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+
+  },
+  "author": "loki2302",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-karma": "^0.10.1",
+    "karma-chrome-launcher": "^0.1.7",
+    "karma-jasmine": "^0.3.4"
+  }
+}

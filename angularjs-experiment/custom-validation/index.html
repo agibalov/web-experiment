@@ -1,0 +1,52 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>hello</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  </head>
+  <body ng-controller="AppController">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-6">
+          <!-- controller has to work with "be" explicitly -->
+          <form name="f" ng-submit="handleForm()" novalidate validation-facade="be">
+            <div class="form-group" ng-class="{ 'has-error': be.isError('username') }">
+              <label for="username" class="control-label">Username</label>
+              <input type="text" class="form-control" id="username" name="username" ng-model="username">
+              <p class="help-block" ng-show="be.isError('username')">{{be.getFieldError('username')}}</p>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error': be.isError('password') }">
+              <label for="password" class="control-label">Password</label>
+              <input type="text" class="form-control" id="password" name="password" ng-model="password">
+              <p class="help-block" ng-show="be.isError('password')">{{be.getFieldError('password')}}</p>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+          </form>
+        </div>
+        <div class="col-xs-6">
+          <!-- "my-submit" handles the validation errors seamlessly -->
+          <form my-submit="handleForm2()">
+            <div class="form-group" ng-class="{ 'has-error': vf2.isError('username') }">
+              <label for="username" class="control-label">Username</label>
+              <input type="text" class="form-control" id="username" name="username" ng-model="username">
+              <p class="help-block" ng-show="vf2.isError('username')">{{vf2.getFieldError('username')}}</p>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error': vf2.isError('password') }">
+              <label for="password" class="control-label">Password</label>
+              <input type="text" class="form-control" id="password" name="password" ng-model="password">
+              <p class="help-block" ng-show="vf2.isError('password')">{{vf2.getFieldError('password')}}</p>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="src/app.js"></script>
+  </body>
+</html>

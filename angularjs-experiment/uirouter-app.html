@@ -1,0 +1,97 @@
+<!doctype html>
+<html ng-app="app">
+	<head>
+		<title>app</title>
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	</head>
+	<body>
+		<nav class="navbar navbar-default">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#/">App</a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="#/noform">No Form</a></li>
+					<li><a href="#/yesform">Yes Form</a></li>
+				</ul>
+				<div ui-view="navbarView"></div>				
+			</div>
+		</nav>
+		<div class="container">
+			<div class="row">
+				<div ui-view="contentView"></div>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.0/angular.min.js"></script>
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.0/angular-ui-router.min.js"></script>
+
+		<script type="text/javascript">
+			var app = angular.module('app', ['ui.router']);
+
+			app.config(function($stateProvider, $urlRouterProvider) {
+				$urlRouterProvider.otherwise('/noform');
+
+				$stateProvider
+					.state('noform', {
+						url: '/noform', 
+						views: {
+							contentView: { 
+								templateUrl: 'no-form-content.html',
+								controller: 'NoFormController'
+							}
+						}
+					})
+					.state('yesform', {
+						url: '/yesform',
+						data: {
+							x: 123,
+						},
+						views: {
+							navbarView: { 
+								templateUrl: 'yes-form-form.html',
+								controller: 'YesFormFormController'
+							},
+							contentView: { 
+								templateUrl: 'yes-form-content.html',
+								controller: 'YesFormContentController'
+							}
+						}
+					});
+			});
+
+			app.controller('NoFormController', function($scope) {
+				$scope.message = 'hello no form';
+			});
+
+			app.controller('YesFormFormController', function($scope, $state) {
+				$scope.query = 'query text';
+			});
+
+			app.controller('YesFormContentController', function($scope, $state) {
+				$scope.message = 'hello yes form';
+			});
+		</script>
+
+		<script type="text/ng-template" id="no-form-content.html">
+			<h1>No form</h1>
+			<p>You dont see a navbar form</p>
+			<p>Message: <strong>{{message}}</strong></p>
+		</script>
+
+		<script type="text/ng-template" id="yes-form-content.html">
+			<h1>Yes form</h1>
+			<p>You DO see a navbar form</p>
+			<p>Message: <strong>{{message}}</strong></p>
+		</script>
+
+		<script type="text/ng-template" id="yes-form-form.html">
+			<form class="navbar-form navbar-left">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search" ng-model="query">
+				</div>
+				<button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</script>
+	</body>
+</html>

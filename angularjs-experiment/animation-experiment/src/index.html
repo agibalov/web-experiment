@@ -1,0 +1,62 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>hello</title>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <style>
+      .the-element {
+        transition: linear 5s;
+      }
+
+      .the-element.ng-hide {
+        opacity: 0;
+      }
+
+      .ngrepeattest li {
+        transition: linear 0.5s;
+        opacity: 1;
+      }
+      .ngrepeattest li.ng-enter {
+        opacity: 0;
+      }
+      .ngrepeattest li.ng-enter-active {
+        opacity: 1;
+        background-color: green;
+      }
+      .ngrepeattest li.ng-leave {
+        opacity: 1;
+        background-color: red;
+      }
+      .ngrepeattest li.ng-leave-active {
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" ng-controller="AppController">
+      <div class="row">
+        <div class="col-xs-6">
+          <div ng-init="checked=true">
+            <input type="checkbox" ng-model="checked">
+            <div class="the-element" ng-show="checked">
+              hello
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-6 ngrepeattest">
+          <button class="btn btn-success btn-xs" type="button" ng-click="addItem()">Add</button>
+          <ul class="list-unstyled">
+            <li ng-repeat="item in items">
+              {{item}}
+              <button class="btn btn-danger btn-xs" type="button" ng-click="removeItem(item)">Remove</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script src="/angular/angular.js"></script>
+    <script src="/angular-animate/angular-animate.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>

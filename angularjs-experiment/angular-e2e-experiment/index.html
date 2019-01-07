@@ -1,0 +1,43 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>Hello e2e</title>
+  </head>
+  <body ng-controller="DummyController">
+    <h1>Hello e2e</h1>
+    <p id="message">{{message}}</p>
+    <p id="asyncMessage">{{asyncMessage}}</p>
+    <form ng-submit="addNumbers()">
+      <input type="text" ng-model="a">
+      <input type="text" ng-model="b">
+      <button id="addNumbers" type="submit">Add</button>
+    </form>
+    <p>{{result}}</p>
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script>
+      angular.module('app', [])
+      .controller('DummyController', ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
+        $scope.message = 'hi there!';
+        $scope.asyncMessage = '';
+        
+        $scope.a = "";
+        $scope.b = "";
+        $scope.result = "";
+        $scope.addNumbers = function() {
+          var a = parseInt($scope.a, 10);
+          var b = parseInt($scope.b, 10);
+          $http.post('/add/', { a: a, b: b }).then(function(response) {
+            $scope.a = "";
+            $scope.b = "";
+            $scope.result = response.data.result;
+          });
+        };
+
+        $timeout(function() {
+          $scope.asyncMessage = 'i am async message';
+        }, 500);
+      }]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html ng-app="app">
+<head>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.5/angular.min.js"></script>
+
+    <!-- TODO: use inner directive instead of just-transclusion -->
+    <!-- TODO: use 2 inner directives - toolbar + content -->
+
+    <script type="text/ng-template" id="layout.html">
+        <div class="container">
+            <div class="page-header">
+                <h3>{{title}} <small>that's a title</small></h3>
+            </div>
+            <div class="row">
+                <div class="span12" ng-transclude>
+                </div>
+            </div>
+            <hr>
+            &copy; loki2302
+        </div>
+    </script>
+
+    <script type="text/javascript">
+        angular.module("app", [], function() {});
+
+        angular.module("app").directive("layout", function() {
+            return {
+                restrict: "E",
+                scope: {
+                    title: "@"
+                },
+                templateUrl: "layout.html",
+                transclude: true
+            };
+        });
+    </script>
+</head>
+<body>
+    <layout title="Hello there">
+        Content here
+    </layout>
+</body>
+</html>

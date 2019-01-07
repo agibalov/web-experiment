@@ -1,0 +1,46 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>Hello Angular Material</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+  </head>
+  <body ng-controller="AppController" layout="column">
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h1>Calculator</h1>
+          <span flex></span>
+          <md-button ng-click="add()">Add</md-button>
+        </div>
+      </md-toolbar>
+      <div flex layout="row">
+        <md-content flex layout-padding>
+          <md-list>
+            <md-list-item ng-repeat="item in items" class="md-3-line">
+              <div class="md-list-item-text" layout="column">
+                <h3>{{item}}</h3>
+                <h4>{{item}}</h4>
+                <p>{{item}}</p>
+              </div>
+            </md-list-item>
+          </md-list>
+        </md-content>
+        <md-content flex layout="column">
+          <div layout="row">
+            <md-input-container>
+              <label>Number A</label>
+              <input ng-model="a">
+            </md-input-container>
+            <md-input-container>
+              <label>Number B</label>
+              <input ng-model="b">
+            </md-input-container>
+          </div>
+          <md-button ng-click="add()">Add Numbers</md-button>
+        </md-content>
+        <div flex>3</div>
+      </div>
+      <div>footer</div>
+
+    <script src="bundle.js"></script>
+  </body>
+</html>

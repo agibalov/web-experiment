@@ -1,0 +1,42 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>Hello Satellizer</title>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
+  </head>
+  <body ng-controller="AppController">
+    <button type="button" ng-click="authenticate()">Authenticate with GitHub</button>
+    <h1>Username: {{username}}</h1>
+
+    <script src="angular/angular.min.js"></script>
+    <script src="satellizer/satellizer.min.js"></script>
+    <script src="angular-jwt/dist/angular-jwt.min.js"></script>
+    <script>
+      angular.module('app', ['satellizer', 'angular-jwt'])
+      .config(function($authProvider) {
+        $authProvider.github({
+          clientId: '6747db0ee93f22958546'
+        });
+      })
+      .controller('AppController', function($scope, $auth, jwtHelper) {
+        $scope.username = null;
+
+        $scope.authenticate = function() {
+          $scope.username = 'working...';
+          $auth.authenticate('github').then(function(response) {
+            console.log('ok', response);
+
+            var token = response.data.token;
+            var tokenPayload = jwtHelper.decodeToken(token);
+            console.log('payload', tokenPayload);
+
+            var username = tokenPayload.sub;
+            $scope.username = username;
+          }, function(response) {
+            console.log('error', response);
+          });
+        };
+      });
+    </script>
+  </body>
+</html>

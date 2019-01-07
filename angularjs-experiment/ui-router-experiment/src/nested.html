@@ -1,0 +1,68 @@
+<!doctype html>
+<html ng-app="app">
+  <head>
+    <title>hello world</title>
+  </head>
+  <body ng-controller="AppController">
+    <a ui-sref="authenticated.displayingdata1">ONE</a>
+    <a ui-sref="authenticated.displayingdata2">TWO</a> 
+    <div ui-view></div>
+
+    <script src="/angular/angular.js"></script>
+    <script src="/angular-ui-router/release/angular-ui-router.js"></script>
+    <script>
+      angular.module('app', ['ui.router'])
+      .config(function($urlRouterProvider) {
+      	$urlRouterProvider.otherwise("/");
+      })
+      .config(function($stateProvider) {
+        $stateProvider
+        .state('authenticated', {
+          abstract: true,
+          onEnter: function() { console.log('authenticated enter'); },
+          onExit: function() { console.log('authenticated exit'); },
+          template: '<div class="level0" ui-view></div>',
+          controller: function($scope, sessionToken) {
+            console.log('authenticated controller', sessionToken)
+          },
+          resolve: {
+            sessionToken: function($q) {
+              // access API and get the the session token
+              // if successful, the 'sessionToken' is resolved
+              // and it all goes to displayingdata
+              // otherwise it's rejected and $stateChangeError is triggered
+              return $q.when('good session token');
+              //return $q.reject('shit happened');
+            }
+          }
+        })
+        .state('authenticated.displayingdata1', {
+          url: '/',
+          onEnter: function() { console.log('displayingdata1 enter'); },
+          onExit: function() { console.log('displayingdata1 exit'); },
+          template: '<div class="displayingdata1">I am displayingdata1</div>',
+          controller: function($scope, sessionToken) {
+            console.log('displayingdata1 controller', sessionToken)
+          }
+        })
+        .state('authenticated.displayingdata2', {
+          url: '/2',
+          onEnter: function() { console.log('displayingdata2 enter'); },
+          onExit: function() { console.log('displayingdata2 exit'); },
+          template: '<div class="displayingdata2">I am displayingdata2</div>',
+          controller: function($scope, sessionToken) {
+            console.log('displayingdata2 controller', sessionToken)
+          }
+        });
+      })
+      .controller('AppController', function($scope) {
+        $scope.$on('$stateChangeError', function() {
+          console.log('got $stateChangeError');
+        });
+        $scope.$on('$stateChangeSuccess', function() {
+          console.log('got $stateChangeSuccess');
+        });
+      });
+    </script>
+  </body>
+</html>
