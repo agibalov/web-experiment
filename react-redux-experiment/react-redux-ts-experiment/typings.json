@@ -1,0 +1,9 @@
+{
+  "ambientDependencies": {
+    "react": "registry:dt/react#0.14.0+20160319053454",
+    "react-dom": "registry:dt/react-dom#0.14.0+20160316155526",
+    "react-redux": "registry:dt/react-redux#4.4.0+20160316155526",
+    "redux": "registry:dt/redux#3.3.1+20160326112656",
+    "redux-logger": "registry:dt/redux-logger#2.6.0+20160316155526"
+  }
+}
