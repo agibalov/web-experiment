@@ -1,0 +1,37 @@
+{
+  "name": "angular-minify-experiment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.config.js --port 9090 --content-base src --myversion=1.2.1.2 --myenv=dev",
+    "dist": "rimraf dist && webpack --config webpack.config.js --progress --profile --myversion=4.3.2.1 --myenv=prod"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^6.0.56",
+    "babel-core": "^6.21.0",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.18.0",
+    "rimraf": "^2.5.4",
+    "ts-loader": "^1.3.3",
+    "typescript": "~2.0.8",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2",
+    "yargs": "^6.6.0"
+  },
+  "dependencies": {
+    "@angular/common": "^2.4.1",
+    "@angular/compiler": "^2.4.1",
+    "@angular/core": "^2.4.1",
+    "@angular/forms": "^2.4.1",
+    "@angular/http": "^2.4.1",
+    "@angular/platform-browser": "^2.4.1",
+    "@angular/platform-browser-dynamic": "^2.4.1",
+    "babel-polyfill": "^6.20.0",
+    "reflect-metadata": "^0.1.9",
+    "rxjs": "^5.0.2",
+    "zone.js": "^0.7.4"
+  }
+}
