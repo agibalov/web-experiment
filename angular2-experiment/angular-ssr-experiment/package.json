@@ -1,0 +1,50 @@
+{
+  "name": "angular-ssr-experiment",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "fe:start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e",
+    "compile:server": "webpack --config webpack.server.config.js --progress --colors",
+    "serve:ssr": "node dist/server",
+    "build:ssr": "npm run build:client-and-server-bundles && npm run compile:server",
+    "build:client-and-server-bundles": "ng build --prod && ng run angular-ssr-experiment:server:production --bundleDependencies all",
+    "start": "concurrently \"yarn fe:start\" \"yarn serve:ssr\""
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "~8.2.0",
+    "@angular/common": "~8.2.0",
+    "@angular/compiler": "~8.2.0",
+    "@angular/core": "~8.2.0",
+    "@angular/forms": "~8.2.0",
+    "@angular/platform-browser": "~8.2.0",
+    "@angular/platform-browser-dynamic": "~8.2.0",
+    "@angular/platform-server": "~8.2.0",
+    "@angular/router": "~8.2.0",
+    "@nguniversal/express-engine": "^8.1.1",
+    "@nguniversal/module-map-ngfactory-loader": "8.1.1",
+    "bulma": "^0.7.5",
+    "express": "^4.15.2",
+    "rxjs": "~6.4.0",
+    "tslib": "^1.10.0",
+    "zone.js": "~0.9.1"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~0.802.2",
+    "@angular/cli": "~8.2.2",
+    "@angular/compiler-cli": "~8.2.0",
+    "@angular/language-service": "~8.2.0",
+    "@types/express": "^4.17.0",
+    "@types/node": "~8.9.4",
+    "concurrently": "^4.1.2",
+    "ts-loader": "^5.2.0",
+    "ts-node": "~7.0.0",
+    "tslint": "~5.15.0",
+    "typescript": "~3.5.3",
+    "webpack-cli": "^3.1.0"
+  }
+}
