@@ -1,0 +1,16 @@
+<div class="container">
+    <fa-icon [icon]="['fas', 'spinner']" [spin]="true" size="2x"></fa-icon>
+    <fa-icon [icon]="['far', 'calendar']" [pulse]="true" [styles]="{color: 'red'}"></fa-icon>
+    <fa-icon [icon]="['fab', 'twitter']"></fa-icon>
+
+    <fa-stack>
+        <fa-icon [icon]="['fas', 'circle']" stackItemSize="2x"></fa-icon>
+        <fa-icon [icon]="['fas', 'flag']" [inverse]="true" [pulse]="true" stackItemSize="1x"></fa-icon>
+    </fa-stack>
+
+    <button class="button is-success">
+        <fa-icon [icon]="['fas', 'coffee']" [spin]="true"></fa-icon>
+        Hello
+        <fa-icon [icon]="['fas', 'coffee']" [pulse]="true"></fa-icon>
+    </button>
+</div>
