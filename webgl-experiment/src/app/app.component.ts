@@ -13,16 +13,6 @@ export class AppComponent implements AfterViewInit {
         const canvas = this.canvasRef.nativeElement as HTMLCanvasElement;
         const context = canvas.getContext('webgl') as WebGLRenderingContext;
 
-        const fragmentShader = context.createShader(context.FRAGMENT_SHADER);
-        context.shaderSource(fragmentShader, `
-            precision mediump float;
-            
-            void main(void) {
-                gl_FragColor = vec4(0.9, 0.3, 0.6, 1.0);
-            }
-        `);
-        context.compileShader(fragmentShader);
-
         const vertexShader = context.createShader(context.VERTEX_SHADER);
         context.shaderSource(vertexShader, `
             attribute vec3 Position;
@@ -35,14 +25,29 @@ export class AppComponent implements AfterViewInit {
             }
         `);
         context.compileShader(vertexShader);
+        if (!context.getShaderParameter(vertexShader, context.COMPILE_STATUS)) {
+            throw new Error('Failed to compile vertex shader');
+        }
+
+        const fragmentShader = context.createShader(context.FRAGMENT_SHADER);
+        context.shaderSource(fragmentShader, `
+            precision mediump float;
+            
+            void main(void) {
+                gl_FragColor = vec4(0.9, 0.3, 0.6, 1.0);
+            }
+        `);
+        context.compileShader(fragmentShader);
+        if (!context.getShaderParameter(fragmentShader, context.COMPILE_STATUS)) {
+            throw new Error('Failed to compile fragment shader');
+        }
 
         const program = context.createProgram();
         context.attachShader(program, fragmentShader);
         context.attachShader(program, vertexShader);
         context.linkProgram(program);
-
         if (!context.getProgramParameter(program, context.LINK_STATUS)) {
-            throw new Error('Failed to link');
+            throw new Error('Failed to link program');
         }
 
         context.useProgram(program);
