@@ -11,8 +11,7 @@ export class AppComponent implements AfterViewInit {
     width: number;
     height: number;
     triangleVertexPositionBuffer: WebGLBuffer;
-    readonly triangleVertexPositionBufferItemSize = 3;
-    readonly triangleVertexPositionBufferNumItems = 6;
+    triangleVertexIndexBuffer: WebGLBuffer;
     positionLocation: number;
     perspectiveLocation: WebGLUniformLocation;
     modelViewLocation: WebGLUniformLocation;
@@ -64,8 +63,6 @@ export class AppComponent implements AfterViewInit {
         gl.useProgram(program);
 
         this.positionLocation = gl.getAttribLocation(program, 'Position');
-        gl.enableVertexAttribArray(this.positionLocation);
-
         this.perspectiveLocation = gl.getUniformLocation(program, 'u_PerspectiveMatrix');
         this.modelViewLocation = gl.getUniformLocation(program, 'u_ModelViewMatrix');
 
@@ -75,10 +72,17 @@ export class AppComponent implements AfterViewInit {
             -1, -1, 0,
             -1, 1, 0,
             1, 1, 0,
-            1, 1, 0,
-            1, -1, 0,
-            -1, -1, 0
+            1, -1, 0
         ]), gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+        this.triangleVertexIndexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.triangleVertexIndexBuffer);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([
+            0, 1, 2,
+            2, 3, 0
+        ]), gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
         requestAnimationFrame(timestamp => this.render(gl, timestamp));
     }
@@ -99,7 +103,7 @@ export class AppComponent implements AfterViewInit {
         mat4.fromTranslation(modelViewMatrix, [0, 0, -4]);
         mat4.rotate(modelViewMatrix, modelViewMatrix, elapsedTime * 0.001, [0, 0.7, 1]);
 
-        gl.clearColor(0.5, 0.5, 0.5, 1);
+        gl.clearColor(0.2, 0.2, 0.2, 1);
         gl.enable(gl.DEPTH_TEST);
 
         gl.viewport(0, 0, this.width, this.height);
@@ -109,8 +113,13 @@ export class AppComponent implements AfterViewInit {
         gl.uniformMatrix4fv(this.modelViewLocation, false, modelViewMatrix);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.triangleVertexPositionBuffer);
-        gl.vertexAttribPointer(this.positionLocation, this.triangleVertexPositionBufferItemSize, gl.FLOAT, false, 0, 0);
-        gl.drawArrays(gl.TRIANGLES, 0, this.triangleVertexPositionBufferNumItems);
+        gl.vertexAttribPointer(this.positionLocation, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(this.positionLocation);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.triangleVertexIndexBuffer);
+        gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+        gl.disableVertexAttribArray(this.positionLocation);
+        gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
         requestAnimationFrame(timestamp => this.render(gl, timestamp));
     }
