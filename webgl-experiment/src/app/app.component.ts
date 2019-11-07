@@ -10,9 +10,11 @@ export class AppComponent implements AfterViewInit {
     @ViewChild('canvas1', {static: false}) canvasRef: ElementRef;
     width: number;
     height: number;
-    triangleVertexPositionBuffer: WebGLBuffer;
-    triangleVertexIndexBuffer: WebGLBuffer;
+    vertexPositionBuffer: WebGLBuffer;
+    vertexColorBuffer: WebGLBuffer;
+    vertexIndexBuffer: WebGLBuffer;
     positionLocation: number;
+    colorLocation: number;
     perspectiveLocation: WebGLUniformLocation;
     modelViewLocation: WebGLUniformLocation;
 
@@ -26,12 +28,16 @@ export class AppComponent implements AfterViewInit {
         const vertexShader = gl.createShader(gl.VERTEX_SHADER);
         gl.shaderSource(vertexShader, `
             attribute vec3 Position;
+            attribute vec4 Color;
             
             uniform mat4 u_ModelViewMatrix;
             uniform mat4 u_PerspectiveMatrix;
             
+            varying lowp vec4 vColor;
+            
             void main(void) {
                 gl_Position = u_PerspectiveMatrix * u_ModelViewMatrix * vec4(Position, 1.0);
+                vColor = Color;
             }
         `);
         gl.compileShader(vertexShader);
@@ -41,10 +47,10 @@ export class AppComponent implements AfterViewInit {
 
         const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
         gl.shaderSource(fragmentShader, `
-            precision mediump float;
+            varying lowp vec4 vColor;
             
             void main(void) {
-                gl_FragColor = vec4(1.0, 0.3, 0.0, 1.0);
+                gl_FragColor = vColor;
             }
         `);
         gl.compileShader(fragmentShader);
@@ -63,11 +69,12 @@ export class AppComponent implements AfterViewInit {
         gl.useProgram(program);
 
         this.positionLocation = gl.getAttribLocation(program, 'Position');
+        this.colorLocation = gl.getAttribLocation(program, 'Color');
         this.perspectiveLocation = gl.getUniformLocation(program, 'u_PerspectiveMatrix');
         this.modelViewLocation = gl.getUniformLocation(program, 'u_ModelViewMatrix');
 
-        this.triangleVertexPositionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.triangleVertexPositionBuffer);
+        this.vertexPositionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPositionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
             -1, -1, 0,
             -1, 1, 0,
@@ -76,8 +83,18 @@ export class AppComponent implements AfterViewInit {
         ]), gl.STATIC_DRAW);
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-        this.triangleVertexIndexBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.triangleVertexIndexBuffer);
+        this.vertexColorBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexColorBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            1, 0, 0, 1,
+            0, 1, 0, 1,
+            0, 0, 1, 1,
+            1, 1, 0, 1
+        ]), gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+        this.vertexIndexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vertexIndexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([
             0, 1, 2,
             2, 3, 0
@@ -112,12 +129,21 @@ export class AppComponent implements AfterViewInit {
         gl.uniformMatrix4fv(this.perspectiveLocation, false, perspectiveMatrix);
         gl.uniformMatrix4fv(this.modelViewLocation, false, modelViewMatrix);
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.triangleVertexPositionBuffer);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPositionBuffer);
         gl.vertexAttribPointer(this.positionLocation, 3, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(this.positionLocation);
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.triangleVertexIndexBuffer);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexColorBuffer);
+        gl.vertexAttribPointer(this.colorLocation, 4, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(this.colorLocation);
+
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vertexIndexBuffer);
         gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+        gl.disableVertexAttribArray(this.colorLocation);
+
         gl.disableVertexAttribArray(this.positionLocation);
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
