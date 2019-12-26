@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Hello grid</title>
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+            }
+
+            .root {
+                display: grid;
+                grid-template-columns: 25% auto;
+                grid-template-rows: max-content auto max-content;
+                grid-gap: 5px;
+                grid-template-areas:
+                        "header header"
+                        "menu content"
+                        "footer footer";
+                width: 100vw;
+                height: 100vh;
+            }
+
+            .header {
+                grid-area: header;
+                background-color: red;
+            }
+
+            .menu {
+                grid-area: menu;
+                background-color: blue;
+            }
+
+            .content {
+                grid-area: content;
+                background-color: yellow;
+            }
+
+            .footer {
+                grid-area: footer;
+                background-color: green;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="root">
+            <div class="header">Header</div>
+            <div class="menu">Menu</div>
+            <div class="content">Content</div>
+            <div class="footer">Footer</div>
+        </div>
+    </body>
+</html>
