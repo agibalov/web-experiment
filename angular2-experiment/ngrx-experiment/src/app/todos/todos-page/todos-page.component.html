@@ -1,0 +1,11 @@
+<h1>Todos</h1>
+<h2>Todo count: {{todoCount$|async}}</h2>
+<button type="button" (click)="deleteAllTodos()">Delete All Todos</button>
+<button type="button" (click)="addTodo()">Add Todo</button>
+<ul>
+  <li *ngFor="let todo of todos$|async">
+    <a [routerLink]="todo.id">{{todo.id}}</a>: {{todo.text}}
+    <button type="button" (click)="deleteTodo(todo.id)">Delete</button>
+  </li>
+</ul>
+
