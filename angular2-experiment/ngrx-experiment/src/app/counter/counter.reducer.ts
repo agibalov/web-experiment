@@ -7,6 +7,10 @@ export interface CounterState {
   count: number;
 }
 
+export interface CounterFeatureState {
+  [counterFeatureKey]: CounterState;
+}
+
 const underscoreCounterReducer = createReducer<CounterState>(
   {
     count: 0

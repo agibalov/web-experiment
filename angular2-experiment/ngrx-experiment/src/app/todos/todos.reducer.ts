@@ -13,6 +13,10 @@ export interface TodosState extends EntityState<Todo> {
   selectedTodoId: string|null;
 }
 
+export interface TodosFeatureState {
+  [todosFeatureKey]: TodosState;
+}
+
 export function selectTodoId(todo: Todo): string {
   return todo.id;
 }
