@@ -36,7 +36,9 @@ describe('CounterPageComponent', () => {
     // https://ngrx.io/guide/store/testing
     // Note: MockStore will reset all of the mocked selectors after each test (in the afterEach() hook)
     // by calling the MockStore.resetSelectors() method.
-    // TODO: WTF? Is this supposed to happen automatically?
+    // Question: WTF? Is this supposed to happen automatically?
+    // Answer: Angular 8's TestBed.get() became Angular 9's TestBed.inject()
+    // Ngrx MockStore relies on TestBed.inject(), that's why with Angular 8 I have to do this manually
     mockStore.resetSelectors();
   });
 
