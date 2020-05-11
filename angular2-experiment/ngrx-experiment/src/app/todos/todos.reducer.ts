@@ -29,7 +29,7 @@ const initialState = adapter.getInitialState({
   selectedTodoId: null
 });
 
-export const todosReducer = createReducer<TodosState>(
+const underscoreTodosReducer = createReducer<TodosState>(
   initialState,
   on(loadTodos, (state, payload) => {
     return adapter.setAll(payload.todos, state);
@@ -47,6 +47,10 @@ export const todosReducer = createReducer<TodosState>(
     return adapter.removeAll(state);
   })
 );
+
+export function todosReducer(state, action) {
+  return underscoreTodosReducer(state, action);
+}
 
 export const selectTodosState = createFeatureSelector<TodosState>(todosFeatureKey);
 

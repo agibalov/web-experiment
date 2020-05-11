@@ -17,15 +17,17 @@ export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
   };
 }
 
+export const reducers = {
+  router/*[routerFeatureKey]*/: routerReducer
+};
+
 @NgModule({
   declarations: [
     AppComponent,
   ],
   imports: [
     BrowserModule,
-    StoreModule.forRoot({
-      [routerFeatureKey]: routerReducer
-    }, {
+    StoreModule.forRoot(reducers, {
       runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,
