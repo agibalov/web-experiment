@@ -1009,6 +1009,13 @@
     rxjs "6.5.4"
     webpack-sources "1.4.3"
 
+"@ngxs/form-plugin@^3.6.2":
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/@ngxs/form-plugin/-/form-plugin-3.6.2.tgz#b188485ae43997d9c822edebcd2ba37838de0920"
+  integrity sha512-1ksH4j84HRuCvKLsDrWRLeezmx54qYcGIxZyPRUJqoMRD//Tb07VIHtNHwpCrZBloV1ajP5thaMx3xHWjbkBLw==
+  dependencies:
+    tslib "^1.9.0"
+
 "@ngxs/store@^3.6.2":
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/@ngxs/store/-/store-3.6.2.tgz#cfba63dc1e5bd422e89e54b3332cd69818510624"
@@ -1945,6 +1952,11 @@ builtins@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/builtins/-/builtins-1.0.3.tgz#cb94faeb61c8696451db36534e1422f94f0aee88"
   integrity sha1-y5T662HIaWRR2zZTThQi+U8K7og=
+
+bulma@^0.8.2:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/bulma/-/bulma-0.8.2.tgz#5d928f16ed4a84549c2873f95c92c38c69c631a7"
+  integrity sha512-vMM/ijYSxX+Sm+nD7Lmc1UgWDy2JcL2nTKqwgEqXuOMU+IGALbXd5MLt/BcjBAPLIx36TtzhzBcSnOP974gcqA==
 
 bytes@3.0.0:
   version "3.0.0"

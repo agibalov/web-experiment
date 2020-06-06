@@ -1,0 +1,47 @@
+<!-- NOTE: can't use ngxsForm inside async subscription, because ngxsForm updates the state once subscribed and
+ this causes ExpressionChangedAfterItHasBeenCheckedError -->
+<!--<div class="columns" *ngIf="editorState$|async as editorState">-->
+<div class="columns">
+  <div class="column is-6">
+    <form [formGroup]="editorForm" ngxsForm="editor.editorForm" (ngSubmit)="handleSubmit()">
+      <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="Name" formControlName="name">
+        </div>
+        <!-- NOTE: ngxsForm doesn't expose form control errors, have to access the form directly -->
+        <ng-container *ngIf="editorForm.get('name') as name">
+          <ng-container *ngIf="name.dirty">
+            <p class="help is-danger" *ngIf="name.getError('required')">Required</p>
+            <p class="help is-danger" *ngIf="name.getError('pattern') as e">
+              Must match this pattern: <code>{{e.requiredPattern}}</code>
+            </p>
+          </ng-container>
+        </ng-container>
+      </div>
+      <div class="field">
+        <label class="label">Description</label>
+        <div class="control">
+          <textarea class="textarea" placeholder="Description" formControlName="description"></textarea>
+        </div>
+        <ng-container *ngIf="editorForm.get('name') as description">
+          <ng-container *ngIf="description.dirty">
+            <p class="help is-danger" *ngIf="description.getError('required')">Required</p>
+          </ng-container>
+        </ng-container>
+      </div>
+      <!-- NOTE: see the explanation above -->
+      <div class="field" *ngIf="editorState$|async as editorState">
+        <div class="control">
+          <button class="button" type="submit"
+                  [attr.disabled]="editorForm.invalid || editorState.working ? '' : null"
+                  [ngClass]="{'is-loading': editorState.working}">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- NOTE: see the explanation above -->
+  <div class="column is-6" *ngIf="editorState$|async as editorState">
+    <pre>{{editorState|json}}</pre>
+  </div>
+</div>

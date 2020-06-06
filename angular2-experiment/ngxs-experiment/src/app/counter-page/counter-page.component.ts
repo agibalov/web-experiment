@@ -22,7 +22,7 @@ export interface CounterStateModel {
 }
 
 @State<CounterStateModel>({
-  name: 'Counter',
+  name: 'counter',
   defaults: {
     working: false,
     count: 0
@@ -94,14 +94,11 @@ export class CalculatorService {
   templateUrl: './counter-page.component.html',
   styleUrls: ['./counter-page.component.scss']
 })
-export class CounterPageComponent implements OnInit {
-  counterState$ = this.store.select(state => state.Counter);
+export class CounterPageComponent {
+  counterState$ = this.store.select(state => state.counter);
   snapshot: CounterStateModel;
 
   constructor(private readonly store: Store) {
-  }
-
-  ngOnInit(): void {
   }
 
   async increment() {
@@ -123,6 +120,6 @@ export class CounterPageComponent implements OnInit {
   }
 
   makeSnapshot() {
-    this.snapshot = this.store.selectSnapshot(state => state.Counter);
+    this.snapshot = this.store.selectSnapshot(state => state.counter);
   }
 }
