@@ -1,0 +1,15 @@
+<p>todo-page works!</p>
+<div class="columns">
+  <div class="column is-6" *ngIf="state$|async as state">
+    <p>ID: {{state.state.root.firstChild.params.id}}</p>
+    <p>extended: {{state.state.root.firstChild.queryParams.extended}}</p>
+    <pre>{{state|json}}</pre>
+  </div>
+  <div class="column is-6" *ngIf="todoState$|async as todoState">
+    <p *ngIf="todoState.isLoading">Loading...</p>
+    <ng-container *ngIf="!todoState.isLoading">
+      <p>ID: {{todoState.todoId}}</p>
+      <p>Text: {{todoState.todoText}}</p>
+    </ng-container>
+  </div>
+</div>

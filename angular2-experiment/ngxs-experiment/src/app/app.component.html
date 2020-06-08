@@ -3,6 +3,13 @@
     <ul>
       <li routerLinkActive="is-active"><a routerLink="counter">Counter</a></li>
       <li routerLinkActive="is-active"><a routerLink="editor">Editor</a></li>
+      <li routerLinkActive="is-active"><a routerLink="todos/123">Todo 123</a></li>
+      <li routerLinkActive="is-active" [routerLinkActiveOptions]="{exact: true}">
+        <a routerLink="todos/234">Todo 234</a>
+      </li>
+      <li routerLinkActive="is-active" [routerLinkActiveOptions]="{exact: true}">
+        <a routerLink="todos/234" [queryParams]="{extended: 1}">Todo 234 (extended)</a>
+      </li>
     </ul>
   </div>
 
