@@ -49,6 +49,8 @@ export interface TodoRouteModel {
   isExtended: boolean;
 }
 
+// Long story short: I don't understand how to use ngxs/router-plugin
+
 @Component({
   selector: 'app-todo-page',
   templateUrl: './todo-page.component.html',
@@ -61,6 +63,7 @@ export class TodoPageComponent implements OnDestroy {
 
   @Selector([RouterState])
   private static todoRouteParams(state: RouterStateModel): TodoRouteModel {
+    // Should do some sort of if (!url.startsWith('/todos/')) return null;
     const firstChild = state.state.root.firstChild;
     const todoId = firstChild.params.id;
     const isExtended = firstChild.queryParams.extended === '1';
@@ -69,8 +72,13 @@ export class TodoPageComponent implements OnDestroy {
 
   constructor(private readonly store: Store) {
     this.subscription = store
+      // When you navigate away from the TodoPageComponent, you keep getting the updates.
+      // If the new route has nothing to do with the "todos", all this stuff still gets called and
+      // it sure produces the bs results.
       .select(TodoPageComponent.todoRouteParams)
       .subscribe(todoRouteParams => {
+        // When you navigate from /todos/123 to /editor, this gets called twice
+        console.log('todoRouteParams', todoRouteParams);
         store.dispatch(new LoadTodo(todoRouteParams.todoId, todoRouteParams.isExtended));
       });
   }
