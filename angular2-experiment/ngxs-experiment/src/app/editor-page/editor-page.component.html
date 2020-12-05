@@ -1,7 +1,4 @@
-<!-- NOTE: can't use ngxsForm inside async subscription, because ngxsForm updates the state once subscribed and
- this causes ExpressionChangedAfterItHasBeenCheckedError -->
-<!--<div class="columns" *ngIf="editorState$|async as editorState">-->
-<div class="columns">
+<div class="columns" *ngIf="editorState$|async as editorState">
   <div class="column is-6">
     <form [formGroup]="editorForm" ngxsForm="editor.editorForm" (ngSubmit)="handleSubmit()">
       <div class="field">
@@ -30,8 +27,7 @@
           </ng-container>
         </ng-container>
       </div>
-      <!-- NOTE: see the explanation above -->
-      <div class="field" *ngIf="editorState$|async as editorState">
+      <div class="field">
         <div class="control">
           <button class="button" type="submit"
                   [attr.disabled]="editorForm.invalid || editorState.working ? '' : null"
@@ -40,8 +36,7 @@
       </div>
     </form>
   </div>
-  <!-- NOTE: see the explanation above -->
-  <div class="column is-6" *ngIf="editorState$|async as editorState">
+  <div class="column is-6">
     <pre>{{editorState|json}}</pre>
   </div>
 </div>

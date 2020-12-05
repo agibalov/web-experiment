@@ -1,4 +1,4 @@
-import { Component, Injectable, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injectable, OnInit } from '@angular/core';
 import { Action, State, StateContext, Store } from '@ngxs/store';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UpdateFormValue } from '@ngxs/form-plugin';
@@ -47,7 +47,8 @@ export class EditorState {
 @Component({
   selector: 'app-editor-page',
   templateUrl: './editor-page.component.html',
-  styleUrls: ['./editor-page.component.scss']
+  styleUrls: ['./editor-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditorPageComponent implements OnInit {
   editorState$ = this.store.select(state => state.editor);
