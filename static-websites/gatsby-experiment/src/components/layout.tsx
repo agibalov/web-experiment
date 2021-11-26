@@ -3,16 +3,21 @@ import { Link } from 'gatsby';
 
 const Layout = ({ children }) => {
     return (
-        <>
-            <div>
-                <ul>
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/about">About</Link></li>
-                </ul>
+        <div className="container">
+            <nav className="navbar">
+                <div className="navbar-menu">
+                    <div className="navbar-start">
+                        <Link to="/" className="navbar-item">Home</Link>
+                        <Link to="/about" className="navbar-item">About</Link>
+                        <Link to="/this-page-definitely-does-not-exist" className="navbar-item">404</Link>
+                    </div>
+                </div>
+            </nav>
+            <div className="content">
+                {children}
             </div>
-            {children}
             <div>&copy; 2021</div>
-        </>
+        </div>
     )
 }
 

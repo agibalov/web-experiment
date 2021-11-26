@@ -1,18 +1,19 @@
 import * as React from "react"
 import { graphql, Link } from 'gatsby';
 import Layout from '../components/layout';
+import "./styles.scss"
 
-const pageStyles = {
+const projectsH1Styles = {
     color: "#ff0000",
     border: "1px solid green",
 }
 
 const IndexPage = ({data}) => {
     return (
-        <Layout style={pageStyles}>
+        <Layout>
             <title>Home Page</title>
 
-            <h1>Projects</h1>
+            <h1 style={projectsH1Styles}>Projects</h1>
             <p>These come from *.yaml files</p>
             <ul>
                 {data.allProjectsYaml.edges.map(({node}) => (
