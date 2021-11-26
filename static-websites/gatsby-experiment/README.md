@@ -11,3 +11,4 @@ A Gatsby hello world.
 ## Notes
 
 * `npm run-script build` generates a bunch of files I don't understand: there are a few JS files and a `/public/page-data` directory.
+* `gatsby-node.js` the [suggested](https://www.gatsbyjs.com/docs/recipes/sourcing-data/) `createPages` implementation looks very immature (if errors, then log).
