@@ -1,9 +1,9 @@
 const path = require('path');
 
-exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
+exports.sourceNodes = ({actions, createNodeId, createContentDigest}) => {
     const interests = [
-        { interestId: 'programming', name: 'Programming', description: 'I like to write code' },
-        { interestId: 'music', name: 'Music', description: 'I like to play music' }
+        {interestId: 'programming', name: 'Programming', description: 'I like to write code'},
+        {interestId: 'music', name: 'Music', description: 'I like to play music'}
     ];
 
     interests.forEach(interest => {
@@ -20,7 +20,7 @@ exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
     });
 };
 
-exports.createPages = async ({ actions, graphql }) => {
+exports.createPages = async ({actions, graphql}) => {
     const result = await graphql(`
         query {
             allProjectsYaml {
