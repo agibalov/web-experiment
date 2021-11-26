@@ -1,4 +1,5 @@
 import * as React from "react"
+import Layout from '../components/layout';
 
 const pageStyles = {
     color: "#ff0000",
@@ -7,10 +8,10 @@ const pageStyles = {
 
 const AboutPage = () => {
     return (
-        <main style={pageStyles}>
+        <Layout style={pageStyles}>
             <title>About</title>
             <p>this is the about page</p>
-        </main>
+        </Layout>
     )
 }
 

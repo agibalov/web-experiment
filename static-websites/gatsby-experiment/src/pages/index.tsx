@@ -1,5 +1,6 @@
 import * as React from "react"
 import { graphql, Link } from 'gatsby';
+import Layout from '../components/layout';
 
 const pageStyles = {
     color: "#ff0000",
@@ -8,13 +9,11 @@ const pageStyles = {
 
 const IndexPage = ({data}) => {
     return (
-        <main style={pageStyles}>
+        <Layout style={pageStyles}>
             <title>Home Page</title>
-            <ul>
-                <li><Link to="/">Home</Link></li>
-                <li><Link to="/about">About</Link></li>
-            </ul>
+
             <h1>Projects</h1>
+            <p>These come from *.yaml files</p>
             <ul>
                 {data.allProjectsYaml.edges.map(({node}) => (
                     <li key={node.projectId}>
@@ -24,13 +23,17 @@ const IndexPage = ({data}) => {
                     </li>
                 ))}
             </ul>
+
             <h1>Interests</h1>
+            <p>These come from sourceNodes in gatsby-node.js</p>
             <ul>
                 {data.allInterest.edges.map(({node}) => (
                     <li key={node.interestId}>{node.name} ({node.description})</li>
                 ))}
             </ul>
+
             <h1>Posts</h1>
+            <p>These come from *.md files</p>
             <ul>
                 {data.allMarkdownRemark.edges.map(({node}) => (
                     <li key={node.id}>
@@ -38,7 +41,7 @@ const IndexPage = ({data}) => {
                     </li>
                 ))}
             </ul>
-        </main>
+        </Layout>
     )
 }
 

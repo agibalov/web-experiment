@@ -1,13 +1,14 @@
 import React from "react"
 import {graphql} from "gatsby"
+import Layout from "../components/layout";
 
 function PostTemplate(props) {
     const post = props.data.markdownRemark;
     return (
-        <main>
+        <Layout>
             <title>{post.frontmatter.title}</title>
             <div dangerouslySetInnerHTML={{__html: post.html}}></div>
-        </main>
+        </Layout>
     )
 }
 

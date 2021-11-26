@@ -1,13 +1,14 @@
 import React from "react"
 import { graphql } from "gatsby"
+import Layout from '../components/layout';
 
 function ProjectTemplate(props) {
     const project = props.data.allProjectsYaml.edges[0].node
     return (
-        <main>
+        <Layout>
             <title>{project.name}</title>
             <p>This is project {project.name}</p>
-        </main>
+        </Layout>
     )
 }
 
