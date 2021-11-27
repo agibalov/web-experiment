@@ -42,7 +42,6 @@ export const getStaticPaths: GetStaticPaths<PostParsedUrlQuery> = () => {
 
 export const getStaticProps: GetStaticProps<PostProps, PostParsedUrlQuery> = ({params}) => {
     if (params === undefined) {
-        // TODO: how should I indicate an error?
         throw new Error(`params is undefined`);
     }
 
