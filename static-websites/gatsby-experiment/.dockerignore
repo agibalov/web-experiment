@@ -1,0 +1,6 @@
+**
+!/src
+!/*.js
+!/package.json
+!/package-lock.json
+!/default.conf.template
