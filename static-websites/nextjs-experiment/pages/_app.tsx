@@ -8,7 +8,7 @@ function MyApp({Component, pageProps}: AppProps) {
         <>
             <Head>
                 <title>Next.js experiment</title>
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/favicon.ico"/>
             </Head>
             <div className="container">
                 <nav className="navbar">
@@ -22,7 +22,7 @@ function MyApp({Component, pageProps}: AppProps) {
                             </Link>
                             <Link href={{
                                 pathname: '/posts/[id]',
-                                query: { id: '123' }
+                                query: {id: '123'}
                             }}>
                                 <a className="navbar-item">Post 123</a>
                             </Link>
