@@ -1,6 +1,6 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { getAllPosts, getOnePost } from '../data/posts';
+import { getAllPosts, getOnePost } from '../../data/posts';
 
 interface PostProps {
     id: string;
@@ -44,8 +44,9 @@ export const getStaticProps: GetStaticProps<PostProps, PostParsedUrlQuery> = ({p
 
     const post = getOnePost(params.id);
     if (post === undefined) {
-        // TODO: how should I indicate an error?
-        throw new Error('post is undefined');
+        return {
+            notFound: true
+        };
     }
 
     return {
