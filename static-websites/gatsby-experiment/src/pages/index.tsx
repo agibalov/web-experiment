@@ -1,7 +1,6 @@
 import * as React from "react"
 import { graphql, Link } from 'gatsby';
 import Layout from '../components/layout';
-import "./styles.scss"
 
 const projectsH1Styles = {
     color: "#ff0000",

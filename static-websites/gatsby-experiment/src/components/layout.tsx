@@ -1,5 +1,6 @@
 import * as React from "react"
 import { Link } from 'gatsby';
+import "./styles.scss"
 
 const Layout = ({ children }) => {
     return (
