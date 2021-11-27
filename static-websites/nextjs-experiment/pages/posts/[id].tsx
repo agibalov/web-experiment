@@ -1,6 +1,7 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { getAllPosts, getOnePost } from '../../data/posts';
+import Head from 'next/head';
 
 interface PostProps {
     id: string;
@@ -11,6 +12,9 @@ interface PostProps {
 const Post: NextPage<PostProps> = (post) => {
     return (
         <>
+            <Head>
+                <title>Post #{post.id}</title>
+            </Head>
             <h1>Post #{post.id}</h1>
             <pre>
                 Title: {post.title}{'\n'}
