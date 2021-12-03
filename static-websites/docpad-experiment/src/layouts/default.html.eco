@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <title><%= @document.title %> | <%= @myCustom.name %></title>
+    <link rel="stylesheet" href="/styles/style.css">
+  </head>
+  <body>
+    <div class="container">
+      <ul>
+        <li><a href="<%= @getCollection("html").findOne({type:'index'}).toJSON().url %>">Index</a></li>
+        <li><a href="<%= @getCollection("html").findOne({type:'article'}).toJSON().url %>">Article 1</a></li>
+        <li><a href="<%= @getCollection("html").findOne({type:'asciidoctest'}).toJSON().url %>">Asciidoctor plugin test</a></li>
+        <li><a href="<%= @getCollection("html").findOne({type:'projects index'}).toJSON().url %>">Projects</a></li>
+      </ul>
+      <h1 class="page-header"><%= @document.title %></h1>
+      <%- @content %>
+    </div>
+  </body>
+</html>

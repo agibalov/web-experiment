@@ -1,0 +1,25 @@
+---
+omg: wtf
+layout: default
+type: asciidoctest
+---
+
+:something: I am a substitution.
+
+= Title here
+
+Some text here
+
+----
+block of code here
+----
+
+* This comes from plugin: {dataFromPlugin}
+* This comes from own attributes: {something}
+
+Here's my `package.json` at the very root.
+----
+include::package.json[]
+----
+
+Done.
