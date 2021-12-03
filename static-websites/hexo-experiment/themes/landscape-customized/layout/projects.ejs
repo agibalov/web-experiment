@@ -1,0 +1,12 @@
+<article>
+  <div class="article-inner">
+    <div class="article-entry">
+      <h2>Projects</h2>
+      <ul>
+        <% page.projects.forEach(project => { %>
+        <li><a href="<%= url_for(`/projects/${project.slug}`) %>"><%= project.name %></a></li>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+</article>

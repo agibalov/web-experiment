@@ -1,0 +1,14 @@
+<% if (site.data.sayings) { %>
+  <div class="widget-wrap">
+    <h3 class="widget-title">Computer Programming Sayings</h3>
+    <div class="widget">
+      <ul>
+        <% site.data.sayings.forEach(saying => { %>
+        <li>
+          &laquo;<%= saying.saying %>&raquo; (<%= saying.author %>)
+        </li>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+<% } %>
