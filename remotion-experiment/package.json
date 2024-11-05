@@ -24,8 +24,9 @@
     "typescript": "5.5.4"
   },
   "scripts": {
-    "dev": "remotion studio",
+    "dev": "remotion studio --props='{\"mode\": \"dev\"}'",
     "build": "remotion render LongClip out/video.mp4",
+    "build-still": "remotion still --props='{\"mode\": \"rendering still\"}' OneImage out/1.png",
     "upgrade": "remotion upgrade",
     "test": "eslint src --ext ts,tsx,js,jsx && tsc"
   },

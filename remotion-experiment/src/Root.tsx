@@ -1,6 +1,7 @@
 import './tailwind.css';
-import { Composition } from "remotion";
+import { Composition, Still } from "remotion";
 import { LongClip } from "./LongClip";
+import { OneImage } from "./OneImage";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -12,6 +13,11 @@ export const RemotionRoot: React.FC = () => {
         fps={30}
         width={480}
         height={640} />
+      <Still
+        id="OneImage"
+        component={OneImage}
+        width={800}
+        height={600} />
     </>
   );
 };
