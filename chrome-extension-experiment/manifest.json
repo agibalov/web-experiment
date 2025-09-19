@@ -11,11 +11,15 @@
     "permissions": [
         "activeTab",
         "scripting",
-        "tabs"
+        "tabs",
+        "sidePanel"
     ],
     "background": {
         "service_worker": "src/background.ts",
         "type": "module"
+    },
+    "side_panel": {
+        "default_path": "src/sidepanel/sidepanel.html"
     },
     "content_scripts": [
         {

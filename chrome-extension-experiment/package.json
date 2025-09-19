@@ -14,7 +14,9 @@
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.2.0",
     "@types/chrome": "^0.1.12",
+    "body-parser": "^2.2.0",
     "esbuild": "^0.25.10",
+    "express": "^5.1.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.6"
   }
