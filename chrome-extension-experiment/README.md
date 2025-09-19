@@ -14,4 +14,4 @@ In 3 separate terminal tabs:
 
 ### Making production builds
 
-TODO
+* `npm run build`

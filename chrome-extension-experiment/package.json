@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite build --watch"
+    "build-zip": "vite build --mode=zip",
+    "preview": "vite build --watch",
+    "clean": "rimraf dist dist-zip"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +19,9 @@
     "body-parser": "^2.2.0",
     "esbuild": "^0.25.10",
     "express": "^5.1.0",
+    "rimraf": "^6.0.1",
     "typescript": "^5.9.2",
-    "vite": "^7.1.6"
+    "vite": "^7.1.6",
+    "vite-plugin-zip-pack": "^1.2.4"
   }
 }
