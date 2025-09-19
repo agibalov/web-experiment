@@ -12,6 +12,8 @@ In 3 separate terminal tabs:
 * `npx web-ext run --target=chromium --chromium-binary="$(which google-chrome)" --source-dir=dist` - deploys `/dist` to Chrome
 * `npm run dev` - serves dummy API
 
-### Making production builds
+### Making extension builds
 
-* `npm run build`
+* `npm run build` to build unpacked extension under "dist/" for "Load unpacked" in Chrome
+* `npm run build-zip` to build a zip archive at "dist-zip/extension.zip"
+* `npm run clean` to delete `build/` and `build-zip/`
