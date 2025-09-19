@@ -1,0 +1,27 @@
+{
+  "name": "chrome-extension-experiment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build-zip": "vite build --mode=zip",
+    "preview": "vite build --watch",
+    "clean": "rimraf dist dist-zip"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.2.0",
+    "@types/chrome": "^0.1.12",
+    "body-parser": "^2.2.0",
+    "esbuild": "^0.25.10",
+    "express": "^5.1.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.6",
+    "vite-plugin-zip-pack": "^1.2.4"
+  }
+}
