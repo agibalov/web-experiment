@@ -1,6 +1,6 @@
 {
     "short_name": "todo-app-frontend",
-    "name": "{{name}}",
+    "name": "Todo App",
     "icons": [
         {
             "src": "favicon.ico",
