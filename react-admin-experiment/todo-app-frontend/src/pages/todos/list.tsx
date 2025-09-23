@@ -51,7 +51,7 @@ export const TodoList = () => (
             <DataTable.Col source="done">
                 <BooleanField source="done" />
             </DataTable.Col>
-            <DataTable.Col source="actions" label="Actions">
+            <DataTable.Col source="actions" label="Actions" disableSort={true}>
                 <Stack direction="row" spacing={1}>
                     <ShowButton />
                     <EditButton />
