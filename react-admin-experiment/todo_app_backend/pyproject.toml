@@ -5,7 +5,9 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "alembic>=1.16.5",
     "fastapi>=0.117.1",
+    "sqlalchemy>=2.0.43",
     "strawberry-graphql[fastapi]>=0.282.0",
     "uvicorn>=0.36.0",
 ]
