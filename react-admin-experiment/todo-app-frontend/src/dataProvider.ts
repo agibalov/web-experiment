@@ -1,8 +1,8 @@
-import fakeRestDataProvider from "ra-data-fakerest";
-import data from "./data.json";
+import buildGraphQLProvider, { buildQuery } from 'ra-data-graphql-simple';
 
-export const dataProvider = fakeRestDataProvider(
-  data,
-  process.env.NODE_ENV !== "test",
-  300,
-);
+export const dataProvider = buildGraphQLProvider({ 
+  buildQuery, 
+  clientOptions: {
+    uri: "http://localhost:8000/graphql"
+  }
+});
