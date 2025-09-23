@@ -69,6 +69,9 @@ def generate_todos():
 
 TODOS = generate_todos()
 
+# Keep track of the next available ID
+NEXT_TODO_ID = 1001  # Start after the initial 1000 todos
+
 @strawberry.type
 class Todo:
     id: strawberry.ID
@@ -155,7 +158,9 @@ class Query:
 class Mutation:
     @strawberry.mutation
     def createTodo(self, title: str, done: bool = False) -> Todo:
-        new_id = str(len(TODOS) + 1)
+        global NEXT_TODO_ID
+        new_id = str(NEXT_TODO_ID)
+        NEXT_TODO_ID += 1
         new_todo = {"id": new_id, "title": title, "done": done}
         TODOS.append(new_todo)
         return Todo(id=new_id, title=title, done=done)
