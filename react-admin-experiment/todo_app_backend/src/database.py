@@ -22,8 +22,8 @@ Base = declarative_base()
 class TodoDB(Base):
     __tablename__ = "todos"
 
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
+    id = Column(Integer, primary_key=True)
+    title = Column(String)
     done = Column(Boolean, default=False)
 
 def create_tables():

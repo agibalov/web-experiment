@@ -26,6 +26,7 @@ def upgrade() -> None:
     """)
     op.execute("CREATE INDEX ix_todos_id ON todos (id)")
     op.execute("CREATE INDEX ix_todos_title ON todos (title)")
+    op.execute("CREATE INDEX ix_todos_done ON todos (done)")
 
 
 def downgrade() -> None:
