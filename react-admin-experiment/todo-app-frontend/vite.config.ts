@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
     },
     base: './',
     build: {
-        sourcemap: mode === "developement",
+        sourcemap: mode === "development",
     },
     test: {
         globals: true,
