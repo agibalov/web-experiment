@@ -1,0 +1,11 @@
+[project]
+name = "todo-app-backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.117.1",
+    "strawberry-graphql[fastapi]>=0.282.0",
+    "uvicorn>=0.36.0",
+]
