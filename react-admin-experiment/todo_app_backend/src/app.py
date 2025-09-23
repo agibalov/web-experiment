@@ -5,38 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from strawberry.fastapi import GraphQLRouter
 from sqlalchemy import desc, asc
 
-from .database import TodoDB, get_db, reset_database, SessionLocal
-from .seed import generate_seed_data
-
-def initialize_database(todo_count: int = 1000):
-    print("Resetting database...")
-    reset_database()
-    
-    print(f"Populating database with {todo_count} fresh todos...")
-    
-    db = SessionLocal()
-    
-    try:
-        seed_todos = generate_seed_data(todo_count)
-        todos = []
-        
-        for todo_data in seed_todos:
-            todo = TodoDB(title=todo_data["title"], done=todo_data["done"])
-            todos.append(todo)
-        
-        db.add_all(todos)
-        db.commit()
-        
-        print(f"Successfully populated database with {len(todos)} todos!")
-        
-    except Exception as e:
-        print(f"Error populating database: {e}")
-        db.rollback()
-        raise
-    finally:
-        db.close()
-
-initialize_database(1000)
+from .database import TodoDB, get_db, initialize_database
 
 @strawberry.type
 class Todo:
@@ -190,3 +159,5 @@ app.add_middleware(
 )
 
 app.include_router(GraphQLRouter(schema), prefix="/graphql")
+
+initialize_database(todo_count=1000)

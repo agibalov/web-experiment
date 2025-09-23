@@ -6,6 +6,8 @@ from urllib.parse import urlparse
 from alembic.config import Config
 from alembic import command
 
+from .seed import generate_seed_data
+
 SQLALCHEMY_DATABASE_URL = "sqlite:///./todos.db"
 
 engine = create_engine(
@@ -43,5 +45,33 @@ def get_db():
     db = SessionLocal()
     try:
         yield db
+    finally:
+        db.close()
+        
+def initialize_database(todo_count: int = 1000):
+    print("Resetting database...")
+    reset_database()
+    
+    print(f"Populating database with {todo_count} fresh todos...")
+    
+    db = SessionLocal()
+    
+    try:
+        seed_todos = generate_seed_data(todo_count)
+        todos = []
+        
+        for todo_data in seed_todos:
+            todo = TodoDB(title=todo_data["title"], done=todo_data["done"])
+            todos.append(todo)
+        
+        db.add_all(todos)
+        db.commit()
+        
+        print(f"Successfully populated database with {len(todos)} todos!")
+        
+    except Exception as e:
+        print(f"Error populating database: {e}")
+        db.rollback()
+        raise
     finally:
         db.close()
