@@ -184,7 +184,7 @@ class Mutation:
         # Remove the todo from the list
         TODOS = [todo for todo in TODOS if todo["id"] != str(id)]
         
-        if todo is None:
+        if deleted is None:
             return None        
         
         return Todo(id=deleted["id"], title=deleted["title"], done=deleted["done"])
