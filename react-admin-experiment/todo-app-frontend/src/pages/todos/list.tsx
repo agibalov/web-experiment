@@ -1,5 +1,5 @@
 import { Stack, Box, Typography, Chip } from '@mui/material';
-import { BooleanField, DataTable, List, DeleteButton, EditButton, ShowButton, useRecordContext } from 'react-admin';
+import { BooleanField, DataTable, List, DeleteButton, EditButton, ShowButton, useRecordContext, DateField } from 'react-admin';
 
 const TodoExpandPanel = () => {
     const record = useRecordContext();
@@ -38,6 +38,22 @@ const TodoExpandPanel = () => {
                         size="small"
                     />
                 </Box>
+                <Box>
+                    <Typography variant="subtitle2" color="textSecondary">
+                        Created At:
+                    </Typography>
+                    <Typography variant="body1">
+                        <DateField record={record} source="createdAt" showTime />
+                    </Typography>
+                </Box>
+                <Box>
+                    <Typography variant="subtitle2" color="textSecondary">
+                        Updated At:
+                    </Typography>
+                    <Typography variant="body1">
+                        <DateField record={record} source="updatedAt" showTime />
+                    </Typography>
+                </Box>
             </Stack>
         </Box>
     );
@@ -50,6 +66,12 @@ export const TodoList = () => (
             <DataTable.Col source="title" />
             <DataTable.Col source="done">
                 <BooleanField source="done" />
+            </DataTable.Col>
+            <DataTable.Col source="createdAt" label="Created">
+                <DateField source="createdAt" showTime />
+            </DataTable.Col>
+            <DataTable.Col source="updatedAt" label="Updated">
+                <DateField source="updatedAt" showTime />
             </DataTable.Col>
             <DataTable.Col source="actions" label="Actions" disableSort={true}>
                 <Stack direction="row" spacing={1}>

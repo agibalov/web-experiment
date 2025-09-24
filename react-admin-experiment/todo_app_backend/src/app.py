@@ -1,5 +1,6 @@
 import strawberry
-from typing import Optional, List
+from typing import Optional, List, Annotated
+from datetime import datetime, timezone
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from strawberry.fastapi import GraphQLRouter
@@ -7,11 +8,18 @@ from sqlalchemy import desc, asc
 
 from .database import TodoDB, get_db, initialize_database
 
+UTCDateTime = Annotated[datetime, strawberry.scalar(
+    serialize=lambda v: v.replace(tzinfo=timezone.utc).isoformat().replace('+00:00', 'Z') if v else None,
+    parse_value=lambda v: datetime.fromisoformat(v.replace('Z', '+00:00')) if v else None,
+)]
+
 @strawberry.type
 class Todo:
     id: strawberry.ID
     title: str
     done: bool
+    created_at: UTCDateTime
+    updated_at: UTCDateTime
 
 @strawberry.input
 class TodoFilter:
@@ -53,12 +61,16 @@ class Query:
                     query = query.order_by(desc(TodoDB.title) if sortOrder == "DESC" else asc(TodoDB.title))
                 elif sortField == "done":
                     query = query.order_by(desc(TodoDB.done) if sortOrder == "DESC" else asc(TodoDB.done))
+                elif sortField == "createdAt":
+                    query = query.order_by(desc(TodoDB.created_at) if sortOrder == "DESC" else asc(TodoDB.created_at))
+                elif sortField == "updatedAt":
+                    query = query.order_by(desc(TodoDB.updated_at) if sortOrder == "DESC" else asc(TodoDB.updated_at))
             
             if page is not None and perPage is not None:
                 query = query.offset(page * perPage).limit(perPage)
 
             db_todos = query.all()
-            return [Todo(id=str(todo.id), title=todo.title, done=todo.done) for todo in db_todos]
+            return [Todo(id=str(todo.id), title=todo.title, done=todo.done, created_at=todo.created_at, updated_at=todo.updated_at) for todo in db_todos]
         finally:
             db.close()
     
@@ -93,7 +105,7 @@ class Query:
         try:
             db_todo = db.query(TodoDB).filter(TodoDB.id == int(id)).first()
             if db_todo:
-                return Todo(id=str(db_todo.id), title=db_todo.title, done=db_todo.done)
+                return Todo(id=str(db_todo.id), title=db_todo.title, done=db_todo.done, created_at=db_todo.created_at, updated_at=db_todo.updated_at)
             return None
         finally:
             db.close()
@@ -109,7 +121,7 @@ class Mutation:
             db.add(db_todo)
             db.commit()
             db.refresh(db_todo)
-            return Todo(id=str(db_todo.id), title=db_todo.title, done=db_todo.done)
+            return Todo(id=str(db_todo.id), title=db_todo.title, done=db_todo.done, created_at=db_todo.created_at, updated_at=db_todo.updated_at)
         finally:
             db.close()
     
@@ -126,7 +138,7 @@ class Mutation:
                     db_todo.done = done
                 db.commit()
                 db.refresh(db_todo)
-                return Todo(id=str(db_todo.id), title=db_todo.title, done=db_todo.done)
+                return Todo(id=str(db_todo.id), title=db_todo.title, done=db_todo.done, created_at=db_todo.created_at, updated_at=db_todo.updated_at)
             return None
         finally:
             db.close()
@@ -138,7 +150,7 @@ class Mutation:
         try:
             db_todo = db.query(TodoDB).filter(TodoDB.id == int(id)).first()
             if db_todo:
-                deleted_todo = Todo(id=str(db_todo.id), title=db_todo.title, done=db_todo.done)
+                deleted_todo = Todo(id=str(db_todo.id), title=db_todo.title, done=db_todo.done, created_at=db_todo.created_at, updated_at=db_todo.updated_at)
                 db.delete(db_todo)
                 db.commit()
                 return deleted_todo

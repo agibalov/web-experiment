@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Boolean
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
@@ -25,6 +25,8 @@ class TodoDB(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String)
     done = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
 def create_tables():
     alembic_cfg = Config("alembic.ini")
@@ -61,7 +63,12 @@ def initialize_database(todo_count: int = 1000):
         todos = []
         
         for todo_data in seed_todos:
-            todo = TodoDB(title=todo_data["title"], done=todo_data["done"])
+            todo = TodoDB(
+                title=todo_data["title"], 
+                done=todo_data["done"],
+                created_at=todo_data["created_at"],
+                updated_at=todo_data["updated_at"]
+            )
             todos.append(todo)
         
         db.add_all(todos)
