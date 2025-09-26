@@ -11,8 +11,9 @@ from .seed import generate_seed_data
 SQLALCHEMY_DATABASE_URL = "sqlite:///./todos.db"
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, 
-    connect_args={"check_same_thread": False}
+    SQLALCHEMY_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+    echo=True
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -27,6 +28,12 @@ class TodoDB(Base):
     done = Column(Boolean, default=False)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+
+class TodoFTSDB(Base):
+    __tablename__ = 'todos_fts'
+
+    rowid = Column(Integer, primary_key=True)
+    title = Column(String)
 
 def create_tables():
     alembic_cfg = Config("alembic.ini")
@@ -49,33 +56,33 @@ def get_db():
         yield db
     finally:
         db.close()
-        
+
 def initialize_database(todo_count: int = 1000):
     print("Resetting database...")
     reset_database()
-    
+
     print(f"Populating database with {todo_count} fresh todos...")
-    
+
     db = SessionLocal()
-    
+
     try:
         seed_todos = generate_seed_data(todo_count)
         todos = []
-        
+
         for todo_data in seed_todos:
             todo = TodoDB(
-                title=todo_data["title"], 
+                title=todo_data["title"],
                 done=todo_data["done"],
                 created_at=todo_data["created_at"],
                 updated_at=todo_data["updated_at"]
             )
             todos.append(todo)
-        
+
         db.add_all(todos)
         db.commit()
-        
+
         print(f"Successfully populated database with {len(todos)} todos!")
-        
+
     except Exception as e:
         print(f"Error populating database: {e}")
         db.rollback()

@@ -1,11 +1,11 @@
 import { Stack, Box, Typography, Chip } from '@mui/material';
-import { BooleanField, DataTable, List, DeleteButton, EditButton, ShowButton, useRecordContext, DateField } from 'react-admin';
+import { BooleanField, DataTable, List, DeleteButton, EditButton, ShowButton, useRecordContext, DateField, SearchInput } from 'react-admin';
 
 const TodoExpandPanel = () => {
     const record = useRecordContext();
-    
+
     if (!record) return null;
-    
+
     return (
         <Box sx={{ p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>
             <Typography variant="h6" gutterBottom>
@@ -32,8 +32,8 @@ const TodoExpandPanel = () => {
                     <Typography variant="subtitle2" color="textSecondary">
                         Status:
                     </Typography>
-                    <Chip 
-                        label={record.done ? 'Completed' : 'Pending'} 
+                    <Chip
+                        label={record.done ? 'Completed' : 'Pending'}
                         color={record.done ? 'success' : 'warning'}
                         size="small"
                     />
@@ -59,8 +59,12 @@ const TodoExpandPanel = () => {
     );
 };
 
+const todoFilters = [
+    <SearchInput source="q" alwaysOn />
+];
+
 export const TodoList = () => (
-    <List>
+    <List filters={todoFilters}>
         <DataTable expand={<TodoExpandPanel />}>
             <DataTable.Col source="id" />
             <DataTable.Col source="title" />
