@@ -1,5 +1,5 @@
 import { Stack, Box, Typography, Chip } from '@mui/material';
-import { BooleanField, DataTable, List, DeleteButton, EditButton, ShowButton, useRecordContext, DateField, SearchInput, BooleanInput, SelectInput } from 'react-admin';
+import { BooleanField, DataTable, List, DeleteButton, EditButton, ShowButton, useRecordContext, DateField, SearchInput } from 'react-admin';
 
 const TodoExpandPanel = () => {
     const record = useRecordContext();
