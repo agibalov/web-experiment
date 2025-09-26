@@ -31,6 +31,37 @@ def upgrade() -> None:
     op.execute("CREATE INDEX ix_todos_done ON todos (done)")
     op.execute("CREATE INDEX ix_todos_created_at ON todos (created_at)")
     op.execute("CREATE INDEX ix_todos_updated_at ON todos (updated_at)")
+    
+    op.execute("""
+        CREATE VIRTUAL TABLE todos_fts USING fts5(
+            title,
+            content=todos,
+            content_rowid=id
+        )
+    """)
+    
+    op.execute("""
+        CREATE TRIGGER todos_fts_insert AFTER INSERT ON todos BEGIN
+            INSERT INTO todos_fts(rowid, title)
+            VALUES (new.id, new.title);
+        END
+    """)
+
+    op.execute("""
+        CREATE TRIGGER todos_fts_delete AFTER DELETE ON todos BEGIN
+            INSERT INTO todos_fts(todos_fts, rowid, title)
+            VALUES('delete', old.id, old.title);
+        END
+    """)
+
+    op.execute("""
+        CREATE TRIGGER todos_fts_update AFTER UPDATE ON todos BEGIN
+            INSERT INTO todos_fts(todos_fts, rowid, title)
+            VALUES('delete', old.id, old.title);
+            INSERT INTO todos_fts(rowid, title)
+            VALUES (new.id, new.title);
+        END
+    """)
 
 
 def downgrade() -> None:
