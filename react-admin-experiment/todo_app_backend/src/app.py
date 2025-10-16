@@ -1,5 +1,6 @@
+import asyncio
 import strawberry
-from typing import Optional, List, Annotated
+from typing import AsyncGenerator, Optional, List, Annotated
 from datetime import datetime, timezone
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,6 +10,8 @@ from sqlalchemy import desc, asc, func, literal_column
 from src.fts import build_match
 
 from .database import TodoDB, TodoFTSDB, get_db, initialize_database
+
+subscribers: list[asyncio.Queue] = []
 
 UTCDateTime = Annotated[datetime, strawberry.scalar(
     serialize=lambda v: v.replace(tzinfo=timezone.utc).isoformat().replace('+00:00', 'Z') if v else None,
@@ -22,6 +25,12 @@ class Todo:
     done: bool
     created_at: UTCDateTime
     updated_at: UTCDateTime
+
+@strawberry.type
+class TodoUpdate:
+    type: str # "CREATED", "UPDATED", "DELETED"
+    todo: Todo | None = None
+    id: strawberry.ID | None = None
 
 @strawberry.input
 class TodoFilter:
@@ -49,6 +58,19 @@ def apply_todo_filter(query, filter: Optional[TodoFilter]):
         if filter.done is not None:
             query = query.filter(TodoDB.done == filter.done)
     return query
+
+async def notify_subscribers(update: TodoUpdate):
+    for queue in subscribers:
+        await queue.put(update)
+
+def todo_from_tododb(db_todo: TodoDB) -> Todo:
+    return Todo(
+        id=str(db_todo.id),
+        title=db_todo.title,
+        done=db_todo.done,
+        created_at=db_todo.created_at,
+        updated_at=db_todo.updated_at
+    )
 
 @strawberry.type
 class Query:
@@ -82,7 +104,7 @@ class Query:
                 query = query.offset(page * perPage).limit(perPage)
 
             db_todos = query.all()
-            return [Todo(id=str(todo.id), title=todo.title, done=todo.done, created_at=todo.created_at, updated_at=todo.updated_at) for todo in db_todos]
+            return [todo_from_tododb(db_todo) for db_todo in db_todos]
         finally:
             db.close()
 
@@ -111,7 +133,7 @@ class Query:
         try:
             db_todo = db.query(TodoDB).filter(TodoDB.id == int(id)).first()
             if db_todo:
-                return Todo(id=str(db_todo.id), title=db_todo.title, done=db_todo.done, created_at=db_todo.created_at, updated_at=db_todo.updated_at)
+                return todo_from_tododb(db_todo)
             return None
         finally:
             db.close()
@@ -119,7 +141,7 @@ class Query:
 @strawberry.type
 class Mutation:
     @strawberry.mutation
-    def createTodo(self, title: str, done: bool = False) -> Todo:
+    async def createTodo(self, title: str, done: bool = False) -> Todo:
         db = get_db_session()
 
         try:
@@ -130,9 +152,10 @@ class Mutation:
             return Todo(id=str(db_todo.id), title=db_todo.title, done=db_todo.done, created_at=db_todo.created_at, updated_at=db_todo.updated_at)
         finally:
             db.close()
+            await notify_subscribers(TodoUpdate(type="CREATED", todo=todo_from_tododb(db_todo)))
 
     @strawberry.mutation
-    def updateTodo(self, id: strawberry.ID, title: Optional[str] = None, done: Optional[bool] = None) -> Optional[Todo]:
+    async def updateTodo(self, id: strawberry.ID, title: Optional[str] = None, done: Optional[bool] = None) -> Optional[Todo]:
         db = get_db_session()
 
         try:
@@ -148,9 +171,10 @@ class Mutation:
             return None
         finally:
             db.close()
+            await notify_subscribers(TodoUpdate(type="UPDATED", todo=todo_from_tododb(db_todo)))
 
     @strawberry.mutation
-    def deleteTodo(self, id: strawberry.ID) -> Optional[Todo]:
+    async def deleteTodo(self, id: strawberry.ID) -> Optional[Todo]:
         db = get_db_session()
 
         try:
@@ -163,8 +187,26 @@ class Mutation:
             return None
         finally:
             db.close()
+            await notify_subscribers(TodoUpdate(type="DELETED", id=id))
 
-schema = strawberry.Schema(query=Query, mutation=Mutation)
+@strawberry.type
+class Subscription:
+    @strawberry.subscription
+    async def todoUpdates(self, info: strawberry.Info) -> AsyncGenerator[TodoUpdate, None]:
+        queue: asyncio.Queue = asyncio.Queue()
+        subscribers.append(queue)
+        try:
+            while True:
+                update = await queue.get()
+                if isinstance(update, TodoUpdate):
+                    yield update
+        finally:
+            subscribers.remove(queue)
+
+schema = strawberry.Schema(
+    query=Query,
+    mutation=Mutation,
+    subscription=Subscription)
 
 app = FastAPI()
 
@@ -176,6 +218,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(GraphQLRouter(schema), prefix="/graphql")
+graphql_app = GraphQLRouter(
+    schema,
+    subscription_protocols=[
+        strawberry.subscriptions.GRAPHQL_TRANSPORT_WS_PROTOCOL,
+    ],
+)
+app.include_router(graphql_app, prefix="/graphql")
 
 initialize_database(todo_count=1000)

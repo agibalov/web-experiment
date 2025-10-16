@@ -10,4 +10,5 @@ dependencies = [
     "sqlalchemy>=2.0.43",
     "strawberry-graphql[fastapi]>=0.282.0",
     "uvicorn>=0.36.0",
+    "websockets>=15.0.1",
 ]
