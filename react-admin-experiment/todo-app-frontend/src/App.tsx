@@ -2,14 +2,14 @@ import {
     Admin,
     DataProvider,
     EditGuesser,
-    Resource,
-    ShowGuesser
+    Resource
 } from "react-admin";
 import { Layout } from "./Layout";
 import { TodoList } from "./pages/todos/list";
 import { TodoCreate } from "./pages/todos/create";
 import { useEffect, useState } from "react";
 import { buildDataProvider } from "./dataProvider";
+import { TodoShow } from "./pages/todos/show";
 
 export const App = () => {
     const [dataProvider, setDataProvider] = useState<DataProvider | null>(null);
@@ -38,7 +38,7 @@ export const App = () => {
                 name="Todo"
                 list={TodoList}
                 create={TodoCreate}
-                show={ShowGuesser}
+                show={TodoShow}
                 edit={EditGuesser}
             />
         </Admin>
