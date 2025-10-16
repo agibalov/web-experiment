@@ -1,5 +1,6 @@
 import { Stack, Box, Typography, Chip } from '@mui/material';
 import { BooleanField, DataTable, List, DeleteButton, EditButton, ShowButton, useRecordContext, DateField, SearchInput } from 'react-admin';
+import { useTodoSubscription } from '../../useTodoSubscription';
 
 const TodoExpandPanel = () => {
     const record = useRecordContext();
@@ -63,27 +64,31 @@ const todoFilters = [
     <SearchInput source="q" alwaysOn />
 ];
 
-export const TodoList = () => (
-    <List filters={todoFilters}>
-        <DataTable expand={<TodoExpandPanel />}>
-            <DataTable.Col source="id" />
-            <DataTable.Col source="title" />
-            <DataTable.Col source="done">
-                <BooleanField source="done" />
-            </DataTable.Col>
-            <DataTable.Col source="createdAt" label="Created">
-                <DateField source="createdAt" showTime />
-            </DataTable.Col>
-            <DataTable.Col source="updatedAt" label="Updated">
-                <DateField source="updatedAt" showTime />
-            </DataTable.Col>
-            <DataTable.Col source="actions" label="Actions" disableSort={true}>
-                <Stack direction="row" spacing={1}>
-                    <ShowButton />
-                    <EditButton />
-                    <DeleteButton />
-                </Stack>
-            </DataTable.Col>
-        </DataTable>
-    </List>
-);
+export const TodoList = () => {
+    useTodoSubscription();
+
+    return (
+        <List filters={todoFilters}>
+            <DataTable expand={<TodoExpandPanel />}>
+                <DataTable.Col source="id" />
+                <DataTable.Col source="title" />
+                <DataTable.Col source="done">
+                    <BooleanField source="done" />
+                </DataTable.Col>
+                <DataTable.Col source="createdAt" label="Created">
+                    <DateField source="createdAt" showTime />
+                </DataTable.Col>
+                <DataTable.Col source="updatedAt" label="Updated">
+                    <DateField source="updatedAt" showTime />
+                </DataTable.Col>
+                <DataTable.Col source="actions" label="Actions" disableSort={true}>
+                    <Stack direction="row" spacing={1}>
+                        <ShowButton />
+                        <EditButton />
+                        <DeleteButton />
+                    </Stack>
+                </DataTable.Col>
+            </DataTable>
+        </List>
+    );
+};

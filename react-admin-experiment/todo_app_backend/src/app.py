@@ -1,6 +1,6 @@
 import asyncio
 import strawberry
-from typing import AsyncGenerator, Literal, Optional, List, Annotated
+from typing import AsyncGenerator, Optional, List, Annotated
 from datetime import datetime, timezone
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -26,8 +26,9 @@ class Todo:
     created_at: UTCDateTime
     updated_at: UTCDateTime
 
+@strawberry.type
 class TodoUpdate:
-    type: Literal["CREATED", "UPDATED", "DELETED"]
+    type: str # "CREATED", "UPDATED", "DELETED"
     todo: Todo | None = None
     id: strawberry.ID | None = None
 
@@ -221,7 +222,6 @@ graphql_app = GraphQLRouter(
     schema,
     subscription_protocols=[
         strawberry.subscriptions.GRAPHQL_TRANSPORT_WS_PROTOCOL,
-        strawberry.subscriptions.GRAPHQL_WS_PROTOCOL,
     ],
 )
 app.include_router(graphql_app, prefix="/graphql")
