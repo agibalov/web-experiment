@@ -29,8 +29,7 @@ class Todo:
 @strawberry.type
 class TodoUpdate:
     type: str # "CREATED", "UPDATED", "DELETED"
-    todo: Todo | None = None
-    id: strawberry.ID | None = None
+    id: strawberry.ID
 
 @strawberry.input
 class TodoFilter:
@@ -83,7 +82,6 @@ class Query:
                  filter: Optional[TodoFilter] = None) -> List[Todo]:
 
         db = get_db_session()
-
         try:
             query = db.query(TodoDB)
             query = apply_todo_filter(query, filter)
@@ -117,7 +115,6 @@ class Query:
                       filter: Optional[TodoFilter] = None) -> ListMetadata:
 
         db = get_db_session()
-
         try:
             query = db.query(TodoDB)
             query = apply_todo_filter(query, filter)
@@ -129,7 +126,6 @@ class Query:
     @strawberry.field
     def Todo(self, id: strawberry.ID) -> Optional[Todo]:
         db = get_db_session()
-
         try:
             db_todo = db.query(TodoDB).filter(TodoDB.id == int(id)).first()
             if db_todo:
@@ -143,21 +139,23 @@ class Mutation:
     @strawberry.mutation
     async def createTodo(self, title: str, done: bool = False) -> Todo:
         db = get_db_session()
-
         try:
             db_todo = TodoDB(title=title, done=done)
             db.add(db_todo)
             db.commit()
             db.refresh(db_todo)
-            return Todo(id=str(db_todo.id), title=db_todo.title, done=db_todo.done, created_at=db_todo.created_at, updated_at=db_todo.updated_at)
+            return todo_from_tododb(db_todo)
         finally:
             db.close()
-            await notify_subscribers(TodoUpdate(type="CREATED", todo=todo_from_tododb(db_todo)))
+            await notify_subscribers(TodoUpdate(type="CREATED", id=str(db_todo.id)))
 
     @strawberry.mutation
-    async def updateTodo(self, id: strawberry.ID, title: Optional[str] = None, done: Optional[bool] = None) -> Optional[Todo]:
-        db = get_db_session()
+    async def updateTodo(self,
+                         id: strawberry.ID,
+                         title: Optional[str] = None,
+                         done: Optional[bool] = None) -> Optional[Todo]:
 
+        db = get_db_session()
         try:
             db_todo = db.query(TodoDB).filter(TodoDB.id == int(id)).first()
             if db_todo:
@@ -167,20 +165,19 @@ class Mutation:
                     db_todo.done = done
                 db.commit()
                 db.refresh(db_todo)
-                return Todo(id=str(db_todo.id), title=db_todo.title, done=db_todo.done, created_at=db_todo.created_at, updated_at=db_todo.updated_at)
+                return todo_from_tododb(db_todo)
             return None
         finally:
             db.close()
-            await notify_subscribers(TodoUpdate(type="UPDATED", todo=todo_from_tododb(db_todo)))
+            await notify_subscribers(TodoUpdate(type="UPDATED", id=id))
 
     @strawberry.mutation
     async def deleteTodo(self, id: strawberry.ID) -> Optional[Todo]:
         db = get_db_session()
-
         try:
             db_todo = db.query(TodoDB).filter(TodoDB.id == int(id)).first()
             if db_todo:
-                deleted_todo = Todo(id=str(db_todo.id), title=db_todo.title, done=db_todo.done, created_at=db_todo.created_at, updated_at=db_todo.updated_at)
+                deleted_todo = todo_from_tododb(db_todo)
                 db.delete(db_todo)
                 db.commit()
                 return deleted_todo
