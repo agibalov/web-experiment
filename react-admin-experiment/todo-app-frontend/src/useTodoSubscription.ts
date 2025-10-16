@@ -5,13 +5,6 @@ const TODO_UPDATES_SUBSCRIPTION = gql`
   subscription TodoUpdates {
     todoUpdates {
       type
-      todo {
-        id
-        title
-        done
-        createdAt
-        updatedAt
-      }
       id
     }
   }
