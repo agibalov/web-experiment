@@ -33,8 +33,6 @@ S.headers.update({"Authorization": API_KEY, "Content-Type": "application/json"})
 
 def wait_until_ready():
     """Wait for FusionAuth to be ready AND for the API key to be valid."""
-    import time, sys, requests
-
     print(f"⏳ Waiting for FusionAuth at {BASE} to be ready…")
     deadline = time.time() + READINESS_TIMEOUT_SEC
     last_err = None
