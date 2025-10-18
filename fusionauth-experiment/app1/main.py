@@ -13,7 +13,7 @@ templates = Jinja2Templates(directory="templates")
 FUSIONAUTH_URL = "http://localhost:9011"
 CLIENT_ID = "00000000-0000-0000-0000-000000000001"
 CLIENT_SECRET = "sandwichesaregreat123123123"
-REDIRECT_URI = "http://localhost:3333/callback"
+REDIRECT_URI = "http://localhost:3000/callback"
 COOKIE_SECRET_KEY = "didisaysandwichesaregreat123123123"
 
 # Session serializer for secure cookies

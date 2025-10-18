@@ -24,8 +24,8 @@ ADMIN_EMAIL = "admin@example.org"
 ADMIN_PASSWORD = "Qwerty111!"
 APP_ID = "00000000-0000-0000-0000-000000000001"
 
-REDIRECT = "http://localhost:3333/callback"
-LOGOUT_URL = "http://localhost:3333/"
+REDIRECT = "http://localhost:3000/callback"
+LOGOUT_URL = "http://localhost:3000/"
 CLIENT_SECRET = "sandwichesaregreat123123123"  # will be (re)set on app create
 FUSIONAUTH_APP_ID = "3c219e58-ed0e-4b18-ad48-f4f92793ae32"
 

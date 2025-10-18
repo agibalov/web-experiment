@@ -27,7 +27,7 @@ def local_shell_resource(name, cmd = None, deps = None, serve_cmd = None, allow_
 
 local_shell_resource(
     "app1",
-    serve_cmd="uv sync && uv run uvicorn main:app --reload --port 3333",
+    serve_cmd="uv sync && uv run uvicorn main:app --reload --port 3000",
     allow_parallel=True,
     dir="app1"
 )
