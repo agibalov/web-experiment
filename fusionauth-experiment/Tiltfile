@@ -1,19 +1,35 @@
-def local_shell_resource(name, dir, cmd):
+def local_shell_resource(name, cmd = None, deps = None, serve_cmd = None, allow_parallel = False, dir = ''):
     """Run a command inside bash -lc from a given relative dir."""
     repo_root = os.getcwd()
-    full_cmd = (
-        'bash -lc "cd ' + repo_root + '/' + dir + ' && ' + cmd + '"'
-    )
+    
+    if cmd != None:
+        full_cmd = (
+            'bash -lc "cd ' + repo_root + '/' + dir + ' && ' + cmd + '"'
+        )
+    else:
+        full_cmd = []
+
+    if serve_cmd != None:
+        full_serve_cmd = (
+            'bash -lc "cd ' + repo_root + '/' + dir + ' && ' + serve_cmd + '"'
+        )
+    else:
+        full_serve_cmd = []
+
     local_resource(
         name,
-        serve_cmd=full_cmd,
-        allow_parallel=True,
+        cmd=full_cmd,
+        deps=deps,
+        serve_cmd=full_serve_cmd,
+        allow_parallel=allow_parallel,
+        dir=''
     )
 
 local_shell_resource(
     "app1",
-    "app1",
-    "uv sync && uv run uvicorn main:app --reload --port 3333",
+    serve_cmd="uv sync && uv run uvicorn main:app --reload --port 3333",
+    allow_parallel=True,
+    dir="app1"
 )
 
 # Tilt doesn't respect docker-compose.yml file for dependencies and startup order,
@@ -25,8 +41,17 @@ local_resource(
   'bash -lc \'docker compose up -d db; ' +
   'until docker compose exec -T db pg_isready -U fusionauth -d fusionauth >/dev/null 2>&1; do ' +
   '  echo "waiting for db..."; sleep 1; ' +
-  'done\'',
-  allow_parallel=False
+  'done; ' +
+  'echo "READY!"\'',
+  allow_parallel=True,
+  resource_deps=['db']
 )
 
 dc_resource('fusionauth', resource_deps=['db-ready'])
+
+local_shell_resource(
+    "fusionauth-setup",
+    cmd="uv run fusionauth_setup.py",
+    deps=["fusionauth"],
+    allow_parallel=True
+)

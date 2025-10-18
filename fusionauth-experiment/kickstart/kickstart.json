@@ -4,58 +4,5 @@
             "key": "dev_api_key_Mp2b9Sx7Vq4nE3tZ6yG5cU1rH8fJ0aLd",
             "description": "local dev key"
         }
-    ],
-    "variables": {
-        "adminEmail": "admin@example.org",
-        "adminPassword": "Qwerty111!",
-        "appId": "00000000-0000-0000-0000-000000000001"
-    },
-    "requests": [
-        {
-            "method": "POST",
-            "url": "/api/user/registration",
-            "body": {
-                "user": {
-                    "email": "#{adminEmail}",
-                    "password": "#{adminPassword}",
-                    "emailVerified": true
-                },
-                "registration": {
-                    "applicationId": "3c219e58-ed0e-4b18-ad48-f4f92793ae32",
-                    "roles": [
-                        "admin"
-                    ]
-                }
-            }
-        },
-        {
-            "method": "POST",
-            "url": "/api/application/#{appId}",
-            "body": {
-                "application": {
-                    "name": "My App",
-                    "jwtConfiguration": {
-                        "enabled": true
-                    },
-                    "registrationConfiguration": {
-                        "enabled": true,
-                        "selfServiceEnabled": true
-                    },
-                    "oauthConfiguration": {
-                        "enabledGrants": [
-                            "authorization_code",
-                            "refresh_token"
-                        ],
-                        "requireRegistration": true,
-                        "authorizedRedirectURLs": [
-                            "http://localhost:3333/callback"
-                        ],
-                        "logoutBehavior": "RedirectOnly",
-                        "logoutURL": "http://localhost:3333/",
-                        "clientSecret": "sandwichesaregreat123123123"
-                    }
-                }
-            }
-        }
     ]
 }

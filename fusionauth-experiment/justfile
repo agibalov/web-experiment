@@ -1,0 +1,6 @@
+start:
+    tilt up
+
+stop:
+    tilt down
+    docker compose down -v # delete volumes
