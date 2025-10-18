@@ -1,7 +1,7 @@
 #!/usr/bin/env -S uv run
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["requests"]
+# dependencies = ["requests", "python-dotenv"]
 # ///
 """
 Wait for FusionAuth to be ready, then:
@@ -10,7 +10,11 @@ Wait for FusionAuth to be ready, then:
 No retries during actions; only an initial readiness wait.
 """
 
-import json, sys, time, traceback, requests
+import json, sys, time, traceback, requests, os
+from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv("fusionauth_setup.env")
 
 # --- Config (match your Kickstart) -------------------------------------------------
 BASE = "http://localhost:9011"
@@ -24,6 +28,10 @@ REDIRECT = "http://localhost:3333/callback"
 LOGOUT_URL = "http://localhost:3333/"
 CLIENT_SECRET = "sandwichesaregreat123123123"  # will be (re)set on app create
 FUSIONAUTH_APP_ID = "3c219e58-ed0e-4b18-ad48-f4f92793ae32"
+
+GOOGLE_IDP_ID = "00000000-0000-0000-0000-000000000002"
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "")
 
 READINESS_TIMEOUT_SEC = 120
 # -----------------------------------------------------------------------------------
@@ -132,17 +140,46 @@ def ensure_application():
 
     return r.json()["application"]
 
+def ensure_google_identity_provider():
+    """Create/update Google identity provider and enable it for the app."""
+    # check if identity provider exists first
+    r = S.get(f"{BASE}/api/identity-provider/{GOOGLE_IDP_ID}")
+
+    body = {
+        "identityProvider": {
+            "name": "Google",
+            "type": "Google",
+            "enabled": True,
+            "buttonText": "Sign in with Google",
+            "client_id": GOOGLE_CLIENT_ID,
+            "client_secret": GOOGLE_CLIENT_SECRET,
+            "scope": "openid email profile",
+            "applicationConfiguration": {
+                APP_ID: {
+                    "enabled": True,
+                    "createRegistration": True
+                }
+            }
+        }
+    }
+
+    if r.status_code == 200:
+        # identity provider exists, update it with PATCH
+        r = S.patch(f"{BASE}/api/identity-provider/{GOOGLE_IDP_ID}", data=json.dumps(body))
+        r.raise_for_status()
+    else:
+        # identity provider doesn't exist, create it with POST at specific ID
+        r = S.post(f"{BASE}/api/identity-provider/{GOOGLE_IDP_ID}", data=json.dumps(body))
+        r.raise_for_status()
+
+    return r.json()["identityProvider"]
+
 def main():
     wait_until_ready()
 
     admin_user = ensure_admin_user()
     app = ensure_application()
-
-    # (Optional) also register the admin to your app
-    S.put(
-        f"{BASE}/api/user/registration/{admin_user['id']}",
-        data=json.dumps({"registration": {"applicationId": APP_ID}})
-    )
+    google_idp = ensure_google_identity_provider()
 
     # Build handy URLs
     wk = requests.get(f"{BASE}/.well-known/openid-configuration").json()
@@ -157,7 +194,12 @@ def main():
         "loginUrl": login_url,
         "registerUrl": register_url,
         "logoutUrl": logout_url,
-        "redirects": app["oauthConfiguration"].get("authorizedRedirectURLs", [])
+        "redirects": app["oauthConfiguration"].get("authorizedRedirectURLs", []),
+        "googleIdp": {
+            "id": google_idp["id"],
+            "name": google_idp["name"],
+            "enabled": google_idp["enabled"]
+        }
     }, indent=2))
 
 if __name__ == "__main__":
