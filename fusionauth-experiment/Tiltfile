@@ -1,0 +1,32 @@
+def local_shell_resource(name, dir, cmd):
+    """Run a command inside bash -lc from a given relative dir."""
+    repo_root = os.getcwd()
+    full_cmd = (
+        'bash -lc "cd ' + repo_root + '/' + dir + ' && ' + cmd + '"'
+    )
+    local_resource(
+        name,
+        serve_cmd=full_cmd,
+        allow_parallel=True,
+    )
+
+local_shell_resource(
+    "app1",
+    "app1",
+    "uv sync && uv run uvicorn main:app --reload --port 3333",
+)
+
+# Tilt doesn't respect docker-compose.yml file for dependencies and startup order,
+# so we need to define that manually.
+docker_compose("docker-compose.yml")
+
+local_resource(
+  'db-ready',
+  'bash -lc \'docker compose up -d db; ' +
+  'until docker compose exec -T db pg_isready -U fusionauth -d fusionauth >/dev/null 2>&1; do ' +
+  '  echo "waiting for db..."; sleep 1; ' +
+  'done\'',
+  allow_parallel=False
+)
+
+dc_resource('fusionauth', resource_deps=['db-ready'])
